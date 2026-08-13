@@ -7,3 +7,19 @@ body {
   padding: 0;
   margin: 0;
 }
+
+@keyframes garland-twinkle {
+  0%, 100% { opacity: 0.55; }
+  50% { opacity: 1; }
+}
+
+.garland-dot {
+  animation: garland-twinkle 2.6s ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .garland-dot {
+    animation: none;
+    opacity: 0.85;
+  }
+}
