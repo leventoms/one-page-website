@@ -25,7 +25,7 @@ export default function Tier2Template({ config, isPreview }: TemplateProps<Tier2
     <main
       className="min-h-screen px-6 py-16"
       style={{
-        background: `linear-gradient(180deg, ${config.accentColor}22, #0f0f13 15%, #0f0f13 85%, ${config.accentColor}22)`,
+        background: `linear-gradient(180deg, ${config.accentColor}22, #0a0a0c 15%, #0a0a0c 85%, ${config.accentColor}22)`,
       }}
     >
       {isPreview && (

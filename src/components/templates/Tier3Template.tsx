@@ -52,7 +52,7 @@ export default function Tier3Template({ config, isPreview }: TemplateProps<Tier3
       <main
         className="min-h-screen flex flex-col items-center justify-center px-6 py-16 text-center"
         style={{
-          background: `radial-gradient(circle at top, ${config.accentColor}18, #170e1a 60%)`,
+          background: `radial-gradient(circle at top, ${config.accentColor}18, #0a0a0c 60%)`,
         }}
       >
         <p className="text-white/50 text-sm mb-3 uppercase tracking-widest">
@@ -82,7 +82,7 @@ export default function Tier3Template({ config, isPreview }: TemplateProps<Tier3
     <main
       className="relative min-h-screen flex flex-col items-center justify-center px-6 py-16 text-center overflow-hidden"
       style={{
-        background: `radial-gradient(circle at top, ${config.accentColor}22, #170e1a 60%)`,
+        background: `radial-gradient(circle at top, ${config.accentColor}22, #0a0a0c 60%)`,
       }}
     >
       {isPreview && (

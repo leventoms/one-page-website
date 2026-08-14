@@ -1,13 +1,14 @@
 import { z } from 'zod';
 
-// Curated to sit alongside the plum/marigold brand palette rather than
-// clashing with it — every generated page stays visually on-brand.
+// Curated to sit alongside the near-black brand canvas and its warm
+// orange->pink->purple gradient accent — every generated page stays
+// visually on-brand.
 export const ALLOWED_ACCENT_COLORS = [
-  '#f0a94e', // marigold
-  '#e2607a', // rose
-  '#f6c27a', // light gold
-  '#9b6bd1', // soft violet
-  '#5fb3a3', // muted teal (deliberate contrast note)
+  '#ff7a45', // warm orange
+  '#ff4d8d', // pink
+  '#a855f7', // purple
+  '#22d3ee', // cyan (deliberate cool contrast note)
+  '#facc15', // gold
 ] as const;
 
 export const tier1ConfigSchema = z.object({
