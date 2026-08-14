@@ -18,8 +18,26 @@ export interface Tier1Config {
   songUrl?: string; // optional short audio clip URL, not a streaming embed
 }
 
-/** Discriminated union so new tiers can be added without touching tier1 code (OCP). */
-export type TemplateConfig = { tier: 'tier1'; data: Tier1Config };
+/** A single photo + caption moment in a Tier 2 "Memory Lane" sequence. */
+export interface Tier2Memory {
+  photoUrl: string;
+  caption: string;
+}
+
+export interface Tier2Config {
+  recipientName: string;
+  senderName: string;
+  introMessage: string; // opening line before the memories start
+  memories: Tier2Memory[]; // 2-6 photo+caption moments, scrollable sequence
+  closingMessage: string;
+  accentColor: string;
+  songUrl?: string;
+}
+
+/** Discriminated union so new tiers can be added without touching existing tier code (OCP). */
+export type TemplateConfig =
+  | { tier: 'tier1'; data: Tier1Config }
+  | { tier: 'tier2'; data: Tier2Config };
 
 export interface Order {
   id: string;

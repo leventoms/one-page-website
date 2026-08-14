@@ -7,7 +7,7 @@ import type { CreateOrderInput, Order, OrderStatus } from '@/types/order';
  * API routes, or pages.
  */
 export interface IOrderRepository {
-  create(slug: string, input: CreateOrderInput): Promise<Order>;
+  create(slug: string, input: CreateOrderInput, priceInPaise: number): Promise<Order>;
   findBySlug(slug: string): Promise<Order | null>;
   updateStatus(
     slug: string,

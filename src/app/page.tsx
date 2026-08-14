@@ -163,29 +163,52 @@ export default function HomePage() {
 
       {/* Pricing */}
       <section className="px-6 py-16 md:py-20">
-        <div className="mx-auto max-w-md">
-          <div className="rounded-3xl bg-plum p-8 ring-1 ring-plum-line text-center">
-            <p className="font-mono text-xs uppercase tracking-widest text-marigold mb-2">
-              Simple Wish
-            </p>
-            <p className="font-display text-4xl text-ivory mb-1">₹99</p>
-            <p className="text-ivory-muted text-sm mb-6">One page, one recipient, yours to send.</p>
-            <ul className="text-left text-ivory-muted text-sm space-y-2 mb-8">
-              <li>· Custom name, message &amp; up to 3 photos</li>
-              <li>· Choice of accent colour</li>
-              <li>· PIN-protected link</li>
-              <li>· Preview before you pay</li>
-            </ul>
-            <Link
-              href="/builder"
-              className="block w-full rounded-full bg-marigold px-6 py-3 font-semibold text-plum-deep hover:bg-marigold-light transition-colors"
-            >
-              Build yours
-            </Link>
-            <p className="text-xs text-ivory-muted mt-4">
-              More styles are on the way — this is the first of a few.
-            </p>
+        <div className="mx-auto max-w-3xl">
+          <h2 className="font-display text-2xl md:text-3xl text-ivory mb-10 text-center">
+            Pick a style
+          </h2>
+          <div className="grid gap-8 sm:grid-cols-2">
+            <div className="rounded-3xl bg-plum p-8 ring-1 ring-plum-line text-center">
+              <p className="font-mono text-xs uppercase tracking-widest text-marigold mb-2">
+                Simple Wish
+              </p>
+              <p className="font-display text-4xl text-ivory mb-1">₹99</p>
+              <p className="text-ivory-muted text-sm mb-6">One message, one recipient.</p>
+              <ul className="text-left text-ivory-muted text-sm space-y-2 mb-8">
+                <li>· Name, message &amp; up to 3 photos</li>
+                <li>· Choice of accent colour</li>
+                <li>· PIN-protected link</li>
+              </ul>
+              <Link
+                href="/builder"
+                className="block w-full rounded-full bg-marigold px-6 py-3 font-semibold text-plum-deep hover:bg-marigold-light transition-colors"
+              >
+                Build yours
+              </Link>
+            </div>
+
+            <div className="rounded-3xl bg-plum p-8 ring-1 ring-plum-line text-center">
+              <p className="font-mono text-xs uppercase tracking-widest text-rose mb-2">
+                Memory Lane
+              </p>
+              <p className="font-display text-4xl text-ivory mb-1">₹199</p>
+              <p className="text-ivory-muted text-sm mb-6">A scrollable sequence of moments.</p>
+              <ul className="text-left text-ivory-muted text-sm space-y-2 mb-8">
+                <li>· 2–6 photo + caption memories</li>
+                <li>· Opening &amp; closing message</li>
+                <li>· PIN-protected link</li>
+              </ul>
+              <Link
+                href="/builder/tier2"
+                className="block w-full rounded-full bg-rose px-6 py-3 font-semibold text-ivory hover:opacity-90 transition-opacity"
+              >
+                Build yours
+              </Link>
+            </div>
           </div>
+          <p className="text-xs text-ivory-muted text-center mt-8">
+            Both are preview-before-you-pay. More styles are on the way.
+          </p>
         </div>
       </section>
 

@@ -31,19 +31,17 @@ function rowToOrder(row: OrderRow): Order {
   };
 }
 
-const TIER1_PRICE_IN_PAISE = 9900; // ₹99, kept here as the tier-1 default
-
 export class SupabaseOrderRepository implements IOrderRepository {
   constructor(private readonly client: SupabaseClient) {}
 
-  async create(slug: string, input: CreateOrderInput): Promise<Order> {
+  async create(slug: string, input: CreateOrderInput, priceInPaise: number): Promise<Order> {
     const { data, error } = await this.client
       .from('orders')
       .insert({
         slug,
         status: 'draft' satisfies OrderStatus,
         config: input.config,
-        price_in_paise: TIER1_PRICE_IN_PAISE,
+        price_in_paise: priceInPaise,
         pin_code: input.pinCode,
       })
       .select()

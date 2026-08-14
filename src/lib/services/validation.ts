@@ -1,13 +1,13 @@
 import { z } from 'zod';
 
-// Small, curated accent palette rather than a free-text color field —
-// keeps every generated page visually on-brand and avoids garish input.
+// Curated to sit alongside the plum/marigold brand palette rather than
+// clashing with it — every generated page stays visually on-brand.
 export const ALLOWED_ACCENT_COLORS = [
-  '#f5457f', // rose
-  '#f59e0b', // amber
-  '#22c55e', // green
-  '#3b82f6', // blue
-  '#a855f7', // violet
+  '#f0a94e', // marigold
+  '#e2607a', // rose
+  '#f6c27a', // light gold
+  '#9b6bd1', // soft violet
+  '#5fb3a3', // muted teal (deliberate contrast note)
 ] as const;
 
 export const tier1ConfigSchema = z.object({
@@ -19,15 +19,35 @@ export const tier1ConfigSchema = z.object({
   songUrl: z.string().url().optional(),
 });
 
+export const tier2MemorySchema = z.object({
+  photoUrl: z.string().url(),
+  caption: z.string().trim().min(1).max(120),
+});
+
+export const tier2ConfigSchema = z.object({
+  recipientName: z.string().trim().min(1).max(40),
+  senderName: z.string().trim().min(1).max(40),
+  introMessage: z.string().trim().min(1).max(300),
+  memories: z.array(tier2MemorySchema).min(2).max(6),
+  closingMessage: z.string().trim().min(1).max(300),
+  accentColor: z.enum(ALLOWED_ACCENT_COLORS),
+  songUrl: z.string().url().optional(),
+});
+
+// Discriminated on `tier` so each new template only needs one new branch
+// here — nothing else in this file changes shape (OCP).
+export const templateConfigSchema = z.discriminatedUnion('tier', [
+  z.object({ tier: z.literal('tier1'), data: tier1ConfigSchema }),
+  z.object({ tier: z.literal('tier2'), data: tier2ConfigSchema }),
+]);
+
 export const createOrderInputSchema = z.object({
-  config: z.object({
-    tier: z.literal('tier1'),
-    data: tier1ConfigSchema,
-  }),
+  config: templateConfigSchema,
   pinCode: z
     .string()
     .regex(/^\d{4}$/, 'PIN must be exactly 4 digits'),
 });
 
 export type Tier1ConfigInput = z.infer<typeof tier1ConfigSchema>;
+export type Tier2ConfigInput = z.infer<typeof tier2ConfigSchema>;
 export type CreateOrderInputParsed = z.infer<typeof createOrderInputSchema>;

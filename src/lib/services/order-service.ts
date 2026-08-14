@@ -1,5 +1,6 @@
 import type { IOrderRepository } from '@/lib/repositories/order-repository.interface';
 import type { ISlugGenerator } from './slug-generator';
+import { getTemplateDefinition } from '@/lib/templates/template-registry';
 import type { CreateOrderInput, Order } from '@/types/order';
 
 export class OrderNotFoundError extends Error {
@@ -30,10 +31,9 @@ export class OrderService {
   ) {}
 
   async createOrder(input: CreateOrderInput): Promise<Order> {
-    const displayName =
-      input.config.tier === 'tier1' ? input.config.data.recipientName : 'surprise';
-    const slug = this.slugGenerator.generate(displayName);
-    return this.orders.create(slug, input);
+    const slug = this.slugGenerator.generate(input.config.data.recipientName);
+    const priceInPaise = getTemplateDefinition(input.config.tier).priceInPaise;
+    return this.orders.create(slug, input, priceInPaise);
   }
 
   async getOrderForPreview(slug: string): Promise<Order> {
