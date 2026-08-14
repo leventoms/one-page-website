@@ -34,10 +34,21 @@ export interface Tier2Config {
   songUrl?: string;
 }
 
+export interface Tier3Config {
+  recipientName: string;
+  senderName: string;
+  message: string;
+  photoUrls: string[]; // 1-5 photos, revealed together
+  accentColor: string;
+  revealAt: string; // ISO datetime — page stays locked behind a countdown until this
+  songUrl?: string;
+}
+
 /** Discriminated union so new tiers can be added without touching existing tier code (OCP). */
 export type TemplateConfig =
   | { tier: 'tier1'; data: Tier1Config }
-  | { tier: 'tier2'; data: Tier2Config };
+  | { tier: 'tier2'; data: Tier2Config }
+  | { tier: 'tier3'; data: Tier3Config };
 
 export interface Order {
   id: string;

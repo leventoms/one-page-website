@@ -90,7 +90,11 @@ export default function Tier2Builder() {
           <Link href="/builder" className="text-marigold underline underline-offset-2">
             The simpler Tier 1 page
           </Link>{' '}
-          might be a better fit.
+          might be a better fit, or add a{' '}
+          <Link href="/builder/tier3" className="text-marigold underline underline-offset-2">
+            countdown reveal
+          </Link>{' '}
+          with Tier 3.
         </p>
 
         <label className="flex flex-col gap-1 text-sm text-ivory-muted">

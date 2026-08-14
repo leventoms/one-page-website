@@ -163,51 +163,92 @@ export default function HomePage() {
 
       {/* Pricing */}
       <section className="px-6 py-16 md:py-20">
-        <div className="mx-auto max-w-3xl">
+        <div className="mx-auto max-w-5xl">
           <h2 className="font-display text-2xl md:text-3xl text-ivory mb-10 text-center">
             Pick a style
           </h2>
-          <div className="grid gap-8 sm:grid-cols-2">
-            <div className="rounded-3xl bg-plum p-8 ring-1 ring-plum-line text-center">
+          <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+            <div className="rounded-3xl bg-plum p-6 ring-1 ring-plum-line text-center flex flex-col">
               <p className="font-mono text-xs uppercase tracking-widest text-marigold mb-2">
                 Simple Wish
               </p>
-              <p className="font-display text-4xl text-ivory mb-1">₹99</p>
-              <p className="text-ivory-muted text-sm mb-6">One message, one recipient.</p>
-              <ul className="text-left text-ivory-muted text-sm space-y-2 mb-8">
+              <p className="font-display text-3xl text-ivory mb-1">₹99</p>
+              <p className="text-ivory-muted text-sm mb-4">One message, one recipient.</p>
+              <ul className="text-left text-ivory-muted text-xs space-y-1.5 mb-6 flex-1">
                 <li>· Name, message &amp; up to 3 photos</li>
                 <li>· Choice of accent colour</li>
                 <li>· PIN-protected link</li>
               </ul>
               <Link
                 href="/builder"
-                className="block w-full rounded-full bg-marigold px-6 py-3 font-semibold text-plum-deep hover:bg-marigold-light transition-colors"
+                className="block w-full rounded-full bg-marigold px-4 py-2.5 text-sm font-semibold text-plum-deep hover:bg-marigold-light transition-colors"
               >
                 Build yours
               </Link>
             </div>
 
-            <div className="rounded-3xl bg-plum p-8 ring-1 ring-plum-line text-center">
+            <div className="rounded-3xl bg-plum p-6 ring-1 ring-plum-line text-center flex flex-col">
               <p className="font-mono text-xs uppercase tracking-widest text-rose mb-2">
                 Memory Lane
               </p>
-              <p className="font-display text-4xl text-ivory mb-1">₹199</p>
-              <p className="text-ivory-muted text-sm mb-6">A scrollable sequence of moments.</p>
-              <ul className="text-left text-ivory-muted text-sm space-y-2 mb-8">
+              <p className="font-display text-3xl text-ivory mb-1">₹199</p>
+              <p className="text-ivory-muted text-sm mb-4">A sequence of photo moments.</p>
+              <ul className="text-left text-ivory-muted text-xs space-y-1.5 mb-6 flex-1">
                 <li>· 2–6 photo + caption memories</li>
                 <li>· Opening &amp; closing message</li>
                 <li>· PIN-protected link</li>
               </ul>
               <Link
                 href="/builder/tier2"
-                className="block w-full rounded-full bg-rose px-6 py-3 font-semibold text-ivory hover:opacity-90 transition-opacity"
+                className="block w-full rounded-full bg-rose px-4 py-2.5 text-sm font-semibold text-ivory hover:opacity-90 transition-opacity"
               >
                 Build yours
               </Link>
             </div>
+
+            <div className="rounded-3xl bg-plum p-6 ring-1 ring-plum-line text-center flex flex-col">
+              <p className="font-mono text-xs uppercase tracking-widest text-marigold-light mb-2">
+                Time Capsule
+              </p>
+              <p className="font-display text-3xl text-ivory mb-1">₹299</p>
+              <p className="text-ivory-muted text-sm mb-4">Locked until the moment you pick.</p>
+              <ul className="text-left text-ivory-muted text-xs space-y-1.5 mb-6 flex-1">
+                <li>· Live countdown reveal</li>
+                <li>· Up to 5 photos</li>
+                <li>· PIN-protected link</li>
+              </ul>
+              <Link
+                href="/builder/tier3"
+                className="block w-full rounded-full bg-marigold-light px-4 py-2.5 text-sm font-semibold text-plum-deep hover:opacity-90 transition-opacity"
+              >
+                Build yours
+              </Link>
+            </div>
+
+            <div className="rounded-3xl bg-plum-soft p-6 ring-1 ring-plum-line text-center flex flex-col">
+              <p className="font-mono text-xs uppercase tracking-widest text-ivory-muted mb-2">
+                White Glove
+              </p>
+              <p className="font-display text-3xl text-ivory mb-1">From ₹999</p>
+              <p className="text-ivory-muted text-sm mb-4">Made by hand, just for this one.</p>
+              <ul className="text-left text-ivory-muted text-xs space-y-1.5 mb-6 flex-1">
+                <li>· Fully custom design</li>
+                <li>· Unlimited photos &amp; video</li>
+                <li>· We build it with you, 1:1</li>
+              </ul>
+              {/* TODO: point this at a real Instagram/WhatsApp contact once set up */}
+              <a
+                href="https://instagram.com/yourhandle"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="block w-full rounded-full border border-ivory-muted px-4 py-2.5 text-sm font-semibold text-ivory hover:bg-white/5 transition-colors"
+              >
+                Message us
+              </a>
+            </div>
           </div>
           <p className="text-xs text-ivory-muted text-center mt-8">
-            Both are preview-before-you-pay. More styles are on the way.
+            Tiers 1–3 are preview-before-you-pay. White Glove is handled personally, no builder needed.
           </p>
         </div>
       </section>
