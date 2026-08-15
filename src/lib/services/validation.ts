@@ -64,3 +64,18 @@ export type Tier1ConfigInput = z.infer<typeof tier1ConfigSchema>;
 export type Tier2ConfigInput = z.infer<typeof tier2ConfigSchema>;
 export type Tier3ConfigInput = z.infer<typeof tier3ConfigSchema>;
 export type CreateOrderInputParsed = z.infer<typeof createOrderInputSchema>;
+
+// "Build it for me" path — deliberately loose. Only enough to identify who
+// to build for and how to reach them back; everything else is optional
+// free-text context, not structured page content like templateConfigSchema.
+export const manualRequestInputSchema = z.object({
+  tier: z.enum(['tier1', 'tier2', 'tier3', 'tier4']),
+  recipientName: z.string().trim().min(1).max(60),
+  contactEmail: z.string().trim().email(),
+  senderName: z.string().trim().max(60).optional(),
+  occasion: z.string().trim().max(60).optional(),
+  message: z.string().trim().max(1000).optional(),
+  notes: z.string().trim().max(1000).optional(),
+});
+
+export type ManualRequestInputParsed = z.infer<typeof manualRequestInputSchema>;

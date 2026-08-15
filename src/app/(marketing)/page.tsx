@@ -323,15 +323,12 @@ export default function HomePage() {
                 <li>· Unlimited photos &amp; video</li>
                 <li>· We build it with you, 1:1</li>
               </ul>
-              {/* TODO: point this at a real Instagram/WhatsApp contact once set up */}
-              <a
-                href="https://instagram.com/yourhandle"
-                target="_blank"
-                rel="noopener noreferrer"
+              <Link
+                href="/builder/white-glove"
                 className="block w-full rounded-full border border-plum-line px-4 py-2.5 text-sm font-semibold text-ivory hover:bg-plum transition-colors"
               >
                 Message us
-              </a>
+              </Link>
             </div>
           </div>
           <p className="text-xs text-ivory-muted text-center mt-8">

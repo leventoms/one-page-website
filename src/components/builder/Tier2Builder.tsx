@@ -4,6 +4,7 @@ import { useState } from 'react';
 import Script from 'next/script';
 import Link from 'next/link';
 import Tier2Template from '@/components/templates/Tier2Template';
+import ManualRequestForm from '@/components/ManualRequestForm';
 import { ALLOWED_ACCENT_COLORS } from '@/lib/services/validation';
 import { useOrderCheckout } from '@/lib/hooks/useOrderCheckout';
 import type { Tier2Config, Tier2Memory } from '@/types/order';
@@ -23,10 +24,17 @@ const EMPTY_CONFIG: Tier2Config = {
 };
 
 export default function Tier2Builder() {
+  const [mode, setMode] = useState<'diy' | 'manual'>('diy');
   const [config, setConfig] = useState<Tier2Config>(EMPTY_CONFIG);
   const [pinCode, setPinCode] = useState('');
   const [formError, setFormError] = useState<string | null>(null);
   const { stage, errorMessage, finalSlug, payAndPublish } = useOrderCheckout();
+
+  if (mode === 'manual') {
+    return (
+      <ManualRequestForm tier="tier2" tierLabel="Memory Lane" onBackToBuilder={() => setMode('diy')} />
+    );
+  }
 
   function updateField<K extends keyof Tier2Config>(key: K, value: Tier2Config[K]) {
     setConfig((prev) => ({ ...prev, [key]: value }));
@@ -94,7 +102,15 @@ export default function Tier2Builder() {
           <Link href="/builder/tier3" className="text-marigold underline underline-offset-2">
             countdown reveal
           </Link>{' '}
-          with Tier 3.
+          with Tier 3. Rather not fill this in yourself?{' '}
+          <button
+            type="button"
+            onClick={() => setMode('manual')}
+            className="text-marigold underline underline-offset-2"
+          >
+            Let us build it for you
+          </button>
+          .
         </p>
 
         <label className="flex flex-col gap-1 text-sm text-ivory-muted">

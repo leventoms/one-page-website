@@ -4,6 +4,7 @@ import { useState } from 'react';
 import Script from 'next/script';
 import Link from 'next/link';
 import Tier1Template from '@/components/templates/Tier1Template';
+import ManualRequestForm from '@/components/ManualRequestForm';
 import { ALLOWED_ACCENT_COLORS } from '@/lib/services/validation';
 import { useOrderCheckout } from '@/lib/hooks/useOrderCheckout';
 import type { Tier1Config } from '@/types/order';
@@ -17,10 +18,17 @@ const EMPTY_CONFIG: Tier1Config = {
 };
 
 export default function Tier1Builder() {
+  const [mode, setMode] = useState<'diy' | 'manual'>('diy');
   const [config, setConfig] = useState<Tier1Config>(EMPTY_CONFIG);
   const [pinCode, setPinCode] = useState('');
   const [formError, setFormError] = useState<string | null>(null);
   const { stage, errorMessage, finalSlug, payAndPublish } = useOrderCheckout();
+
+  if (mode === 'manual') {
+    return (
+      <ManualRequestForm tier="tier1" tierLabel="Simple Wish" onBackToBuilder={() => setMode('diy')} />
+    );
+  }
 
   function updateField<K extends keyof Tier1Config>(key: K, value: Tier1Config[K]) {
     setConfig((prev) => ({ ...prev, [key]: value }));
@@ -63,6 +71,14 @@ export default function Tier1Builder() {
           <Link href="/builder/tier2" className="text-marigold underline underline-offset-2">
             Try Memory Lane instead
           </Link>
+          . Rather not fill this in yourself?{' '}
+          <button
+            type="button"
+            onClick={() => setMode('manual')}
+            className="text-marigold underline underline-offset-2"
+          >
+            Let us build it for you
+          </button>
           .
         </p>
 
