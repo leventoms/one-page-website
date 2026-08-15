@@ -271,7 +271,7 @@ export default function HomePage() {
               </Link>
             </div>
 
-            <div className="relative rounded-3xl bg-plum p-6 ring-2 ring-transparent [background:linear-gradient(#151517,#151517)_padding-box,var(--gradient-accent)_border-box] text-center flex flex-col">
+            <div className="relative rounded-3xl bg-plum p-6 border-2 border-transparent [background:linear-gradient(#151517,#151517)_padding-box,var(--gradient-accent)_border-box] text-center flex flex-col">
               <span className="absolute -top-3 left-1/2 -translate-x-1/2 rounded-full bg-gradient-accent px-3 py-1 text-[10px] font-bold uppercase tracking-widest text-ivory">
                 Popular
               </span>
@@ -346,7 +346,7 @@ export default function HomePage() {
           <p className="font-mono text-xs uppercase tracking-widest text-ivory-muted text-center mb-3">
             Questions
           </p>
-          <h2 className="font-display font-extrabold text-3xl text-ivory text-center mb-12">
+          <h2 className="font-display font-extrabold text-3xl text-ivory text-center mb-14">
             Before you build one
           </h2>
           <Accordion items={FAQ_ITEMS} />

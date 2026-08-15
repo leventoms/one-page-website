@@ -28,6 +28,20 @@ body {
   color: transparent;
 }
 
+/*
+ * Visible keyboard focus, applied globally so every interactive element
+ * (links, buttons, the accordion, the mobile menu toggle) picks it up
+ * without needing a focus class added file-by-file — same "one place"
+ * pattern already used for the color tokens.
+ */
+:focus-visible {
+  outline: none;
+  border-radius: 4px;
+  box-shadow:
+    0 0 0 2px #0a0a0c,
+    0 0 0 4px #ff7a45;
+}
+
 /* Infinite horizontal marquee, paused on hover and skipped for reduced motion. */
 @keyframes marquee-scroll {
   from { transform: translateX(0); }

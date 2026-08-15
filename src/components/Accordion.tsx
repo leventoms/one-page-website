@@ -19,17 +19,30 @@ export default function Accordion({ items }: { items: FaqItem[] }) {
             <button
               type="button"
               onClick={() => setOpenIndex(isOpen ? null : i)}
-              className="w-full flex items-center justify-between py-5 text-left"
+              className="w-full flex items-center justify-between gap-6 py-5 text-left"
               aria-expanded={isOpen}
             >
               <span className="font-display font-semibold text-ivory">{item.question}</span>
-              <span className="text-ivory-muted text-xl leading-none">{isOpen ? '−' : '+'}</span>
+              <span
+                className={`shrink-0 text-ivory-muted text-xl leading-none transition-transform duration-300 ease-out ${
+                  isOpen ? 'rotate-45' : 'rotate-0'
+                }`}
+                aria-hidden="true"
+              >
+                +
+              </span>
             </button>
-            {isOpen && (
-              <p className="pb-5 text-ivory-muted text-sm leading-relaxed max-w-2xl">
-                {item.answer}
-              </p>
-            )}
+            <div
+              className={`grid transition-[grid-template-rows] duration-300 ease-out ${
+                isOpen ? 'grid-rows-[1fr]' : 'grid-rows-[0fr]'
+              }`}
+            >
+              <div className="overflow-hidden">
+                <p className="pb-5 text-ivory-muted text-sm leading-relaxed max-w-2xl">
+                  {item.answer}
+                </p>
+              </div>
+            </div>
           </div>
         );
       })}
