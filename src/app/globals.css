@@ -91,3 +91,115 @@ body {
     display: none;
   }
 }
+
+/*
+ * Marketing-site motion. Kept intentionally minimal — one blob drift, one
+ * scroll-reveal, one hover-lift, one shimmer — reused everywhere rather
+ * than a different animation per section, so it reads as one considered
+ * system rather than a demo of effects.
+ */
+
+/* Slow-drifting gradient blobs behind the hero — ambient, not attention-grabbing. */
+@keyframes blob-drift {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  33% { transform: translate(3%, -4%) scale(1.08); }
+  66% { transform: translate(-3%, 3%) scale(0.95); }
+}
+
+.animate-blob {
+  animation: blob-drift 18s ease-in-out infinite;
+}
+
+.animate-blob-delayed {
+  animation: blob-drift 22s ease-in-out infinite;
+  animation-delay: -7s;
+}
+
+/* Same ambient-petal motif as the delivered Tier 3 product, echoed faintly
+   in the hero so the marketing site and the actual product feel connected. */
+@keyframes petal-drift {
+  0% { transform: translateY(0) translateX(0) rotate(0deg); opacity: 0; }
+  10% { opacity: 0.5; }
+  90% { opacity: 0.5; }
+  100% { transform: translateY(-90px) translateX(14px) rotate(80deg); opacity: 0; }
+}
+
+.hero-petal {
+  position: absolute;
+  border-radius: 9999px;
+  animation: petal-drift 9s ease-in-out infinite;
+}
+
+/* Gentle bob for the hero phone mockup — alive, not distracting. */
+@keyframes float-y {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+}
+
+.animate-float {
+  animation: float-y 5s ease-in-out infinite;
+}
+
+/* Scroll-reveal: fade + rise, driven by a class toggled once on intersection. */
+.reveal {
+  opacity: 0;
+  transform: translateY(16px);
+  transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+}
+
+.reveal-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Hover-lift used on cards throughout — one shared feel for anything clickable/browsable. */
+.hover-lift {
+  transition: transform 0.25s ease-out, box-shadow 0.25s ease-out, border-color 0.25s ease-out;
+}
+
+.hover-lift:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 32px -12px rgba(255, 122, 69, 0.25);
+}
+
+/* Sheen sweep for the primary CTA — a single subtle pass, not a loop. */
+@keyframes sheen-sweep {
+  0% { transform: translateX(-120%) skewX(-15deg); }
+  100% { transform: translateX(220%) skewX(-15deg); }
+}
+
+.sheen::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(115deg, transparent 40%, rgba(255, 255, 255, 0.35) 50%, transparent 60%);
+  transform: translateX(-120%) skewX(-15deg);
+  pointer-events: none;
+}
+
+.sheen:hover::after {
+  animation: sheen-sweep 1s ease-out;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-blob,
+  .animate-blob-delayed,
+  .hero-petal,
+  .animate-float {
+    animation: none;
+  }
+
+  .reveal {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+
+  .hover-lift:hover {
+    transform: none;
+  }
+
+  .sheen:hover::after {
+    animation: none;
+  }
+}
