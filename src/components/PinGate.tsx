@@ -19,7 +19,7 @@ export default function PinGate({ slug, error }: Props) {
   }
 
   return (
-    <main className="min-h-screen flex flex-col items-center justify-center px-6 text-center bg-plum-deep">
+    <main className="min-h-screen flex flex-col items-center justify-center px-6 text-center bg-plum-deep dark-surface">
       <h1 className="font-display text-xl text-ivory mb-2">Enter the 4-digit PIN</h1>
       <p className="text-ivory-muted text-sm mb-6">Ask whoever sent you this link.</p>
 

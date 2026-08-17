@@ -11,7 +11,7 @@ export default function Accordion({ items }: { items: FaqItem[] }) {
   const [openIndex, setOpenIndex] = useState<number | null>(null);
 
   return (
-    <div className="divide-y divide-plum-line border-y border-plum-line">
+    <div className="divide-y divide-paper-line border-y border-paper-line">
       {items.map((item, i) => {
         const isOpen = openIndex === i;
         return (
@@ -22,9 +22,9 @@ export default function Accordion({ items }: { items: FaqItem[] }) {
               className="w-full flex items-center justify-between gap-6 py-5 text-left"
               aria-expanded={isOpen}
             >
-              <span className="font-display font-semibold text-ivory">{item.question}</span>
+              <span className="font-display font-semibold text-ink">{item.question}</span>
               <span
-                className={`shrink-0 text-ivory-muted text-xl leading-none transition-transform duration-300 ease-out ${
+                className={`shrink-0 text-ink-muted text-xl leading-none transition-transform duration-300 ease-out ${
                   isOpen ? 'rotate-45' : 'rotate-0'
                 }`}
                 aria-hidden="true"
@@ -38,7 +38,7 @@ export default function Accordion({ items }: { items: FaqItem[] }) {
               }`}
             >
               <div className="overflow-hidden">
-                <p className="pb-5 text-ivory-muted text-sm leading-relaxed max-w-2xl">
+                <p className="pb-5 text-ink-muted text-sm leading-relaxed max-w-2xl">
                   {item.answer}
                 </p>
               </div>

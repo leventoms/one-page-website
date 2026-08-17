@@ -51,11 +51,11 @@ export default function Tier1Builder() {
     const liveUrl = `${window.location.origin}/p/${finalSlug}?pin=${pinCode}`;
     return (
       <div className="max-w-md mx-auto text-center py-16 px-6">
-        <h2 className="font-display text-xl text-ivory mb-3">Payment received 🎉</h2>
-        <p className="text-ivory-muted mb-4">
+        <h2 className="font-display text-xl text-ink mb-3">Payment received 🎉</h2>
+        <p className="text-ink-muted mb-4">
           It may take a few seconds to go live. Share this link (with the PIN) once it does:
         </p>
-        <code className="block break-all rounded-lg bg-plum p-3 text-sm text-ivory">{liveUrl}</code>
+        <code className="block break-all rounded-lg bg-paper-soft border border-paper-line p-3 text-sm text-ink">{liveUrl}</code>
       </div>
     );
   }
@@ -65,57 +65,57 @@ export default function Tier1Builder() {
       <Script src="https://checkout.razorpay.com/v1/checkout.js" strategy="lazyOnload" />
 
       <form className="flex flex-col gap-4" onSubmit={(e) => e.preventDefault()}>
-        <h1 className="font-display text-2xl text-ivory mb-1">Build your surprise page</h1>
-        <p className="text-sm text-ivory-muted mb-2">
+        <h1 className="font-display text-2xl text-ink mb-1">Build your surprise page</h1>
+        <p className="text-sm text-ink-muted mb-2">
           Want more than one message?{' '}
-          <Link href="/builder/tier2" className="text-marigold underline underline-offset-2">
+          <Link href="/builder/tier2" className="text-marigold-deep underline underline-offset-2">
             Try Memory Lane instead
           </Link>
           . Rather not fill this in yourself?{' '}
           <button
             type="button"
             onClick={() => setMode('manual')}
-            className="text-marigold underline underline-offset-2"
+            className="text-marigold-deep underline underline-offset-2"
           >
             Let us build it for you
           </button>
           .
         </p>
 
-        <label className="flex flex-col gap-1 text-sm text-ivory-muted">
+        <label className="flex flex-col gap-1 text-sm text-ink-muted">
           Recipient&apos;s name
           <input
-            className="rounded-lg bg-plum px-3 py-2 text-ivory"
+            className="rounded-lg bg-paper-soft border border-paper-line px-3 py-2 text-ink"
             value={config.recipientName}
             onChange={(e) => updateField('recipientName', e.target.value)}
             maxLength={40}
           />
         </label>
 
-        <label className="flex flex-col gap-1 text-sm text-ivory-muted">
+        <label className="flex flex-col gap-1 text-sm text-ink-muted">
           Your name
           <input
-            className="rounded-lg bg-plum px-3 py-2 text-ivory"
+            className="rounded-lg bg-paper-soft border border-paper-line px-3 py-2 text-ink"
             value={config.senderName}
             onChange={(e) => updateField('senderName', e.target.value)}
             maxLength={40}
           />
         </label>
 
-        <label className="flex flex-col gap-1 text-sm text-ivory-muted">
+        <label className="flex flex-col gap-1 text-sm text-ink-muted">
           Message
           <textarea
-            className="rounded-lg bg-plum px-3 py-2 min-h-[120px] text-ivory"
+            className="rounded-lg bg-paper-soft border border-paper-line px-3 py-2 min-h-[120px] text-ink"
             value={config.message}
             onChange={(e) => updateField('message', e.target.value)}
             maxLength={600}
           />
         </label>
 
-        <label className="flex flex-col gap-1 text-sm text-ivory-muted">
+        <label className="flex flex-col gap-1 text-sm text-ink-muted">
           Photo URL(s) — comma separated, up to 3
           <input
-            className="rounded-lg bg-plum px-3 py-2 text-ivory"
+            className="rounded-lg bg-paper-soft border border-paper-line px-3 py-2 text-ink"
             placeholder="https://..."
             onChange={(e) =>
               updateField(
@@ -139,17 +139,17 @@ export default function Tier1Builder() {
               className="h-8 w-8 rounded-full ring-2"
               style={{
                 backgroundColor: color,
-                borderColor: config.accentColor === color ? '#f7ede1' : 'transparent',
+                borderColor: config.accentColor === color ? '#0a0a0c' : 'transparent',
               }}
               aria-label={`Choose ${color}`}
             />
           ))}
         </div>
 
-        <label className="flex flex-col gap-1 text-sm text-ivory-muted">
+        <label className="flex flex-col gap-1 text-sm text-ink-muted">
           4-digit PIN for the recipient
           <input
-            className="rounded-lg bg-plum px-3 py-2 w-24 tracking-widest text-ivory"
+            className="rounded-lg bg-paper-soft border border-paper-line px-3 py-2 w-24 tracking-widest text-ink"
             inputMode="numeric"
             maxLength={4}
             value={pinCode}
@@ -165,7 +165,7 @@ export default function Tier1Builder() {
           type="button"
           onClick={handleSubmit}
           disabled={stage === 'creating' || stage === 'paying'}
-          className="mt-2 rounded-full bg-marigold px-6 py-3 font-semibold text-plum-deep disabled:opacity-50"
+          className="mt-2 rounded-full bg-marigold px-6 py-3 font-semibold text-ivory disabled:opacity-50"
         >
           {stage === 'editing' && 'Pay ₹99 & get link'}
           {stage === 'creating' && 'Creating order…'}
@@ -173,7 +173,7 @@ export default function Tier1Builder() {
         </button>
       </form>
 
-      <div className="rounded-2xl overflow-hidden ring-1 ring-plum-line">
+      <div className="rounded-2xl overflow-hidden ring-1 ring-plum-line shadow-lg shadow-black/5">
         <Tier1Template config={config} isPreview />
       </div>
     </div>

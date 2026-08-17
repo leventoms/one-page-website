@@ -15,6 +15,15 @@ body {
  */
 :root {
   --gradient-accent: linear-gradient(90deg, #ff7a45 0%, #ff4d8d 55%, #a855f7 100%);
+  /* Focus-ring "gap" color — must match the local background so it reads as
+     a gap, not a ring of its own. Paper (white) by default since that's now
+     the marketing site's canvas; dark surfaces (PinGate, the delivered
+     templates) opt into the dark variant via .dark-surface. */
+  --focus-offset: #ffffff;
+}
+
+.dark-surface {
+  --focus-offset: #0a0a0c;
 }
 
 .bg-gradient-accent {
@@ -38,7 +47,7 @@ body {
   outline: none;
   border-radius: 4px;
   box-shadow:
-    0 0 0 2px #0a0a0c,
+    0 0 0 2px var(--focus-offset),
     0 0 0 4px #ff7a45;
 }
 

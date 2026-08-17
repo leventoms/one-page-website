@@ -73,10 +73,10 @@ export default function ManualRequestForm({ tier, tierLabel, onBackToBuilder }: 
   if (stage === 'done') {
     return (
       <div className="max-w-md mx-auto text-center py-16 px-6">
-        <h2 className="font-display text-xl text-ivory mb-3">Got it 🎉</h2>
-        <p className="text-ivory-muted">
+        <h2 className="font-display text-xl text-ink mb-3">Got it 🎉</h2>
+        <p className="text-ink-muted">
           We&apos;ll build your {tierLabel} page by hand and send it to{' '}
-          <span className="text-ivory">{contactEmail}</span> once it&apos;s ready.
+          <span className="text-ink">{contactEmail}</span> once it&apos;s ready.
         </p>
       </div>
     );
@@ -84,13 +84,13 @@ export default function ManualRequestForm({ tier, tierLabel, onBackToBuilder }: 
 
   return (
     <form className="flex flex-col gap-4 max-w-md mx-auto px-6 py-12" onSubmit={(e) => e.preventDefault()}>
-      <h1 className="font-display text-2xl text-ivory mb-1">Let us build your {tierLabel}</h1>
-      <p className="text-sm text-ivory-muted mb-2">
+      <h1 className="font-display text-2xl text-ink mb-1">Let us build your {tierLabel}</h1>
+      <p className="text-sm text-ink-muted mb-2">
         Just the basics — we&apos;ll follow up if we need more.
         {onBackToBuilder && (
           <>
             {' '}
-            <button type="button" onClick={onBackToBuilder} className="text-marigold underline underline-offset-2">
+            <button type="button" onClick={onBackToBuilder} className="text-marigold-deep underline underline-offset-2">
               Build it myself instead
             </button>
             .
@@ -98,41 +98,41 @@ export default function ManualRequestForm({ tier, tierLabel, onBackToBuilder }: 
         )}
       </p>
 
-      <label className="flex flex-col gap-1 text-sm text-ivory-muted">
+      <label className="flex flex-col gap-1 text-sm text-ink-muted">
         Recipient&apos;s name
         <input
-          className="rounded-lg bg-plum px-3 py-2 text-ivory"
+          className="rounded-lg bg-paper-soft border border-paper-line px-3 py-2 text-ink"
           value={recipientName}
           onChange={(e) => setRecipientName(e.target.value)}
           maxLength={60}
         />
       </label>
 
-      <label className="flex flex-col gap-1 text-sm text-ivory-muted">
+      <label className="flex flex-col gap-1 text-sm text-ink-muted">
         Your email
         <input
           type="email"
-          className="rounded-lg bg-plum px-3 py-2 text-ivory"
+          className="rounded-lg bg-paper-soft border border-paper-line px-3 py-2 text-ink"
           placeholder="we'll send the finished page here"
           value={contactEmail}
           onChange={(e) => setContactEmail(e.target.value)}
         />
       </label>
 
-      <label className="flex flex-col gap-1 text-sm text-ivory-muted">
-        Your name <span className="text-ivory-muted/60">(optional)</span>
+      <label className="flex flex-col gap-1 text-sm text-ink-muted">
+        Your name <span className="text-ink-muted/60">(optional)</span>
         <input
-          className="rounded-lg bg-plum px-3 py-2 text-ivory"
+          className="rounded-lg bg-paper-soft border border-paper-line px-3 py-2 text-ink"
           value={senderName}
           onChange={(e) => setSenderName(e.target.value)}
           maxLength={60}
         />
       </label>
 
-      <label className="flex flex-col gap-1 text-sm text-ivory-muted">
-        Occasion <span className="text-ivory-muted/60">(optional)</span>
+      <label className="flex flex-col gap-1 text-sm text-ink-muted">
+        Occasion <span className="text-ink-muted/60">(optional)</span>
         <input
-          className="rounded-lg bg-plum px-3 py-2 text-ivory"
+          className="rounded-lg bg-paper-soft border border-paper-line px-3 py-2 text-ink"
           placeholder="Birthday, anniversary, just because…"
           value={occasion}
           onChange={(e) => setOccasion(e.target.value)}
@@ -140,10 +140,10 @@ export default function ManualRequestForm({ tier, tierLabel, onBackToBuilder }: 
         />
       </label>
 
-      <label className="flex flex-col gap-1 text-sm text-ivory-muted">
-        Message or vibe <span className="text-ivory-muted/60">(optional)</span>
+      <label className="flex flex-col gap-1 text-sm text-ink-muted">
+        Message or vibe <span className="text-ink-muted/60">(optional)</span>
         <textarea
-          className="rounded-lg bg-plum px-3 py-2 min-h-[80px] text-ivory"
+          className="rounded-lg bg-paper-soft border border-paper-line px-3 py-2 min-h-[80px] text-ink"
           placeholder="What do you want it to say? Doesn't need to be final wording."
           value={message}
           onChange={(e) => setMessage(e.target.value)}
@@ -151,10 +151,10 @@ export default function ManualRequestForm({ tier, tierLabel, onBackToBuilder }: 
         />
       </label>
 
-      <label className="flex flex-col gap-1 text-sm text-ivory-muted">
-        Anything else <span className="text-ivory-muted/60">(optional)</span>
+      <label className="flex flex-col gap-1 text-sm text-ink-muted">
+        Anything else <span className="text-ink-muted/60">(optional)</span>
         <textarea
-          className="rounded-lg bg-plum px-3 py-2 min-h-[60px] text-ivory"
+          className="rounded-lg bg-paper-soft border border-paper-line px-3 py-2 min-h-[60px] text-ink"
           placeholder="Photos to include, colors, deadline — whatever's useful."
           value={notes}
           onChange={(e) => setNotes(e.target.value)}
@@ -168,7 +168,7 @@ export default function ManualRequestForm({ tier, tierLabel, onBackToBuilder }: 
         type="button"
         onClick={handleSubmit}
         disabled={stage === 'submitting'}
-        className="mt-2 rounded-full bg-marigold px-6 py-3 font-semibold text-plum-deep disabled:opacity-50"
+        className="mt-2 rounded-full bg-marigold px-6 py-3 font-semibold text-ivory disabled:opacity-50"
       >
         {stage === 'editing' ? 'Build now' : 'Sending…'}
       </button>

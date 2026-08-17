@@ -50,7 +50,7 @@ export default function Tier3Template({ config, isPreview }: TemplateProps<Tier3
     const { days, hours, minutes, seconds } = formatRemaining(remaining);
     return (
       <main
-        className="min-h-screen flex flex-col items-center justify-center px-6 py-16 text-center"
+        className="min-h-screen flex flex-col items-center justify-center px-6 py-16 text-center dark-surface"
         style={{
           background: `radial-gradient(circle at top, ${config.accentColor}18, #0a0a0c 60%)`,
         }}
@@ -80,7 +80,7 @@ export default function Tier3Template({ config, isPreview }: TemplateProps<Tier3
 
   return (
     <main
-      className="relative min-h-screen flex flex-col items-center justify-center px-6 py-16 text-center overflow-hidden"
+      className="relative min-h-screen flex flex-col items-center justify-center px-6 py-16 text-center overflow-hidden dark-surface"
       style={{
         background: `radial-gradient(circle at top, ${config.accentColor}22, #0a0a0c 60%)`,
       }}

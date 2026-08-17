@@ -8,16 +8,34 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
-        // Near-black "gallery wall" surfaces — the neutral canvas that lets
-        // colorful photos/accents do the talking, per the reference system.
+        // Near-black "gallery wall" surfaces — used by the actual delivered
+        // product (Tier1-3Template, PinGate, /p/[slug]). Left untouched by
+        // the marketing-site light redesign: colorful user photos are
+        // meant to pop against near-black on the pages people actually
+        // receive, and that's a separate, deliberate decision from how the
+        // marketing site around it looks.
         plum: {
           DEFAULT: '#151517', // card surface
           deep: '#0a0a0c', // page background
           soft: '#1d1d20', // slightly lighter surface
           line: '#2a2a2e', // 1px borders/strokes
         },
+        // Marketing-site surfaces (Subframe-inspired: white canvas, dark
+        // "product panel" islands floating on it). Only page.tsx, Nav,
+        // Accordion, MarqueeStrip, the builder chrome, and ManualRequestForm
+        // use these — never the templates themselves.
+        paper: {
+          DEFAULT: '#ffffff', // page background
+          soft: '#f7f6f4', // card / input surface
+          line: '#e7e4de', // 1px borders/strokes
+        },
+        ink: {
+          DEFAULT: '#0a0a0c', // primary text on paper
+          muted: '#6b6b70', // secondary text on paper
+        },
         // Single accent family, used sparingly and mostly via the gradient
-        // utility classes below — this is the "warm orange" stop.
+        // utility classes below — this is the "warm orange" stop. Unchanged
+        // by the light redesign — same brand gradient, new canvas around it.
         marigold: {
           DEFAULT: '#ff7a45',
           light: '#ff9d6b',
@@ -30,8 +48,8 @@ const config: Config = {
           light: '#e879c9',
         },
         ivory: {
-          DEFAULT: '#ffffff', // primary text
-          muted: '#a3a3ad', // secondary text
+          DEFAULT: '#ffffff', // primary text — product surfaces only, see `plum` above
+          muted: '#a3a3ad', // secondary text — product surfaces only
         },
         // brand.* is used across existing components (buttons, PIN gate);
         // remapped to the accent family so the whole app restyles without

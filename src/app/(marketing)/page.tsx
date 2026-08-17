@@ -109,11 +109,12 @@ export default function HomePage() {
       <section className="relative px-6 pt-20 pb-16 md:pt-28 md:pb-24 text-center overflow-hidden">
         {/* Ambient background — slow-drifting gradient blobs + faint petals,
             echoing the Tier 3 reveal motif. Purely decorative, so it's
-            hidden from assistive tech and ignores pointer events. */}
+            hidden from assistive tech and ignores pointer events. Opacity
+            tuned up from the dark-theme version since these sit on white now. */}
         <div aria-hidden="true" className="pointer-events-none absolute inset-0 -z-10">
-          <div className="animate-blob absolute -top-24 left-1/4 h-72 w-72 rounded-full bg-marigold/20 blur-[90px]" />
-          <div className="animate-blob-delayed absolute top-10 right-[15%] h-64 w-64 rounded-full bg-rose/20 blur-[90px]" />
-          <div className="animate-blob absolute top-40 left-[10%] h-56 w-56 rounded-full bg-purple-500/10 blur-[80px]" />
+          <div className="animate-blob absolute -top-24 left-1/4 h-72 w-72 rounded-full bg-marigold/30 blur-[90px]" />
+          <div className="animate-blob-delayed absolute top-10 right-[15%] h-64 w-64 rounded-full bg-rose/25 blur-[90px]" />
+          <div className="animate-blob absolute top-40 left-[10%] h-56 w-56 rounded-full bg-purple-500/20 blur-[80px]" />
           {[
             { left: '18%', bg: '#ff7a45', delay: '0s', size: 6 },
             { left: '38%', bg: '#ff4d8d', delay: '1.5s', size: 5 },
@@ -138,14 +139,14 @@ export default function HomePage() {
 
         <div className="grid lg:grid-cols-[1.1fr_0.9fr] gap-12 items-center max-w-6xl mx-auto text-left lg:text-left">
           <div className="text-center lg:text-left">
-            <p className="font-mono text-xs uppercase tracking-[0.2em] text-ivory-muted mb-6">
+            <p className="font-mono text-xs uppercase tracking-[0.2em] text-ink-muted mb-6">
               For birthdays &amp; everyday surprises
             </p>
-            <h1 className="font-display font-black text-4xl sm:text-5xl md:text-6xl leading-[1.05] tracking-tight text-ivory max-w-xl mx-auto lg:mx-0 mb-6">
+            <h1 className="font-display font-black text-4xl sm:text-5xl md:text-6xl leading-[1.05] tracking-tight text-ink max-w-xl mx-auto lg:mx-0 mb-6">
               One link.{' '}
               <span className="text-gradient-accent">Every surprise</span> they&apos;ll actually open.
             </h1>
-            <p className="text-ivory-muted text-lg leading-relaxed max-w-lg mx-auto lg:mx-0 mb-9">
+            <p className="text-ink-muted text-lg leading-relaxed max-w-lg mx-auto lg:mx-0 mb-9">
               Write it, preview it exactly as they&apos;ll see it, and get a link to send — in under
               two minutes. No back-and-forth with anyone.
             </p>
@@ -158,7 +159,7 @@ export default function HomePage() {
               </Link>
               <Link
                 href="#pricing"
-                className="inline-flex justify-center rounded-full border border-plum-line px-7 py-3 font-body font-semibold text-ivory hover:bg-plum transition-colors"
+                className="inline-flex justify-center rounded-full border border-paper-line px-7 py-3 font-body font-semibold text-ink hover:bg-paper-soft transition-colors"
               >
                 See pricing
               </Link>
@@ -166,9 +167,12 @@ export default function HomePage() {
           </div>
 
           {/* Phone mockup showing the actual live-rendered product, not a stock photo —
-              a truer "fresh" visual for this product than generic stock imagery. */}
+              a truer "fresh" visual for this product than generic stock imagery.
+              Deliberately stays a dark "product panel" island (Subframe's own pattern
+              of dark screenshot cards floating on a light page) — the delivered
+              product's near-black palette is a separate, intentional decision. */}
           <div className="hidden lg:flex justify-center">
-            <div className="animate-float relative w-[260px] rounded-[2.5rem] border-4 border-plum-line bg-plum-deep shadow-2xl shadow-black/40 overflow-hidden">
+            <div className="animate-float relative w-[260px] rounded-[2.5rem] border-4 border-plum-line bg-plum-deep shadow-2xl shadow-black/20 overflow-hidden">
               <div className="absolute left-1/2 top-2.5 -translate-x-1/2 h-1.5 w-16 rounded-full bg-plum-line z-10" />
               <div className="h-[540px] overflow-hidden">
                 <div className="scale-[0.42] origin-top">
@@ -183,28 +187,29 @@ export default function HomePage() {
       <MarqueeStrip items={OCCASIONS} />
 
       {/* Trust row — replaces "award badges", since we have real mechanics, not awards */}
-      <section className="px-6 py-10 border-b border-plum-line">
+      <section className="px-6 py-10 border-b border-paper-line">
         <div className="mx-auto max-w-4xl grid grid-cols-1 sm:grid-cols-3 gap-6 text-center">
           {[
             'PIN-protected links',
             'Preview before you pay',
             'Live in seconds after payment',
           ].map((point) => (
-            <p key={point} className="text-sm text-ivory-muted">
+            <p key={point} className="text-sm text-ink-muted">
               <span className="text-gradient-accent font-semibold">✓</span> {point}
             </p>
           ))}
         </div>
       </section>
 
-      {/* Portfolio grid — real, live-rendered product, labelled like real deliverables */}
+      {/* Portfolio grid — real, live-rendered product, labelled like real deliverables.
+          Each card stays a dark product-panel island, same reasoning as the hero mockup. */}
       <section className="px-6 py-20 md:py-28">
         <div className="mx-auto max-w-6xl">
           <Reveal className="text-center">
-            <p className="font-mono text-xs uppercase tracking-widest text-ivory-muted mb-3">
+            <p className="font-mono text-xs uppercase tracking-widest text-ink-muted mb-3">
               Real outputs
             </p>
-            <h2 className="font-display font-extrabold text-3xl md:text-4xl text-ivory max-w-xl mx-auto mb-14">
+            <h2 className="font-display font-extrabold text-3xl md:text-4xl text-ink max-w-xl mx-auto mb-14">
               Not a mockup. The actual page they&apos;ll open.
             </h2>
           </Reveal>
@@ -216,10 +221,10 @@ export default function HomePage() {
               { label: 'TIER 3 · TIME CAPSULE', el: <Tier3Template config={TIER3_SAMPLE} isPreview /> },
             ].map((item, i) => (
               <Reveal key={item.label} delayMs={i * 100} className="flex flex-col">
-                <div className="hover-lift rounded-2xl border border-plum-line bg-plum-deep overflow-hidden h-[420px]">
+                <div className="hover-lift rounded-2xl border border-plum-line bg-plum-deep overflow-hidden h-[420px] shadow-lg shadow-black/5">
                   <div className="scale-[0.68] origin-top">{item.el}</div>
                 </div>
-                <p className="font-mono text-xs uppercase tracking-widest text-ivory-muted mt-4 text-center">
+                <p className="font-mono text-xs uppercase tracking-widest text-ink-muted mt-4 text-center">
                   {item.label}
                 </p>
               </Reveal>
@@ -229,13 +234,13 @@ export default function HomePage() {
       </section>
 
       {/* How it works */}
-      <section className="px-6 py-20 md:py-24 border-t border-plum-line">
+      <section className="px-6 py-20 md:py-24 border-t border-paper-line">
         <div className="mx-auto max-w-5xl">
           <Reveal className="text-center">
-            <p className="font-mono text-xs uppercase tracking-widest text-ivory-muted mb-3">
+            <p className="font-mono text-xs uppercase tracking-widest text-ink-muted mb-3">
               How it works
             </p>
-            <h2 className="font-display font-extrabold text-3xl md:text-4xl text-ivory mb-14">
+            <h2 className="font-display font-extrabold text-3xl md:text-4xl text-ink mb-14">
               Three steps. No one else involved.
             </h2>
           </Reveal>
@@ -243,8 +248,8 @@ export default function HomePage() {
             {STEPS.map((step, i) => (
               <Reveal key={step.number} delayMs={i * 100}>
                 <span className="text-gradient-accent font-mono text-sm">{step.number}</span>
-                <h3 className="font-display font-bold text-xl text-ivory mt-2 mb-2">{step.title}</h3>
-                <p className="text-ivory-muted leading-relaxed">{step.body}</p>
+                <h3 className="font-display font-bold text-xl text-ink mt-2 mb-2">{step.title}</h3>
+                <p className="text-ink-muted leading-relaxed">{step.body}</p>
               </Reveal>
             ))}
           </div>
@@ -252,39 +257,39 @@ export default function HomePage() {
       </section>
 
       {/* Comparison — "the difference", kept generic, no named competitors */}
-      <section className="px-6 py-20 md:py-24 border-t border-plum-line">
+      <section className="px-6 py-20 md:py-24 border-t border-paper-line">
         <div className="mx-auto max-w-4xl">
           <Reveal className="text-center">
-            <p className="font-mono text-xs uppercase tracking-widest text-ivory-muted mb-3">
+            <p className="font-mono text-xs uppercase tracking-widest text-ink-muted mb-3">
               The difference
             </p>
-            <h2 className="font-display font-extrabold text-3xl md:text-4xl text-ivory mb-14">
+            <h2 className="font-display font-extrabold text-3xl md:text-4xl text-ink mb-14">
               A page made for them, not a template with their name on it.
             </h2>
           </Reveal>
 
           <div className="grid gap-6 sm:grid-cols-2">
-            <Reveal className="rounded-2xl border border-plum-line bg-plum p-6">
-              <p className="font-mono text-xs uppercase tracking-widest text-ivory-muted mb-4">
+            <Reveal className="rounded-2xl border border-paper-line bg-paper-soft p-6">
+              <p className="font-mono text-xs uppercase tracking-widest text-ink-muted mb-4">
                 A forwarded template
               </p>
               <ul className="space-y-3">
                 {COMPARISON.generic.map((line) => (
-                  <li key={line} className="text-sm text-ivory-muted flex gap-2">
+                  <li key={line} className="text-sm text-ink-muted flex gap-2">
                     <span>–</span> {line}
                   </li>
                 ))}
               </ul>
             </Reveal>
 
-            <Reveal delayMs={100} className="rounded-2xl border border-plum-line bg-plum p-6 relative overflow-hidden">
+            <Reveal delayMs={100} className="rounded-2xl border border-paper-line bg-paper-soft p-6 relative overflow-hidden shadow-lg shadow-black/5">
               <div className="absolute inset-x-0 top-0 h-1 bg-gradient-accent" />
-              <p className="font-mono text-xs uppercase tracking-widest text-ivory-muted mb-4">
+              <p className="font-mono text-xs uppercase tracking-widest text-ink-muted mb-4">
                 A Surprise Pages link
               </p>
               <ul className="space-y-3">
                 {COMPARISON.ours.map((line) => (
-                  <li key={line} className="text-sm text-ivory flex gap-2">
+                  <li key={line} className="text-sm text-ink flex gap-2">
                     <span className="text-gradient-accent">✓</span> {line}
                   </li>
                 ))}
@@ -295,47 +300,47 @@ export default function HomePage() {
       </section>
 
       {/* Pricing */}
-      <section id="pricing" className="px-6 py-20 md:py-24 border-t border-plum-line">
+      <section id="pricing" className="px-6 py-20 md:py-24 border-t border-paper-line">
         <div className="mx-auto max-w-5xl">
           <Reveal className="text-center">
-            <p className="font-mono text-xs uppercase tracking-widest text-ivory-muted mb-3">
+            <p className="font-mono text-xs uppercase tracking-widest text-ink-muted mb-3">
               Pricing
             </p>
-            <h2 className="font-display font-extrabold text-3xl md:text-4xl text-ivory mb-14">
+            <h2 className="font-display font-extrabold text-3xl md:text-4xl text-ink mb-14">
               Pick a style.
             </h2>
           </Reveal>
 
           <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
-            <Reveal className="hover-lift rounded-3xl bg-plum p-6 ring-1 ring-plum-line text-center flex flex-col">
-              <p className="font-mono text-xs uppercase tracking-widest text-ivory-muted mb-2">
+            <Reveal className="hover-lift rounded-3xl bg-paper-soft p-6 ring-1 ring-paper-line text-center flex flex-col">
+              <p className="font-mono text-xs uppercase tracking-widest text-ink-muted mb-2">
                 Simple Wish
               </p>
-              <p className="font-display font-extrabold text-3xl text-ivory mb-1">₹99</p>
-              <p className="text-ivory-muted text-sm mb-4">One message, one recipient.</p>
-              <ul className="text-left text-ivory-muted text-xs space-y-1.5 mb-6 flex-1">
+              <p className="font-display font-extrabold text-3xl text-ink mb-1">₹99</p>
+              <p className="text-ink-muted text-sm mb-4">One message, one recipient.</p>
+              <ul className="text-left text-ink-muted text-xs space-y-1.5 mb-6 flex-1">
                 <li>· Name, message &amp; up to 3 photos</li>
                 <li>· Choice of accent colour</li>
                 <li>· PIN-protected link</li>
               </ul>
               <Link
                 href="/builder"
-                className="block w-full rounded-full border border-plum-line px-4 py-2.5 text-sm font-semibold text-ivory hover:bg-plum-soft transition-colors"
+                className="block w-full rounded-full border border-paper-line px-4 py-2.5 text-sm font-semibold text-ink hover:bg-paper transition-colors"
               >
                 Build yours
               </Link>
             </Reveal>
 
-            <Reveal delayMs={100} className="hover-lift relative rounded-3xl bg-plum p-6 border-2 border-transparent [background:linear-gradient(#151517,#151517)_padding-box,var(--gradient-accent)_border-box] text-center flex flex-col">
+            <Reveal delayMs={100} className="hover-lift relative rounded-3xl bg-paper-soft p-6 border-2 border-transparent [background:linear-gradient(#f7f6f4,#f7f6f4)_padding-box,var(--gradient-accent)_border-box] text-center flex flex-col">
               <span className="absolute -top-3 left-1/2 -translate-x-1/2 rounded-full bg-gradient-accent px-3 py-1 text-[10px] font-bold uppercase tracking-widest text-ivory">
                 Popular
               </span>
-              <p className="font-mono text-xs uppercase tracking-widest text-ivory-muted mb-2">
+              <p className="font-mono text-xs uppercase tracking-widest text-ink-muted mb-2">
                 Memory Lane
               </p>
-              <p className="font-display font-extrabold text-3xl text-ivory mb-1">₹199</p>
-              <p className="text-ivory-muted text-sm mb-4">A sequence of photo moments.</p>
-              <ul className="text-left text-ivory-muted text-xs space-y-1.5 mb-6 flex-1">
+              <p className="font-display font-extrabold text-3xl text-ink mb-1">₹199</p>
+              <p className="text-ink-muted text-sm mb-4">A sequence of photo moments.</p>
+              <ul className="text-left text-ink-muted text-xs space-y-1.5 mb-6 flex-1">
                 <li>· 2–6 photo + caption memories</li>
                 <li>· Opening &amp; closing message</li>
                 <li>· PIN-protected link</li>
@@ -348,58 +353,58 @@ export default function HomePage() {
               </Link>
             </Reveal>
 
-            <Reveal delayMs={200} className="hover-lift rounded-3xl bg-plum p-6 ring-1 ring-plum-line text-center flex flex-col">
-              <p className="font-mono text-xs uppercase tracking-widest text-ivory-muted mb-2">
+            <Reveal delayMs={200} className="hover-lift rounded-3xl bg-paper-soft p-6 ring-1 ring-paper-line text-center flex flex-col">
+              <p className="font-mono text-xs uppercase tracking-widest text-ink-muted mb-2">
                 Time Capsule
               </p>
-              <p className="font-display font-extrabold text-3xl text-ivory mb-1">₹299</p>
-              <p className="text-ivory-muted text-sm mb-4">Locked until the moment you pick.</p>
-              <ul className="text-left text-ivory-muted text-xs space-y-1.5 mb-6 flex-1">
+              <p className="font-display font-extrabold text-3xl text-ink mb-1">₹299</p>
+              <p className="text-ink-muted text-sm mb-4">Locked until the moment you pick.</p>
+              <ul className="text-left text-ink-muted text-xs space-y-1.5 mb-6 flex-1">
                 <li>· Live countdown reveal</li>
                 <li>· Up to 5 photos</li>
                 <li>· PIN-protected link</li>
               </ul>
               <Link
                 href="/builder/tier3"
-                className="block w-full rounded-full border border-plum-line px-4 py-2.5 text-sm font-semibold text-ivory hover:bg-plum-soft transition-colors"
+                className="block w-full rounded-full border border-paper-line px-4 py-2.5 text-sm font-semibold text-ink hover:bg-paper transition-colors"
               >
                 Build yours
               </Link>
             </Reveal>
 
-            <Reveal delayMs={300} className="hover-lift rounded-3xl bg-plum-soft p-6 ring-1 ring-plum-line text-center flex flex-col">
-              <p className="font-mono text-xs uppercase tracking-widest text-ivory-muted mb-2">
+            <Reveal delayMs={300} className="hover-lift rounded-3xl bg-paper p-6 ring-1 ring-paper-line text-center flex flex-col">
+              <p className="font-mono text-xs uppercase tracking-widest text-ink-muted mb-2">
                 White Glove
               </p>
-              <p className="font-display font-extrabold text-3xl text-ivory mb-1">From ₹999</p>
-              <p className="text-ivory-muted text-sm mb-4">Made by hand, just for this one.</p>
-              <ul className="text-left text-ivory-muted text-xs space-y-1.5 mb-6 flex-1">
+              <p className="font-display font-extrabold text-3xl text-ink mb-1">From ₹999</p>
+              <p className="text-ink-muted text-sm mb-4">Made by hand, just for this one.</p>
+              <ul className="text-left text-ink-muted text-xs space-y-1.5 mb-6 flex-1">
                 <li>· Fully custom design</li>
                 <li>· Unlimited photos &amp; video</li>
                 <li>· We build it with you, 1:1</li>
               </ul>
               <Link
                 href="/builder/white-glove"
-                className="block w-full rounded-full border border-plum-line px-4 py-2.5 text-sm font-semibold text-ivory hover:bg-plum transition-colors"
+                className="block w-full rounded-full border border-paper-line px-4 py-2.5 text-sm font-semibold text-ink hover:bg-paper-soft transition-colors"
               >
                 Message us
               </Link>
             </Reveal>
           </div>
-          <p className="text-xs text-ivory-muted text-center mt-8">
+          <p className="text-xs text-ink-muted text-center mt-8">
             Tiers 1–3 are preview-before-you-pay. White Glove is handled personally, no builder needed.
           </p>
         </div>
       </section>
 
       {/* FAQ */}
-      <section id="faq" className="px-6 py-20 md:py-24 border-t border-plum-line">
+      <section id="faq" className="px-6 py-20 md:py-24 border-t border-paper-line">
         <div className="mx-auto max-w-2xl">
           <Reveal className="text-center">
-            <p className="font-mono text-xs uppercase tracking-widest text-ivory-muted mb-3">
+            <p className="font-mono text-xs uppercase tracking-widest text-ink-muted mb-3">
               Questions
             </p>
-            <h2 className="font-display font-extrabold text-3xl text-ivory mb-14">
+            <h2 className="font-display font-extrabold text-3xl text-ink mb-14">
               Before you build one
             </h2>
           </Reveal>
@@ -410,9 +415,9 @@ export default function HomePage() {
       </section>
 
       {/* Closing CTA */}
-      <section className="px-6 py-24 border-t border-plum-line text-center">
+      <section className="px-6 py-24 border-t border-paper-line text-center">
         <Reveal>
-          <h2 className="font-display font-black text-3xl sm:text-4xl text-ivory max-w-lg mx-auto mb-6">
+          <h2 className="font-display font-black text-3xl sm:text-4xl text-ink max-w-lg mx-auto mb-6">
             Don&apos;t take our word for it. <span className="text-gradient-accent">Preview it free.</span>
           </h2>
           <Link
@@ -425,25 +430,25 @@ export default function HomePage() {
       </section>
 
       {/* Footer */}
-      <footer className="px-6 py-14 border-t border-plum-line">
+      <footer className="px-6 py-14 border-t border-paper-line">
         <div className="mx-auto max-w-6xl grid gap-10 sm:grid-cols-3">
           <div>
-            <p className="font-display font-extrabold text-ivory mb-2">Surprise Pages</p>
-            <p className="text-sm text-ivory-muted">Personalised pages for birthdays and everyday surprises.</p>
+            <p className="font-display font-extrabold text-ink mb-2">Surprise Pages</p>
+            <p className="text-sm text-ink-muted">Personalised pages for birthdays and everyday surprises.</p>
           </div>
           <div>
-            <p className="font-mono text-xs uppercase tracking-widest text-ivory-muted mb-3">Product</p>
+            <p className="font-mono text-xs uppercase tracking-widest text-ink-muted mb-3">Product</p>
             <ul className="space-y-2 text-sm">
-              <li><Link href="/builder" className="text-ivory-muted hover:text-ivory transition-colors">Simple Wish</Link></li>
-              <li><Link href="/builder/tier2" className="text-ivory-muted hover:text-ivory transition-colors">Memory Lane</Link></li>
-              <li><Link href="/builder/tier3" className="text-ivory-muted hover:text-ivory transition-colors">Time Capsule</Link></li>
+              <li><Link href="/builder" className="text-ink-muted hover:text-ink transition-colors">Simple Wish</Link></li>
+              <li><Link href="/builder/tier2" className="text-ink-muted hover:text-ink transition-colors">Memory Lane</Link></li>
+              <li><Link href="/builder/tier3" className="text-ink-muted hover:text-ink transition-colors">Time Capsule</Link></li>
             </ul>
           </div>
           <div>
-            <p className="font-mono text-xs uppercase tracking-widest text-ivory-muted mb-3">Company</p>
+            <p className="font-mono text-xs uppercase tracking-widest text-ink-muted mb-3">Company</p>
             <ul className="space-y-2 text-sm">
-              <li><Link href="/terms" className="text-ivory-muted hover:text-ivory transition-colors">Terms</Link></li>
-              <li><Link href="/refunds" className="text-ivory-muted hover:text-ivory transition-colors">Refunds</Link></li>
+              <li><Link href="/terms" className="text-ink-muted hover:text-ink transition-colors">Terms</Link></li>
+              <li><Link href="/refunds" className="text-ink-muted hover:text-ink transition-colors">Refunds</Link></li>
             </ul>
           </div>
         </div>

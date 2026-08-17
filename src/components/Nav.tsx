@@ -16,15 +16,15 @@ export default function Nav() {
   const [open, setOpen] = useState(false);
 
   return (
-    <header className="sticky top-0 z-50 backdrop-blur-md bg-plum-deep/80 border-b border-plum-line">
+    <header className="sticky top-0 z-50 backdrop-blur-md bg-paper/80 border-b border-paper-line">
       <div className="mx-auto max-w-6xl px-6 h-16 flex items-center justify-between">
-        <Link href="/" className="font-display font-extrabold text-lg tracking-tight text-ivory">
+        <Link href="/" className="font-display font-extrabold text-lg tracking-tight text-ink">
           Surprise Pages
         </Link>
 
         <nav className="hidden sm:flex items-center gap-8">
           {NAV_LINKS.map((link) => (
-            <a key={link.href} href={link.href} className="text-sm text-ivory-muted hover:text-ivory transition-colors">
+            <a key={link.href} href={link.href} className="text-sm text-ink-muted hover:text-ink transition-colors">
               {link.label}
             </a>
           ))}
@@ -40,7 +40,7 @@ export default function Nav() {
         </div>
 
         <button
-          className="sm:hidden relative h-5 w-5 text-ivory"
+          className="sm:hidden relative h-5 w-5 text-ink"
           onClick={() => setOpen((v) => !v)}
           aria-label="Toggle menu"
           aria-expanded={open}
@@ -68,10 +68,10 @@ export default function Nav() {
           open ? 'grid-rows-[1fr]' : 'grid-rows-[0fr]'
         }`}
       >
-        <div className="overflow-hidden border-t border-plum-line">
+        <div className="overflow-hidden border-t border-paper-line">
           <div className="px-6 py-4 flex flex-col gap-4">
             {NAV_LINKS.map((link) => (
-              <a key={link.href} href={link.href} className="text-sm text-ivory-muted" onClick={() => setOpen(false)}>
+              <a key={link.href} href={link.href} className="text-sm text-ink-muted" onClick={() => setOpen(false)}>
                 {link.label}
               </a>
             ))}

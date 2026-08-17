@@ -13,12 +13,12 @@ export default function MarqueeStrip({ items }: MarqueeStripProps) {
   const doubled = [...items, ...items];
 
   return (
-    <div className="overflow-hidden border-y border-plum-line py-5">
+    <div className="overflow-hidden border-y border-paper-line py-5">
       <div className="marquee-track flex w-max gap-10">
         {doubled.map((item, i) => (
           <span
             key={i}
-            className="font-mono text-sm uppercase tracking-widest text-ivory-muted whitespace-nowrap"
+            className="font-mono text-sm uppercase tracking-widest text-ink-muted whitespace-nowrap"
           >
             {item}
           </span>
