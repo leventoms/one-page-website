@@ -19,7 +19,7 @@ body {
      a gap, not a ring of its own. Paper (white) by default since that's now
      the marketing site's canvas; dark surfaces (PinGate, the delivered
      templates) opt into the dark variant via .dark-surface. */
-  --focus-offset: #ffffff;
+  --focus-offset: #fffcf8;
 }
 
 .dark-surface {

@@ -66,21 +66,6 @@ const STEPS = [
   },
 ];
 
-const COMPARISON = {
-  generic: [
-    'The same message everyone else got',
-    'A stock template with their name inserted',
-    'A public link anyone can open',
-    'No way to see it before it sends',
-  ],
-  ours: [
-    'Written for them, by you, from scratch',
-    'Your own photos and words, not a fill-in-the-blank',
-    'PIN-protected — only the two of you have it',
-    'Preview the finished page before you pay',
-  ],
-};
-
 const FAQ_ITEMS = [
   {
     question: 'Can I see the page before I pay for it?',
@@ -138,10 +123,17 @@ export default function HomePage() {
               One link.{' '}
               <span className="text-gradient-accent">Every surprise</span> they&apos;ll actually open.
             </h1>
-            <p className="text-ink-muted text-lg leading-relaxed max-w-lg mx-auto lg:mx-0 mb-9">
+            <p className="text-ink-muted text-lg leading-relaxed max-w-lg mx-auto lg:mx-0 mb-6">
               Write it, preview it exactly as they&apos;ll see it, and get a link to send — in under
               two minutes. No back-and-forth with anyone.
             </p>
+            <ul className="flex flex-wrap justify-center lg:justify-start gap-x-5 gap-y-2 mb-9 text-sm text-ink-muted">
+              {['Fully customisable', 'See it before you pay', 'PIN-protected link', 'Live in seconds'].map((point) => (
+                <li key={point} className="flex items-center gap-1.5">
+                  <span className="text-gradient-accent font-semibold">✓</span> {point}
+                </li>
+              ))}
+            </ul>
             <div className="flex flex-col sm:flex-row items-center lg:items-start justify-center lg:justify-start gap-4">
               <Link
                 href="/builder"
@@ -201,9 +193,27 @@ export default function HomePage() {
 
           <div className="grid gap-6 sm:grid-cols-3">
             {[
-              { label: 'TIER 1 · SIMPLE WISH', el: <Tier1Template config={TIER1_SAMPLE} isPreview={false} />, featured: false },
-              { label: 'TIER 2 · MEMORY LANE', el: <Tier2Template config={TIER2_SAMPLE} isPreview={false} />, featured: true },
-              { label: 'TIER 3 · TIME CAPSULE', el: <Tier3Template config={TIER3_SAMPLE} isPreview />, featured: false },
+              {
+                label: 'TIER 1 · SIMPLE WISH',
+                blurb: 'Their name, your message, a couple of photos — and it opens straight to it.',
+                href: '/builder',
+                el: <Tier1Template config={TIER1_SAMPLE} isPreview={false} />,
+                featured: false,
+              },
+              {
+                label: 'TIER 2 · MEMORY LANE',
+                blurb: 'A scrollable run of memories, each with its own caption, ending on a closing note.',
+                href: '/builder/tier2',
+                el: <Tier2Template config={TIER2_SAMPLE} isPreview={false} />,
+                featured: true,
+              },
+              {
+                label: 'TIER 3 · TIME CAPSULE',
+                blurb: "Locked until the moment you pick, then it opens with a petal-fall reveal.",
+                href: '/builder/tier3',
+                el: <Tier3Template config={TIER3_SAMPLE} isPreview />,
+                featured: false,
+              },
             ].map((item, i) => (
               <Reveal key={item.label} delayMs={i * 100} className="flex flex-col">
                 <div
@@ -220,9 +230,16 @@ export default function HomePage() {
                   )}
                   <div className="scale-[0.68] origin-top">{item.el}</div>
                 </div>
-                <p className="font-mono text-xs uppercase tracking-widest text-ink-muted mt-4 text-center">
+                <p className="font-mono text-xs uppercase tracking-widest text-ink-muted mt-4 mb-2 text-center">
                   {item.label}
                 </p>
+                <p className="text-sm text-ink-muted text-center mb-4 flex-1">{item.blurb}</p>
+                <Link
+                  href={item.href}
+                  className="mx-auto rounded-full border border-paper-line px-5 py-2 text-sm font-semibold text-ink hover:bg-paper-soft transition-colors"
+                >
+                  Build this one
+                </Link>
               </Reveal>
             ))}
           </div>
@@ -253,44 +270,65 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* Comparison — a full-bleed dark panel, not another pair of light cards.
-          Deliberate rhythm break: light, soft, DARK, light, soft, light. */}
+      {/* Comparison — a real row-by-row table like Cutiepage's own
+          "us vs. others" pattern, not prose lists. Every row here is a
+          genuine, honest capability comparison — nothing invented to make
+          either column look better than it is. */}
       <section className="py-20 md:py-24 bg-plum-deep dark-surface">
-        <div className="px-6 mx-auto max-w-4xl">
+        <div className="px-6 mx-auto max-w-3xl">
           <Reveal className="text-center">
             <p className="font-mono text-xs uppercase tracking-widest text-ivory-muted mb-3">The difference</p>
-            <h2 className="font-display font-extrabold text-3xl md:text-4xl text-ivory mb-16">
+            <h2 className="font-display font-extrabold text-3xl md:text-4xl text-ivory mb-14">
               A page made for them, not a template with their name on it.
             </h2>
           </Reveal>
 
-          <div className="grid gap-10 sm:grid-cols-2">
-            <Reveal>
-              <p className="font-mono text-xs uppercase tracking-widest text-ivory-muted mb-4">
-                A forwarded template
-              </p>
-              <ul className="space-y-3">
-                {COMPARISON.generic.map((line) => (
-                  <li key={line} className="text-sm text-ivory-muted flex gap-2">
-                    <span>–</span> {line}
-                  </li>
+          <Reveal className="overflow-x-auto">
+            <table className="w-full border-collapse text-left">
+              <thead>
+                <tr>
+                  <th className="pb-4 pr-4 text-xs font-mono uppercase tracking-widest text-ivory-muted font-normal align-bottom">
+                    &nbsp;
+                  </th>
+                  <th className="pb-4 px-4 text-xs font-mono uppercase tracking-widest text-ivory-muted font-normal align-bottom text-center">
+                    A forwarded template
+                  </th>
+                  <th className="pb-2 px-4 align-bottom text-center">
+                    <span className="inline-block rounded-full bg-gradient-accent px-3 py-1 text-[10px] font-bold uppercase tracking-widest text-ivory mb-2">
+                      Recommended
+                    </span>
+                    <div className="text-xs font-mono uppercase tracking-widest text-ivory">Surprise Pages</div>
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+                {[
+                  { feature: 'Made specifically for one person', generic: false, ours: true },
+                  { feature: 'Real link you can share anywhere', generic: false, ours: true },
+                  { feature: 'See it before you pay', generic: null, ours: true },
+                  { feature: 'Private, PIN-protected', generic: false, ours: true },
+                  { feature: 'No design skill required', generic: false, ours: true },
+                  { feature: 'A real person you can reach', generic: false, ours: true },
+                ].map((row, i, arr) => (
+                  <tr key={row.feature} className={i < arr.length - 1 ? 'border-b border-plum-line' : ''}>
+                    <td className="py-4 pr-4 text-sm text-ivory-muted">{row.feature}</td>
+                    <td className="py-4 px-4 text-center">
+                      {row.generic === null ? (
+                        <span className="text-ivory-muted/50">—</span>
+                      ) : row.generic ? (
+                        <span className="text-gradient-accent">✓</span>
+                      ) : (
+                        <span className="text-ivory-muted/50">✗</span>
+                      )}
+                    </td>
+                    <td className="py-4 px-4 text-center bg-plum-soft rounded-lg">
+                      {row.ours ? <span className="text-gradient-accent font-semibold">✓</span> : <span className="text-ivory-muted/50">✗</span>}
+                    </td>
+                  </tr>
                 ))}
-              </ul>
-            </Reveal>
-
-            <Reveal delayMs={100} className="sm:border-l sm:border-plum-line sm:pl-10">
-              <p className="font-mono text-xs uppercase tracking-widest text-gradient-accent mb-4">
-                A Surprise Pages link
-              </p>
-              <ul className="space-y-3">
-                {COMPARISON.ours.map((line) => (
-                  <li key={line} className="text-sm text-ivory flex gap-2">
-                    <span className="text-gradient-accent">✓</span> {line}
-                  </li>
-                ))}
-              </ul>
-            </Reveal>
-          </div>
+              </tbody>
+            </table>
+          </Reveal>
         </div>
       </section>
 
@@ -320,7 +358,7 @@ export default function HomePage() {
             </Reveal>
 
             <Reveal delayMs={100} className="lg:-mt-4">
-              <div className="hover-lift relative rounded-3xl bg-paper-soft p-7 border-2 border-transparent [background:linear-gradient(#f7f6f4,#f7f6f4)_padding-box,var(--gradient-accent)_border-box] text-center flex flex-col shadow-xl shadow-black/10">
+              <div className="hover-lift relative rounded-3xl bg-paper-soft p-7 border-2 border-transparent [background:linear-gradient(#faf3ec,#faf3ec)_padding-box,var(--gradient-accent)_border-box] text-center flex flex-col shadow-xl shadow-black/10">
                 <span className="absolute -top-3 left-1/2 -translate-x-1/2 rounded-full bg-gradient-accent px-3 py-1 text-[10px] font-bold uppercase tracking-widest text-ivory">
                   Popular
                 </span>

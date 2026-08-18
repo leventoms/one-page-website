@@ -20,14 +20,17 @@ const config: Config = {
           soft: '#1d1d20', // slightly lighter surface
           line: '#2a2a2e', // 1px borders/strokes
         },
-        // Marketing-site surfaces (Subframe-inspired: white canvas, dark
-        // "product panel" islands floating on it). Only page.tsx, Nav,
+        // Marketing-site surfaces (warm cream canvas — per Cutiepage's own
+        // convention for this category: an off-white "gift wrap" base reads
+        // cozier/more romantic than stark white for a gifting product —
+        // with dark "product panel" islands floating on it, borrowed from
+        // Subframe's screenshot-panel pattern). Only page.tsx, Nav,
         // Accordion, MarqueeStrip, the builder chrome, and ManualRequestForm
         // use these — never the templates themselves.
         paper: {
-          DEFAULT: '#ffffff', // page background
-          soft: '#f7f6f4', // card / input surface
-          line: '#e7e4de', // 1px borders/strokes
+          DEFAULT: '#fffcf8', // page background
+          soft: '#faf3ec', // card / input surface
+          line: '#ece2d6', // 1px borders/strokes
         },
         ink: {
           DEFAULT: '#0a0a0c', // primary text on paper
