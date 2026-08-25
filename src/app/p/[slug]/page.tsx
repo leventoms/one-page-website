@@ -2,7 +2,7 @@ import { notFound } from 'next/navigation';
 import { createOrderService } from '@/lib/composition-root';
 import { getTemplateDefinition } from '@/lib/templates/template-registry';
 import { InvalidPinError, OrderNotFoundError } from '@/lib/services/order-service';
-import PinGate from '@/components/PinGate';
+import PinGate from '@/features/gift/PinGate';
 
 interface PageProps {
   params: { slug: string };

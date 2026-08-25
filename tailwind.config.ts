@@ -4,6 +4,7 @@ const config: Config = {
   content: [
     './src/app/**/*.{ts,tsx}',
     './src/components/**/*.{ts,tsx}',
+    './src/features/**/*.{ts,tsx}',
   ],
   theme: {
     extend: {
@@ -21,9 +22,9 @@ const config: Config = {
           line: '#2a2a2e', // 1px borders/strokes
         },
         // Marketing-site surfaces (Subframe-inspired: white canvas, dark
-        // "product panel" islands floating on it). Only page.tsx, Nav,
-        // Accordion, MarqueeStrip, the builder chrome, and ManualRequestForm
-        // use these — never the templates themselves.
+        // "product panel" islands floating on it). Used by Nav, the builder
+        // chrome (src/features/builder), and ManualRequestForm — never the
+        // templates themselves.
         paper: {
           DEFAULT: '#ffffff', // page background
           soft: '#f7f6f4', // card / input surface

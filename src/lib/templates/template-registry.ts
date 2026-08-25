@@ -1,8 +1,8 @@
 import type { TemplateDefinition } from '@/types/template';
 import type { TemplateTier } from '@/types/order';
-import Tier1Template from '@/components/templates/Tier1Template';
-import Tier2Template from '@/components/templates/Tier2Template';
-import Tier3Template from '@/components/templates/Tier3Template';
+import Tier1Template from '@/features/templates/Tier1Template';
+import Tier2Template from '@/features/templates/Tier2Template';
+import Tier3Template from '@/features/templates/Tier3Template';
 
 /**
  * Adding a new self-serve tier means: write its Template.tsx, add one entry

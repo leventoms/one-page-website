@@ -74,6 +74,41 @@ check in a restricted environment.
    env vars are set), builds the page by hand, sends it to the sender
    directly. No automation past step 2 — that's intentional.
 
+## Project structure
+
+Feature-first: `app/` is routing only, each product surface is a
+self-contained folder under `src/features/`, and `src/lib` + `src/types`
+hold the framework-agnostic domain core.
+
+```
+src/
+  app/                      # routes only (App Router)
+    (site)/                 # everything under the shared marketing Nav
+      layout.tsx            #   <Nav> + font variables
+      page.tsx              #   landing page (composes features/marketing)
+      landing.css           #   autumn/painterly landing theme (.sp-*)
+      builder/              #   self-serve builders (tiers 1-3 + white-glove)
+      terms/  refunds/      #   policy pages
+    p/[slug]/               # delivered gift page (PIN-gated, no Nav)
+    api/                    # order / manual-request / payment endpoints
+    layout.tsx  globals.css # root shell + shared paper-theme utilities
+  features/
+    marketing/              # the landing page, self-contained
+      components/{sections,effects,ui}/
+      hooks/  content.ts  types.ts  assets.ts  typography.ts
+    builder/                # Tier1-3 builder chrome (client forms)
+    templates/              # Tier1-3 live-page renderers
+    gift/                   # PinGate (recipient PIN entry)
+  components/               # genuinely shared: Nav, ManualRequestForm
+  lib/                      # domain core: services, repositories,
+                            #   composition-root, template-registry, payments
+  types/                    # shared TypeScript contracts
+```
+
+Imports use the `@/*` alias (→ `src/*`) throughout; a feature reaches
+another feature only through its `@/features/*` entry points, never via
+relative paths into its internals.
+
 ## Where SOLID shows up
 
 | Principle | Where |
