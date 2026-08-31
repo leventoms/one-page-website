@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import Image from 'next/image';
 import type { Tier3Config } from '@/types/order';
 import type { TemplateProps } from '@/types/template';
+import VideoBlock from '@/features/templates/VideoBlock';
 
 const PLACEHOLDER_PHOTO = '/placeholder-photo.svg';
 const PLACEHOLDER_MESSAGE = 'Your message will appear here once the capsule opens.';
@@ -108,7 +109,7 @@ export default function Tier3Template({ config, isPreview }: TemplateProps<Tier3
 
       <div className="relative w-full max-w-sm rounded-3xl bg-white/5 backdrop-blur-md p-6 shadow-xl ring-1 ring-white/10">
         <div className="flex justify-center gap-2 mb-6 flex-wrap">
-          {photos.slice(0, 5).map((url, i) => (
+          {photos.slice(0, 15).map((url, i) => (
             <div
               key={url + i}
               className="relative h-24 w-20 overflow-hidden rounded-xl ring-2"
@@ -118,6 +119,8 @@ export default function Tier3Template({ config, isPreview }: TemplateProps<Tier3
             </div>
           ))}
         </div>
+
+        {config.video && <VideoBlock video={config.video} accentColor={config.accentColor} />}
 
         <h1 className="text-2xl font-semibold text-white mb-2">
           For {config.recipientName || 'you'} ⏳

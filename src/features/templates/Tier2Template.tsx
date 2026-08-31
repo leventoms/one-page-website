@@ -1,6 +1,7 @@
 import Image from 'next/image';
 import type { Tier2Config } from '@/types/order';
 import type { TemplateProps } from '@/types/template';
+import VideoBlock from '@/features/templates/VideoBlock';
 
 const PLACEHOLDER_PHOTO = '/placeholder-photo.svg';
 const PLACEHOLDER_INTRO = 'A little walk through some of my favourite moments with you.';
@@ -42,7 +43,7 @@ export default function Tier2Template({ config, isPreview }: TemplateProps<Tier2
       </header>
 
       <div className="max-w-md mx-auto flex flex-col gap-10">
-        {memories.slice(0, 6).map((memory, i) => (
+        {memories.slice(0, 10).map((memory, i) => (
           <div key={memory.photoUrl + i} className="flex flex-col items-center text-center">
             <div
               className="relative h-56 w-full max-w-xs overflow-hidden rounded-2xl ring-2 mb-3"
@@ -60,6 +61,8 @@ export default function Tier2Template({ config, isPreview }: TemplateProps<Tier2
           </div>
         ))}
       </div>
+
+      {config.video && <VideoBlock video={config.video} accentColor={config.accentColor} />}
 
       <footer className="max-w-md mx-auto text-center mt-14">
         <p className="whitespace-pre-line text-white/85 leading-relaxed mb-3">{closing}</p>

@@ -174,3 +174,73 @@ export interface LandingContent {
   readonly finalCta: FinalCtaContent;
   readonly footer: FooterContent;
 }
+
+/* ------------------------------------------------------------------ *
+ * Brand sub-pages (About / Contact / Examples)
+ *
+ * These share the same content-as-data convention as the landing page:
+ * pages stay presentational and read their copy from pages.content.ts.
+ * ------------------------------------------------------------------ */
+
+/** A closing "start your page" band reused across the brand pages. */
+export interface BrandCta {
+  readonly title: string;
+  readonly body: string;
+  readonly link: LinkItem;
+}
+
+export interface AboutValue {
+  readonly image: ImageAsset;
+  readonly title: string;
+  readonly body: string;
+}
+
+export interface AboutContent {
+  readonly eyebrow: string;
+  readonly title: string;
+  readonly lede: string;
+  readonly story: {
+    readonly eyebrow: string;
+    readonly title: string;
+    readonly paras: ReadonlyArray<string>;
+  };
+  readonly values: {
+    readonly eyebrow: string;
+    readonly title: string;
+    readonly items: ReadonlyArray<AboutValue>;
+  };
+  readonly cta: BrandCta;
+}
+
+export interface ContactContent {
+  readonly eyebrow: string;
+  readonly title: string;
+  readonly lede: string;
+  readonly aside: {
+    readonly heading: string;
+    readonly body: string;
+    readonly responseTime: string;
+    readonly faqLead: string;
+    readonly faqLink: LinkItem;
+  };
+}
+
+export interface GallerySample {
+  readonly occasion: string;
+  readonly title: string;
+  readonly tierLabel: string;
+  /** CSS expression for the card's accent panel, e.g. "var(--wine)". */
+  readonly swatch: string;
+  readonly quote: string;
+  readonly image: ImageAsset;
+  /** Where "make one like this" sends the visitor. */
+  readonly builderHref: string;
+}
+
+export interface GalleryContent {
+  readonly eyebrow: string;
+  readonly title: string;
+  readonly lede: string;
+  readonly samples: ReadonlyArray<GallerySample>;
+  readonly cta: BrandCta;
+}

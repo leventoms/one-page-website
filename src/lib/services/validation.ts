@@ -1,4 +1,5 @@
 import { z } from 'zod';
+import { parseVideoEmbed } from '@/lib/services/video-embed';
 
 // Curated to sit alongside the near-black brand canvas and its warm
 // orange->pink->purple gradient accent — every generated page stays
@@ -10,6 +11,39 @@ export const ALLOWED_ACCENT_COLORS = [
   '#22d3ee', // cyan (deliberate cool contrast note)
   '#facc15', // gold
 ] as const;
+
+// A larger brand-safe palette offered on the higher self-serve tier
+// (Time Capsule) as its "custom theme colours" perk. Superset of
+// ALLOWED_ACCENT_COLORS; still curated so a page can never look broken.
+export const EXPANDED_ACCENT_COLORS = [
+  ...ALLOWED_ACCENT_COLORS,
+  '#f43f5e', // rose
+  '#fb923c', // amber-orange
+  '#34d399', // emerald
+  '#60a5fa', // sky
+  '#c084fc', // violet
+  '#f472b6', // soft pink
+  '#2dd4bf', // teal
+] as const;
+
+// A single optional video clip: either a self-hosted file URL or an
+// allowlisted embed (YouTube/Instagram). The embed URL is validated against
+// the shared provider allowlist so non-allowlisted hosts are rejected here,
+// not just in the UI. The allowlist check lives on the union (not the member)
+// because z.discriminatedUnion options must be plain objects, not refinements.
+export const videoConfigSchema = z
+  .discriminatedUnion('kind', [
+    z.object({ kind: z.literal('file'), url: z.string().url() }),
+    z.object({
+      kind: z.literal('embed'),
+      provider: z.enum(['youtube', 'instagram']),
+      url: z.string().url(),
+    }),
+  ])
+  .refine((v) => v.kind !== 'embed' || parseVideoEmbed(v.url)?.provider === v.provider, {
+    message: 'Video link must be a supported YouTube or Instagram URL.',
+    path: ['url'],
+  });
 
 export const tier1ConfigSchema = z.object({
   recipientName: z.string().trim().min(1).max(40),
@@ -29,20 +63,22 @@ export const tier2ConfigSchema = z.object({
   recipientName: z.string().trim().min(1).max(40),
   senderName: z.string().trim().min(1).max(40),
   introMessage: z.string().trim().min(1).max(300),
-  memories: z.array(tier2MemorySchema).min(2).max(6),
+  memories: z.array(tier2MemorySchema).min(2).max(10),
   closingMessage: z.string().trim().min(1).max(300),
   accentColor: z.enum(ALLOWED_ACCENT_COLORS),
   songUrl: z.string().url().optional(),
+  video: videoConfigSchema.optional(),
 });
 
 export const tier3ConfigSchema = z.object({
   recipientName: z.string().trim().min(1).max(40),
   senderName: z.string().trim().min(1).max(40),
   message: z.string().trim().min(1).max(600),
-  photoUrls: z.array(z.string().url()).min(1).max(5),
-  accentColor: z.enum(ALLOWED_ACCENT_COLORS),
+  photoUrls: z.array(z.string().url()).min(1).max(15),
+  accentColor: z.enum(EXPANDED_ACCENT_COLORS),
   revealAt: z.string().datetime({ offset: true }),
   songUrl: z.string().url().optional(),
+  video: videoConfigSchema.optional(),
 });
 
 // Discriminated on `tier` so each new template only needs one new branch
@@ -79,3 +115,14 @@ export const manualRequestInputSchema = z.object({
 });
 
 export type ManualRequestInputParsed = z.infer<typeof manualRequestInputSchema>;
+
+// Public contact form — a free-text message plus who sent it and how to reach
+// them back. No tier/PIN/structured page content; this is just a note that
+// gets emailed to the owner (or logged when email isn't configured yet).
+export const contactMessageInputSchema = z.object({
+  name: z.string().trim().min(1).max(60),
+  email: z.string().trim().email(),
+  message: z.string().trim().min(1).max(1000),
+});
+
+export type ContactMessageInputParsed = z.infer<typeof contactMessageInputSchema>;

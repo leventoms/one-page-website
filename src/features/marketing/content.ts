@@ -117,7 +117,7 @@ export const landingContent: LandingContent = {
         cta: { label: 'choose this', href: '/builder' },
         swatch: 'var(--amber)',
         highlights: [
-          'One photo + your message',
+          'Up to 3 photos + your message',
           'Ready to send in minutes',
           'Link never expires',
         ],
@@ -131,7 +131,7 @@ export const landingContent: LandingContent = {
         swatch: 'var(--red)',
         highlights: [
           'Up to 10 photos, arranged',
-          'Add a song or a voice note',
+          'Add a song or a short video',
           'Everything in Simple Wish',
         ],
       },
@@ -145,6 +145,7 @@ export const landingContent: LandingContent = {
         highlights: [
           'Locks until the big moment',
           'A live countdown reveal',
+          'Add a video + custom theme colours',
           'Everything in Memory Lane',
         ],
         featured: true,
@@ -159,7 +160,7 @@ export const landingContent: LandingContent = {
         swatch: 'var(--ink)',
         highlights: [
           'A designer builds it with you',
-          'Unlimited photos & sections',
+          'Generous limits — more on request',
           'Priority support',
         ],
       },
@@ -235,17 +236,18 @@ export const landingContent: LandingContent = {
       {
         heading: 'Company',
         links: [
-          { label: 'About', href: '#top', external: true },
-          { label: 'Examples', href: '#pricing', external: true },
-          { label: 'Contact', href: '#faq', external: true },
+          { label: 'About', href: '/about' },
+          { label: 'Examples', href: '/examples' },
+          { label: 'Contact', href: '/contact' },
         ],
       },
       {
         heading: 'Support',
         links: [
+          { label: 'Help', href: '/#faq' },
           { label: 'Terms', href: '/terms' },
           { label: 'Refunds', href: '/refunds' },
-          { label: 'Help', href: '#faq', external: true },
+          { label: 'Privacy', href: '/privacy' },
         ],
       },
     ],

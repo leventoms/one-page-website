@@ -210,6 +210,124 @@
   .sp-leaves{display:none}
 }
 
+/* ============================================================
+   Brand sub-pages (About / Contact / Examples) — shared autumn
+   building blocks layered on the same .sp-landing scope + tokens.
+   Section-specific landing classes above are unused here and simply
+   don't render (their class names never appear in this markup).
+   ============================================================ */
+.sp-soft{background:var(--cream2)}
+/* compact page hero */
+.sp-phero{position:relative;text-align:center;padding:52px 0 8px}
+@media(min-width:900px){.sp-phero{padding:78px 0 14px}}
+.sp-phero h1{font-size:clamp(2.3rem,5.6vw,3.8rem);font-weight:900;margin-top:.3em}
+.sp-phero .lede{font-size:1.1rem;color:var(--ink2);max-width:36em;margin:1.1rem auto 0}
+.sp-phero-cta{display:flex;gap:12px;flex-wrap:wrap;justify-content:center;margin-top:1.9rem}
+@media(max-width:400px){.sp-phero-cta{flex-direction:column}.sp-phero-cta .sp-btn{width:100%;justify-content:center}}
+/* readable long-form measure (About story) */
+.sp-prose{max-width:40rem;margin-inline:auto}
+.sp-prose p{color:var(--ink2);font-size:1.08rem;margin-bottom:1.1em}
+.sp-prose p:last-child{margin-bottom:0}
+.sp-prose h3{font-family:var(--font-fraunces),Georgia,serif;font-size:1.55rem;font-weight:700;color:var(--ink);margin:1.7em 0 .5em}
+.sp-prose strong{color:var(--ink);font-weight:700}
+/* reusable centered CTA band */
+.sp-cta-band{background:linear-gradient(140deg,#8e2438,#c22b22 60%,#e08a2c);color:#fff;text-align:center}
+.sp-cta-band h2{font-size:clamp(1.9rem,4vw,2.7rem);font-weight:900;color:#fff}
+.sp-cta-band p{font-size:1.1rem;opacity:.94;margin:.9rem auto 1.7rem;max-width:32em}
+/* contact: info + form split */
+.sp-contact{display:grid;grid-template-columns:1fr;gap:30px;align-items:start}
+@media(min-width:880px){.sp-contact{grid-template-columns:.9fr 1.1fr;gap:46px}}
+.sp-contact-aside h2{font-family:var(--font-fraunces),Georgia,serif;font-size:1.55rem;font-weight:700;color:var(--ink);margin-bottom:.5em}
+.sp-contact-aside p{color:var(--ink2);margin-bottom:1rem}
+.sp-contact-aside .big{display:inline-block;font-family:var(--font-fraunces),Georgia,serif;font-size:1.3rem;font-weight:700;color:var(--wine)}
+.sp-contact-aside .big:hover{color:var(--red)}
+.sp-alink{color:var(--red);font-weight:600;text-decoration:underline;text-underline-offset:3px}
+.sp-alink:hover{color:var(--red-deep)}
+.sp-form{display:flex;flex-direction:column;gap:16px;background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:24px;box-shadow:var(--shadow)}
+@media(min-width:640px){.sp-form{padding:30px}}
+.sp-form .sp-btn{justify-content:center}
+.sp-form .sp-btn:disabled{opacity:.6;transform:none;cursor:default}
+.sp-field{display:flex;flex-direction:column;gap:6px}
+.sp-field label{font-weight:600;font-size:.9rem;color:var(--ink)}
+.sp-input,.sp-textarea{font:inherit;width:100%;background:var(--paper);border:1.5px solid var(--line);border-radius:12px;padding:.7em .9em;color:var(--ink);transition:border-color .2s,box-shadow .2s}
+.sp-input:focus,.sp-textarea:focus{outline:none;border-color:var(--red);box-shadow:0 0 0 3px rgba(226,59,46,.15)}
+.sp-textarea{resize:vertical;min-height:130px}
+.sp-field-error{color:var(--red);font-size:.85rem}
+.sp-form-note{font-size:.85rem;color:var(--muted)}
+.sp-form-done{text-align:center;padding:18px 4px}
+.sp-form-done .mark{width:52px;height:52px;border-radius:50%;background:var(--red);color:#fff;display:grid;place-items:center;font-size:1.5rem;margin:0 auto 14px;box-shadow:0 6px 0 var(--red-deep)}
+.sp-form-done h3{font-family:var(--font-fraunces),Georgia,serif;font-size:1.4rem;font-weight:700;color:var(--ink)}
+.sp-form-done p{color:var(--ink2);margin-top:.4rem}
+/* examples gallery */
+.sp-gallery{display:grid;grid-template-columns:1fr;gap:22px}
+@media(min-width:600px){.sp-gallery{grid-template-columns:repeat(2,1fr)}}
+@media(min-width:980px){.sp-gallery{grid-template-columns:repeat(3,1fr)}}
+.sp-gcard{--tier:var(--red);display:flex;flex-direction:column;background:var(--card);border:1px solid var(--line);border-radius:var(--r);overflow:hidden;box-shadow:var(--shadow);transition:transform .25s,box-shadow .25s}
+.sp-gcard:hover{transform:translateY(-6px);box-shadow:0 26px 52px -24px rgba(60,20,10,.5)}
+.sp-gpreview{position:relative;aspect-ratio:4/3;display:flex;align-items:flex-end;justify-content:center;padding:20px;background:linear-gradient(160deg,rgba(255,255,255,.5),rgba(0,0,0,.06)),var(--tier);overflow:hidden}
+.sp-gpreview img{max-height:100%;width:auto;filter:drop-shadow(0 14px 18px rgba(80,25,15,.3))}
+.sp-gchip{position:absolute;top:12px;left:12px;background:var(--paper);color:var(--wine);font-size:.64rem;font-weight:800;letter-spacing:.06em;text-transform:uppercase;padding:5px 10px;border-radius:999px;box-shadow:0 4px 10px -3px rgba(0,0,0,.35)}
+.sp-gbody{display:flex;flex-direction:column;flex:1;padding:20px}
+.sp-gbody .occ{font-size:.7rem;letter-spacing:.12em;text-transform:uppercase;font-weight:700;color:var(--muted)}
+.sp-gbody h3{font-family:var(--font-fraunces),Georgia,serif;font-size:1.3rem;font-weight:700;color:var(--ink);margin:.2em 0 .4em}
+.sp-gbody .quote{color:var(--ink2);font-size:.96rem;font-style:italic;flex:1}
+.sp-gbody .make{margin-top:16px;font-weight:700;color:var(--tier)}
+.sp-gcard:hover .make{text-decoration:underline}
+
+/* ============================================================
+   Builder / dashboard pages (Simple Wish, Memory Lane, Time
+   Capsule, White Glove) — autumn chrome wrapped around the dark
+   product preview. Same .sp-landing tokens; the preview island
+   stays dark on purpose (it IS the real delivered gift page).
+   ============================================================ */
+.sp-builder{min-height:100dvh;padding:34px 0 72px}
+.sp-builder .sp-wrap{position:relative;z-index:2}
+.sp-builder-grid{display:grid;grid-template-columns:1fr;gap:30px;align-items:start}
+@media(min-width:1000px){.sp-builder-grid{grid-template-columns:1.02fr .98fr;gap:44px}}
+.sp-builder-intro{max-width:34em;margin-bottom:4px}
+.sp-builder-intro h1{font-size:clamp(2rem,4.4vw,2.9rem);font-weight:900;margin-top:.3em}
+.sp-builder-intro .lede{color:var(--ink2);font-size:1.06rem;margin-top:.7rem}
+.sp-builder-switch{margin-top:1rem;font-size:.92rem;color:var(--ink2)}
+/* inline text button that reads like a link */
+.sp-textlink{color:var(--red);font-weight:600;text-decoration:underline;text-underline-offset:3px;
+  background:none;border:0;cursor:pointer;font:inherit;padding:0}
+.sp-textlink:hover{color:var(--red-deep)}
+/* accent swatches */
+.sp-swatches{display:flex;flex-wrap:wrap;gap:10px}
+.sp-swatch{width:34px;height:34px;border-radius:50%;border:3px solid transparent;cursor:pointer;padding:0;
+  box-shadow:0 2px 6px -1px rgba(0,0,0,.25);transition:transform .15s,border-color .15s}
+.sp-swatch:hover{transform:scale(1.08)}
+.sp-swatch[aria-pressed="true"]{border-color:var(--ink)}
+/* memory repeater (Memory Lane) */
+.sp-memories{display:flex;flex-direction:column;gap:14px}
+.sp-memories-head{display:flex;align-items:center;justify-content:space-between}
+.sp-memories-head .lbl{font-weight:600;font-size:.9rem;color:var(--ink)}
+.sp-memory{background:var(--cream2);border:1.5px solid var(--line);border-radius:16px;padding:14px;
+  display:flex;flex-direction:column;gap:10px}
+.sp-memory-head{display:flex;align-items:center;justify-content:space-between;font-size:.72rem;
+  letter-spacing:.08em;text-transform:uppercase;font-weight:700;color:var(--muted)}
+/* video input (Memory Lane + Time Capsule) */
+.sp-videomodes{display:flex;flex-wrap:wrap;gap:8px}
+.sp-videomode{font:inherit;font-size:.82rem;font-weight:600;padding:.45em 1em;border-radius:999px;
+  border:1.5px solid var(--line);background:var(--paper);color:var(--ink2);cursor:pointer;transition:.15s}
+.sp-videomode:hover{border-color:var(--red)}
+.sp-videomode[aria-pressed="true"]{background:var(--red);border-color:var(--red);color:#fff}
+/* narrow, spaced PIN field */
+.sp-pin{width:7.5rem;letter-spacing:.4em;text-align:center;font-weight:700}
+/* preview island — dark, framed; it renders the actual delivered page */
+.sp-preview{border-radius:22px;overflow:hidden;background:#0a0a0c;border:1px solid var(--line);
+  box-shadow:0 26px 60px -26px rgba(60,20,10,.6)}
+.sp-preview.scroll{max-height:80vh;overflow-y:auto}
+@media(min-width:1000px){.sp-preview{position:sticky;top:92px}}
+/* success screen with the shareable link */
+.sp-builder-done{max-width:32rem;margin:0 auto;text-align:center;padding:64px 20px}
+.sp-builder-done .mark{width:56px;height:56px;border-radius:50%;background:var(--red);color:#fff;
+  display:grid;place-items:center;font-size:1.6rem;margin:0 auto 16px;box-shadow:0 6px 0 var(--red-deep)}
+.sp-builder-done h2{font-family:var(--font-fraunces),Georgia,serif;font-size:1.7rem;font-weight:800;color:var(--ink)}
+.sp-builder-done p{color:var(--ink2);margin:.6rem 0 1.2rem}
+.sp-sharelink{display:block;word-break:break-all;background:var(--paper);border:1.5px solid var(--line);
+  border-radius:12px;padding:12px 14px;font-family:var(--font-mono,ui-monospace),monospace;font-size:.85rem;color:var(--ink)}
+
 
 
 

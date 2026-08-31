@@ -5,7 +5,8 @@ import Script from 'next/script';
 import Link from 'next/link';
 import Tier3Template from '@/features/templates/Tier3Template';
 import ManualRequestForm from '@/components/ManualRequestForm';
-import { ALLOWED_ACCENT_COLORS } from '@/lib/services/validation';
+import VideoInput from '@/features/builder/VideoInput';
+import { EXPANDED_ACCENT_COLORS } from '@/lib/services/validation';
 import { useOrderCheckout } from '@/lib/hooks/useOrderCheckout';
 import type { Tier3Config } from '@/types/order';
 
@@ -22,7 +23,7 @@ const EMPTY_CONFIG: Tier3Config = {
   senderName: '',
   message: '',
   photoUrls: [],
-  accentColor: ALLOWED_ACCENT_COLORS[0],
+  accentColor: EXPANDED_ACCENT_COLORS[0],
   revealAt: '',
 };
 
@@ -143,7 +144,7 @@ export default function Tier3Builder() {
         </label>
 
         <label className="flex flex-col gap-1 text-sm text-ink-muted">
-          Photo URL(s) — comma separated, up to 5
+          Photo URL(s) — comma separated, up to 15
           <input
             className="rounded-lg bg-paper-soft border border-paper-line px-3 py-2 text-ink"
             placeholder="https://..."
@@ -154,7 +155,7 @@ export default function Tier3Builder() {
                   .split(',')
                   .map((s) => s.trim())
                   .filter(Boolean)
-                  .slice(0, 5)
+                  .slice(0, 15)
               )
             }
           />
@@ -171,8 +172,10 @@ export default function Tier3Builder() {
           />
         </label>
 
-        <div className="flex gap-2">
-          {ALLOWED_ACCENT_COLORS.map((color) => (
+        <VideoInput onChange={(video) => updateField('video', video)} />
+
+        <div className="flex flex-wrap gap-2">
+          {EXPANDED_ACCENT_COLORS.map((color) => (
             <button
               key={color}
               type="button"

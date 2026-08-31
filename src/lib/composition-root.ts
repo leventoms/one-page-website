@@ -5,6 +5,7 @@ import { SlugGenerator } from '@/lib/services/slug-generator';
 import { OrderService } from '@/lib/services/order-service';
 import { ManualRequestService } from '@/lib/services/manual-request-service';
 import { createNotifierFromEnv } from '@/lib/notifications/email-notifier';
+import type { INotifier } from '@/lib/notifications/notifier.interface';
 
 /**
  * The ONE place in the app where concrete classes are instantiated and
@@ -25,4 +26,13 @@ export function createManualRequestService(): ManualRequestService {
   const repository = new SupabaseManualRequestRepository(client);
   const notifier = createNotifierFromEnv();
   return new ManualRequestService(repository, notifier);
+}
+
+/**
+ * Contact-form notifier. Needs no repository — a contact message is delivered,
+ * not persisted — so it's just the env-selected notifier: Resend when
+ * configured, the console fallback otherwise, exactly like manual requests.
+ */
+export function createContactNotifier(): INotifier {
+  return createNotifierFromEnv();
 }

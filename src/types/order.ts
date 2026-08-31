@@ -8,6 +8,17 @@ export type OrderStatus = 'draft' | 'previewing' | 'paid' | 'published' | 'expir
 
 export type TemplateTier = 'tier1' | 'tier2' | 'tier3' | 'tier4';
 
+/**
+ * An optional single video clip attached to a page. Two URL-based modes,
+ * matching how all other media works (no upload pipeline):
+ *  - `file`  — a direct .mp4/.webm URL the sender hosts, played in <video>.
+ *  - `embed` — a YouTube/Instagram link, rendered in a sandboxed <iframe>.
+ * Duration is not capped (we don't host the file); quantity is one clip.
+ */
+export type VideoConfig =
+  | { kind: 'file'; url: string }
+  | { kind: 'embed'; provider: 'youtube' | 'instagram'; url: string };
+
 /** The user-authored content that gets rendered onto the live page. */
 export interface Tier1Config {
   recipientName: string;
@@ -28,20 +39,22 @@ export interface Tier2Config {
   recipientName: string;
   senderName: string;
   introMessage: string; // opening line before the memories start
-  memories: Tier2Memory[]; // 2-6 photo+caption moments, scrollable sequence
+  memories: Tier2Memory[]; // 2-10 photo+caption moments, scrollable sequence
   closingMessage: string;
   accentColor: string;
   songUrl?: string;
+  video?: VideoConfig; // optional single clip (file URL or YouTube/Instagram embed)
 }
 
 export interface Tier3Config {
   recipientName: string;
   senderName: string;
   message: string;
-  photoUrls: string[]; // 1-5 photos, revealed together
+  photoUrls: string[]; // 1-15 photos, revealed together
   accentColor: string;
   revealAt: string; // ISO datetime — page stays locked behind a countdown until this
   songUrl?: string;
+  video?: VideoConfig; // optional single clip (file URL or YouTube/Instagram embed)
 }
 
 /** Discriminated union so new tiers can be added without touching existing tier code (OCP). */

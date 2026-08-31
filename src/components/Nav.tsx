@@ -10,12 +10,18 @@ import { useEffect, useState } from 'react';
  * page, not browsing a site.
  *
  * The bar adapts to the route it sits on:
- *  - "/" (the autumn-themed landing page) gets the cream/red/serif treatment
- *    that matches landing.css: a translucent bar that turns to frosted cream on
+ *  - the autumn-themed pages — the landing page ("/") and the brand pages
+ *    (/about, /contact, /examples) — get the cream/red/serif treatment that
+ *    matches landing.css: a translucent bar that turns to frosted cream on
  *    scroll, a serif wordmark with the signature red dot, red-underline links,
  *    and a solid red pill CTA.
- *  - every other marketing route (builders, terms, refunds) keeps the light
- *    "paper" chrome those pages are designed around.
+ *  - every other marketing route (builders, terms, refunds, privacy) keeps the
+ *    light "paper" chrome those pages are designed around.
+ *
+ * Chrome (`isAutumn`) and the link set (`isLanding`) are decided separately: the
+ * brand pages wear autumn chrome but have no in-page anchors of their own, so
+ * they reuse the paper link set that points back to the landing's /#pricing and
+ * /#faq.
  *
  * Mobile-first: the links live in a hamburger-triggered sheet by default and
  * only expand into an inline row from the `sm` breakpoint up.
@@ -32,9 +38,15 @@ const PAPER_LINKS = [
   { href: '/#faq', label: 'FAQ' },
 ];
 
+/** Routes that share the landing page's autumn chrome. The landing ("/") is
+ *  autumn too, but keeps its own in-page anchor links, so it's tracked by
+ *  `isLanding` separately below. */
+const AUTUMN_ROUTES = new Set(['/about', '/contact', '/examples']);
+
 export default function Nav() {
   const pathname = usePathname();
   const isLanding = pathname === '/';
+  const isAutumn = isLanding || AUTUMN_ROUTES.has(pathname);
   const [open, setOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
 
@@ -43,14 +55,14 @@ export default function Nav() {
     setOpen(false);
   }, [pathname]);
 
-  // Solidify the landing bar once the page scrolls under it.
+  // Solidify the autumn bar once the page scrolls under it.
   useEffect(() => {
-    if (!isLanding) return;
+    if (!isAutumn) return;
     const onScroll = () => setScrolled(window.scrollY > 16);
     onScroll();
     window.addEventListener('scroll', onScroll, { passive: true });
     return () => window.removeEventListener('scroll', onScroll);
-  }, [isLanding]);
+  }, [isAutumn]);
 
   // While the sheet is open, lock body scroll and let Escape close it.
   useEffect(() => {
@@ -68,12 +80,12 @@ export default function Nav() {
   }, [open]);
 
   const links = isLanding ? LANDING_LINKS : PAPER_LINKS;
-  const ctaLabel = isLanding ? 'create a page' : 'Build yours';
+  const ctaLabel = isAutumn ? 'create a page' : 'Build yours';
 
-  // On the landing route the bar is transparent over the hero and frosts to
+  // On the autumn routes the bar is transparent over the hero and frosts to
   // cream once scrolled — or while the sheet is open, so it reads as solid.
   const landingSolid = scrolled || open;
-  const headerCls = isLanding
+  const headerCls = isAutumn
     ? `sticky top-0 z-50 transition-[background-color,box-shadow] duration-300 ${
         landingSolid
           ? 'bg-[#fbf3e9]/90 backdrop-blur-md shadow-[0_1px_0_#e9ddcd]'
@@ -86,7 +98,7 @@ export default function Nav() {
       <div className="mx-auto flex h-16 max-w-6xl items-center justify-between px-5 sm:px-6">
         {/* Wordmark */}
         <Link href="/" className="flex items-center gap-2" onClick={() => setOpen(false)}>
-          {isLanding ? (
+          {isAutumn ? (
             <>
               <span
                 className="h-3 w-3 rounded-full bg-[#e23b2e]"
@@ -110,7 +122,7 @@ export default function Nav() {
         {/* Inline links (sm and up) */}
         <nav className="hidden items-center gap-8 sm:flex">
           {links.map((link) =>
-            isLanding ? (
+            isAutumn ? (
               <a
                 key={link.href}
                 href={link.href}
@@ -132,7 +144,7 @@ export default function Nav() {
 
         {/* CTA (sm and up) */}
         <div className="hidden sm:block">
-          {isLanding ? (
+          {isAutumn ? (
             <Link
               href="/builder"
               className="inline-flex items-center rounded-full bg-[#e23b2e] px-5 py-2.5 text-sm font-semibold text-white shadow-[0_7px_0_#c22b22] transition-all duration-200 hover:-translate-y-0.5 hover:shadow-[0_9px_0_#c22b22] motion-reduce:transform-none motion-reduce:transition-none"
@@ -152,7 +164,7 @@ export default function Nav() {
         {/* Hamburger (mobile only) */}
         <button
           type="button"
-          className={`relative h-6 w-6 sm:hidden ${isLanding ? 'text-[#261d1a]' : 'text-ink'}`}
+          className={`relative h-6 w-6 sm:hidden ${isAutumn ? 'text-[#261d1a]' : 'text-ink'}`}
           onClick={() => setOpen((v) => !v)}
           aria-label={open ? 'Close menu' : 'Open menu'}
           aria-expanded={open}
@@ -186,7 +198,7 @@ export default function Nav() {
       >
         <div
           className={`overflow-hidden border-t ${
-            isLanding ? 'border-[#e9ddcd] bg-[#fbf3e9]/95' : 'border-paper-line'
+            isAutumn ? 'border-[#e9ddcd] bg-[#fbf3e9]/95' : 'border-paper-line'
           }`}
         >
           <div className="flex flex-col gap-1 px-5 py-4">
@@ -196,7 +208,7 @@ export default function Nav() {
                 href={link.href}
                 onClick={() => setOpen(false)}
                 className={`py-3 text-base ${
-                  isLanding ? 'font-medium text-[#3a2c27]' : 'text-ink-muted'
+                  isAutumn ? 'font-medium text-[#3a2c27]' : 'text-ink-muted'
                 }`}
               >
                 {link.label}
@@ -206,7 +218,7 @@ export default function Nav() {
               href="/builder"
               onClick={() => setOpen(false)}
               className={`mt-2 inline-flex justify-center rounded-full px-5 py-3 text-base font-semibold ${
-                isLanding
+                isAutumn
                   ? 'bg-[#e23b2e] text-white shadow-[0_6px_0_#c22b22]'
                   : 'bg-gradient-accent text-ivory'
               }`}

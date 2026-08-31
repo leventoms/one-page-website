@@ -5,11 +5,12 @@ import Script from 'next/script';
 import Link from 'next/link';
 import Tier2Template from '@/features/templates/Tier2Template';
 import ManualRequestForm from '@/components/ManualRequestForm';
+import VideoInput from '@/features/builder/VideoInput';
 import { ALLOWED_ACCENT_COLORS } from '@/lib/services/validation';
 import { useOrderCheckout } from '@/lib/hooks/useOrderCheckout';
 import type { Tier2Config, Tier2Memory } from '@/types/order';
 
-const MAX_MEMORIES = 6;
+const MAX_MEMORIES = 10;
 const MIN_MEMORIES = 2;
 
 const EMPTY_MEMORY: Tier2Memory = { photoUrl: '', caption: '' };
@@ -198,6 +199,8 @@ export default function Tier2Builder() {
             maxLength={300}
           />
         </label>
+
+        <VideoInput onChange={(video) => updateField('video', video)} />
 
         <div className="flex gap-2">
           {ALLOWED_ACCENT_COLORS.map((color) => (
