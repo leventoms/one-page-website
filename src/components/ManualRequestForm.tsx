@@ -72,106 +72,121 @@ export default function ManualRequestForm({ tier, tierLabel, onBackToBuilder }: 
 
   if (stage === 'done') {
     return (
-      <div className="max-w-md mx-auto text-center py-16 px-6">
-        <h2 className="font-display text-xl text-ink mb-3">Got it 🎉</h2>
-        <p className="text-ink-muted">
-          We&apos;ll build your {tierLabel} page by hand and send it to{' '}
-          <span className="text-ink">{contactEmail}</span> once it&apos;s ready.
-        </p>
-      </div>
+      <section className="sp-builder">
+        <div className="sp-wrap">
+          <div className="sp-builder-done">
+            <div className="mark" aria-hidden="true">✓</div>
+            <h2>Got it — we&apos;re on it</h2>
+            <p>
+              We&apos;ll build your {tierLabel} page by hand and send it to{' '}
+              <strong>{contactEmail}</strong> once it&apos;s ready.
+            </p>
+          </div>
+        </div>
+      </section>
     );
   }
 
   return (
-    <form className="flex flex-col gap-4 max-w-md mx-auto px-6 py-12" onSubmit={(e) => e.preventDefault()}>
-      <h1 className="font-display text-2xl text-ink mb-1">Let us build your {tierLabel}</h1>
-      <p className="text-sm text-ink-muted mb-2">
-        Just the basics — we&apos;ll follow up if we need more.
-        {onBackToBuilder && (
-          <>
-            {' '}
-            <button type="button" onClick={onBackToBuilder} className="text-marigold-deep underline underline-offset-2">
-              Build it myself instead
+    <section className="sp-builder">
+      <div className="sp-wrap">
+        <div style={{ maxWidth: '34rem', margin: '0 auto' }}>
+          <div className="sp-builder-intro" style={{ textAlign: 'center', marginInline: 'auto' }}>
+            <span className="sp-eyebrow">{tierLabel.toLowerCase()}</span>
+            <h1>Let us build your <span className="sp-script">{tierLabel}</span></h1>
+            <p className="lede">
+              Tell us who it&apos;s for and the feeling you&apos;re after — a real person takes it
+              from there. Just the basics; we&apos;ll follow up if we need more.
+            </p>
+            {onBackToBuilder && (
+              <p className="sp-builder-switch">
+                <button type="button" onClick={onBackToBuilder} className="sp-textlink">
+                  I&apos;d rather build it myself
+                </button>.
+              </p>
+            )}
+          </div>
+
+          <form className="sp-form" onSubmit={(e) => e.preventDefault()}>
+            <div className="sp-field">
+              <label>Who&apos;s it for?</label>
+              <input
+                className="sp-input"
+                value={recipientName}
+                onChange={(e) => setRecipientName(e.target.value)}
+                maxLength={60}
+              />
+            </div>
+
+            <div className="sp-field">
+              <label>Your email</label>
+              <input
+                type="email"
+                className="sp-input"
+                placeholder="we'll send the finished page here"
+                value={contactEmail}
+                onChange={(e) => setContactEmail(e.target.value)}
+              />
+            </div>
+
+            <div className="sp-field">
+              <label>Your name <span className="sp-form-note" style={{ textTransform: 'none' }}>(optional)</span></label>
+              <input
+                className="sp-input"
+                value={senderName}
+                onChange={(e) => setSenderName(e.target.value)}
+                maxLength={60}
+              />
+            </div>
+
+            <div className="sp-field">
+              <label>Occasion <span className="sp-form-note" style={{ textTransform: 'none' }}>(optional)</span></label>
+              <input
+                className="sp-input"
+                placeholder="Birthday, anniversary, just because…"
+                value={occasion}
+                onChange={(e) => setOccasion(e.target.value)}
+                maxLength={60}
+              />
+            </div>
+
+            <div className="sp-field">
+              <label>Message or vibe <span className="sp-form-note" style={{ textTransform: 'none' }}>(optional)</span></label>
+              <textarea
+                className="sp-textarea"
+                style={{ minHeight: '90px' }}
+                placeholder="What do you want it to say? Doesn't need to be final wording."
+                value={message}
+                onChange={(e) => setMessage(e.target.value)}
+                maxLength={1000}
+              />
+            </div>
+
+            <div className="sp-field">
+              <label>Anything else <span className="sp-form-note" style={{ textTransform: 'none' }}>(optional)</span></label>
+              <textarea
+                className="sp-textarea"
+                style={{ minHeight: '70px' }}
+                placeholder="Photos to include, colours, deadline — whatever's useful."
+                value={notes}
+                onChange={(e) => setNotes(e.target.value)}
+                maxLength={1000}
+              />
+            </div>
+
+            {error && <p className="sp-field-error">{error}</p>}
+
+            <button
+              type="button"
+              onClick={handleSubmit}
+              disabled={stage === 'submitting'}
+              className="sp-btn sp-btn-red"
+            >
+              {stage === 'editing' ? 'Send my brief' : 'Sending…'}
             </button>
-            .
-          </>
-        )}
-      </p>
-
-      <label className="flex flex-col gap-1 text-sm text-ink-muted">
-        Recipient&apos;s name
-        <input
-          className="rounded-lg bg-paper-soft border border-paper-line px-3 py-2 text-ink"
-          value={recipientName}
-          onChange={(e) => setRecipientName(e.target.value)}
-          maxLength={60}
-        />
-      </label>
-
-      <label className="flex flex-col gap-1 text-sm text-ink-muted">
-        Your email
-        <input
-          type="email"
-          className="rounded-lg bg-paper-soft border border-paper-line px-3 py-2 text-ink"
-          placeholder="we'll send the finished page here"
-          value={contactEmail}
-          onChange={(e) => setContactEmail(e.target.value)}
-        />
-      </label>
-
-      <label className="flex flex-col gap-1 text-sm text-ink-muted">
-        Your name <span className="text-ink-muted/60">(optional)</span>
-        <input
-          className="rounded-lg bg-paper-soft border border-paper-line px-3 py-2 text-ink"
-          value={senderName}
-          onChange={(e) => setSenderName(e.target.value)}
-          maxLength={60}
-        />
-      </label>
-
-      <label className="flex flex-col gap-1 text-sm text-ink-muted">
-        Occasion <span className="text-ink-muted/60">(optional)</span>
-        <input
-          className="rounded-lg bg-paper-soft border border-paper-line px-3 py-2 text-ink"
-          placeholder="Birthday, anniversary, just because…"
-          value={occasion}
-          onChange={(e) => setOccasion(e.target.value)}
-          maxLength={60}
-        />
-      </label>
-
-      <label className="flex flex-col gap-1 text-sm text-ink-muted">
-        Message or vibe <span className="text-ink-muted/60">(optional)</span>
-        <textarea
-          className="rounded-lg bg-paper-soft border border-paper-line px-3 py-2 min-h-[80px] text-ink"
-          placeholder="What do you want it to say? Doesn't need to be final wording."
-          value={message}
-          onChange={(e) => setMessage(e.target.value)}
-          maxLength={1000}
-        />
-      </label>
-
-      <label className="flex flex-col gap-1 text-sm text-ink-muted">
-        Anything else <span className="text-ink-muted/60">(optional)</span>
-        <textarea
-          className="rounded-lg bg-paper-soft border border-paper-line px-3 py-2 min-h-[60px] text-ink"
-          placeholder="Photos to include, colors, deadline — whatever's useful."
-          value={notes}
-          onChange={(e) => setNotes(e.target.value)}
-          maxLength={1000}
-        />
-      </label>
-
-      {error && <p className="text-sm text-rose">{error}</p>}
-
-      <button
-        type="button"
-        onClick={handleSubmit}
-        disabled={stage === 'submitting'}
-        className="mt-2 rounded-full bg-marigold px-6 py-3 font-semibold text-ivory disabled:opacity-50"
-      >
-        {stage === 'editing' ? 'Build now' : 'Sending…'}
-      </button>
-    </form>
+          </form>
+        </div>
+      </div>
+    </section>
   );
 }

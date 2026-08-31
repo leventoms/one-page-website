@@ -50,132 +50,140 @@ export default function Tier1Builder() {
   if (stage === 'done' && finalSlug) {
     const liveUrl = `${window.location.origin}/p/${finalSlug}?pin=${pinCode}`;
     return (
-      <div className="max-w-md mx-auto text-center py-16 px-6">
-        <h2 className="font-display text-xl text-ink mb-3">Payment received 🎉</h2>
-        <p className="text-ink-muted mb-4">
-          It may take a few seconds to go live. Share this link (with the PIN) once it does:
-        </p>
-        <code className="block break-all rounded-lg bg-paper-soft border border-paper-line p-3 text-sm text-ink">{liveUrl}</code>
-      </div>
+      <section className="sp-builder">
+        <div className="sp-wrap">
+          <div className="sp-builder-done">
+            <div className="mark" aria-hidden="true">✓</div>
+            <h2>Your Simple Wish is on its way</h2>
+            <p>
+              It takes a few seconds to go live. Once it does, share this link — and the
+              4-digit PIN — with {config.recipientName || 'them'}.
+            </p>
+            <code className="sp-sharelink">{liveUrl}</code>
+          </div>
+        </div>
+      </section>
     );
   }
 
   return (
-    <div className="grid gap-8 lg:grid-cols-2 max-w-5xl mx-auto px-6 py-12">
+    <section className="sp-builder">
       <Script src="https://checkout.razorpay.com/v1/checkout.js" strategy="lazyOnload" />
+      <div className="sp-wrap">
+        <div className="sp-builder-grid">
+          <div>
+            <div className="sp-builder-intro">
+              <span className="sp-eyebrow">simple wish</span>
+              <h1>Write your <span className="sp-script">Simple Wish</span></h1>
+              <p className="lede">
+                A photo or three and a message that means it — ready to send in minutes.
+              </p>
+              <p className="sp-builder-switch">
+                Want a whole photo story?{' '}
+                <Link href="/builder/tier2" className="sp-alink">Build a Memory Lane</Link>{' '}
+                instead. Rather we made it for you?{' '}
+                <button type="button" onClick={() => setMode('manual')} className="sp-textlink">
+                  Let us build it by hand
+                </button>.
+              </p>
+            </div>
 
-      <form className="flex flex-col gap-4" onSubmit={(e) => e.preventDefault()}>
-        <h1 className="font-display text-2xl text-ink mb-1">Build your surprise page</h1>
-        <p className="text-sm text-ink-muted mb-2">
-          Want more than one message?{' '}
-          <Link href="/builder/tier2" className="text-marigold-deep underline underline-offset-2">
-            Try Memory Lane instead
-          </Link>
-          . Rather not fill this in yourself?{' '}
-          <button
-            type="button"
-            onClick={() => setMode('manual')}
-            className="text-marigold-deep underline underline-offset-2"
-          >
-            Let us build it for you
-          </button>
-          .
-        </p>
+            <form className="sp-form" onSubmit={(e) => e.preventDefault()}>
+              <div className="sp-field">
+                <label>Who&apos;s it for?</label>
+                <input
+                  className="sp-input"
+                  value={config.recipientName}
+                  onChange={(e) => updateField('recipientName', e.target.value)}
+                  maxLength={40}
+                />
+              </div>
 
-        <label className="flex flex-col gap-1 text-sm text-ink-muted">
-          Recipient&apos;s name
-          <input
-            className="rounded-lg bg-paper-soft border border-paper-line px-3 py-2 text-ink"
-            value={config.recipientName}
-            onChange={(e) => updateField('recipientName', e.target.value)}
-            maxLength={40}
-          />
-        </label>
+              <div className="sp-field">
+                <label>And who&apos;s it from?</label>
+                <input
+                  className="sp-input"
+                  value={config.senderName}
+                  onChange={(e) => updateField('senderName', e.target.value)}
+                  maxLength={40}
+                />
+              </div>
 
-        <label className="flex flex-col gap-1 text-sm text-ink-muted">
-          Your name
-          <input
-            className="rounded-lg bg-paper-soft border border-paper-line px-3 py-2 text-ink"
-            value={config.senderName}
-            onChange={(e) => updateField('senderName', e.target.value)}
-            maxLength={40}
-          />
-        </label>
+              <div className="sp-field">
+                <label>Your message</label>
+                <textarea
+                  className="sp-textarea"
+                  placeholder="Say the thing you'd say if they were right in front of you."
+                  value={config.message}
+                  onChange={(e) => updateField('message', e.target.value)}
+                  maxLength={600}
+                />
+              </div>
 
-        <label className="flex flex-col gap-1 text-sm text-ink-muted">
-          Message
-          <textarea
-            className="rounded-lg bg-paper-soft border border-paper-line px-3 py-2 min-h-[120px] text-ink"
-            value={config.message}
-            onChange={(e) => updateField('message', e.target.value)}
-            maxLength={600}
-          />
-        </label>
+              <div className="sp-field">
+                <label>Photos <span className="sp-form-note" style={{ textTransform: 'none' }}>— paste up to 3 image links, comma separated</span></label>
+                <input
+                  className="sp-input"
+                  placeholder="https://…"
+                  onChange={(e) =>
+                    updateField(
+                      'photoUrls',
+                      e.target.value.split(',').map((s) => s.trim()).filter(Boolean).slice(0, 3)
+                    )
+                  }
+                />
+              </div>
 
-        <label className="flex flex-col gap-1 text-sm text-ink-muted">
-          Photo URL(s) — comma separated, up to 3
-          <input
-            className="rounded-lg bg-paper-soft border border-paper-line px-3 py-2 text-ink"
-            placeholder="https://..."
-            onChange={(e) =>
-              updateField(
-                'photoUrls',
-                e.target.value
-                  .split(',')
-                  .map((s) => s.trim())
-                  .filter(Boolean)
-                  .slice(0, 3)
-              )
-            }
-          />
-        </label>
+              <div className="sp-field">
+                <label>Pick an accent colour</label>
+                <div className="sp-swatches">
+                  {ALLOWED_ACCENT_COLORS.map((color) => (
+                    <button
+                      key={color}
+                      type="button"
+                      onClick={() => updateField('accentColor', color)}
+                      aria-pressed={config.accentColor === color}
+                      className="sp-swatch"
+                      style={{ backgroundColor: color }}
+                      aria-label={`Choose ${color}`}
+                    />
+                  ))}
+                </div>
+              </div>
 
-        <div className="flex gap-2">
-          {ALLOWED_ACCENT_COLORS.map((color) => (
-            <button
-              key={color}
-              type="button"
-              onClick={() => updateField('accentColor', color)}
-              className="h-8 w-8 rounded-full ring-2"
-              style={{
-                backgroundColor: color,
-                borderColor: config.accentColor === color ? '#0a0a0c' : 'transparent',
-              }}
-              aria-label={`Choose ${color}`}
-            />
-          ))}
+              <div className="sp-field">
+                <label>Set a 4-digit PIN for them</label>
+                <input
+                  className="sp-input sp-pin"
+                  inputMode="numeric"
+                  maxLength={4}
+                  value={pinCode}
+                  onChange={(e) => setPinCode(e.target.value.replace(/\D/g, ''))}
+                />
+              </div>
+
+              {(formError || errorMessage) && (
+                <p className="sp-field-error">{formError ?? errorMessage}</p>
+              )}
+
+              <button
+                type="button"
+                onClick={handleSubmit}
+                disabled={stage === 'creating' || stage === 'paying'}
+                className="sp-btn sp-btn-red"
+              >
+                {stage === 'editing' && 'Pay ₹99 & get your link'}
+                {stage === 'creating' && 'Creating your page…'}
+                {stage === 'paying' && 'Opening payment…'}
+              </button>
+            </form>
+          </div>
+
+          <div className="sp-preview">
+            <Tier1Template config={config} isPreview />
+          </div>
         </div>
-
-        <label className="flex flex-col gap-1 text-sm text-ink-muted">
-          4-digit PIN for the recipient
-          <input
-            className="rounded-lg bg-paper-soft border border-paper-line px-3 py-2 w-24 tracking-widest text-ink"
-            inputMode="numeric"
-            maxLength={4}
-            value={pinCode}
-            onChange={(e) => setPinCode(e.target.value.replace(/\D/g, ''))}
-          />
-        </label>
-
-        {(formError || errorMessage) && (
-          <p className="text-sm text-rose">{formError ?? errorMessage}</p>
-        )}
-
-        <button
-          type="button"
-          onClick={handleSubmit}
-          disabled={stage === 'creating' || stage === 'paying'}
-          className="mt-2 rounded-full bg-marigold px-6 py-3 font-semibold text-ivory disabled:opacity-50"
-        >
-          {stage === 'editing' && 'Pay ₹99 & get link'}
-          {stage === 'creating' && 'Creating order…'}
-          {stage === 'paying' && 'Opening payment…'}
-        </button>
-      </form>
-
-      <div className="rounded-2xl overflow-hidden ring-1 ring-plum-line shadow-lg shadow-black/5">
-        <Tier1Template config={config} isPreview />
       </div>
-    </div>
+    </section>
   );
 }

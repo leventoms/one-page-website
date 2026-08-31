@@ -76,150 +76,157 @@ export default function Tier3Builder() {
   if (stage === 'done' && finalSlug) {
     const liveUrl = `${window.location.origin}/p/${finalSlug}?pin=${pinCode}`;
     return (
-      <div className="max-w-md mx-auto text-center py-16 px-6">
-        <h2 className="font-display text-xl text-ink mb-3">Payment received 🎉</h2>
-        <p className="text-ink-muted mb-4">
-          It may take a few seconds to go live. Share this link (with the PIN) once it does —
-          it&apos;ll stay locked behind the countdown until your chosen time.
-        </p>
-        <code className="block break-all rounded-lg bg-paper-soft p-3 text-sm text-ink">{liveUrl}</code>
-      </div>
+      <section className="sp-builder">
+        <div className="sp-wrap">
+          <div className="sp-builder-done">
+            <div className="mark" aria-hidden="true">✓</div>
+            <h2>Your Time Capsule is sealed</h2>
+            <p>
+              It takes a few seconds to go live. Share this link — and the 4-digit PIN — with{' '}
+              {config.recipientName || 'them'}; it stays locked behind the countdown until your
+              chosen moment.
+            </p>
+            <code className="sp-sharelink">{liveUrl}</code>
+          </div>
+        </div>
+      </section>
     );
   }
 
   return (
-    <div className="grid gap-8 lg:grid-cols-2 max-w-5xl mx-auto px-6 py-12">
+    <section className="sp-builder">
       <Script src="https://checkout.razorpay.com/v1/checkout.js" strategy="lazyOnload" />
+      <div className="sp-wrap">
+        <div className="sp-builder-grid">
+          <div>
+            <div className="sp-builder-intro">
+              <span className="sp-eyebrow">time capsule</span>
+              <h1>Seal your <span className="sp-script">Time Capsule</span></h1>
+              <p className="lede">
+                Lock it behind a countdown so it opens at exactly the right moment — the
+                reveal is the gift.
+              </p>
+              <p className="sp-builder-switch">
+                Don&apos;t need a countdown?{' '}
+                <Link href="/builder" className="sp-alink">Simple Wish</Link>{' '}
+                and{' '}
+                <Link href="/builder/tier2" className="sp-alink">Memory Lane</Link>{' '}
+                publish instantly. Rather we made it for you?{' '}
+                <button type="button" onClick={() => setMode('manual')} className="sp-textlink">
+                  Let us build it by hand
+                </button>.
+              </p>
+            </div>
 
-      <form className="flex flex-col gap-4" onSubmit={(e) => e.preventDefault()}>
-        <h1 className="font-display text-2xl text-ink mb-1">Build your Time Capsule</h1>
-        <p className="text-sm text-ink-muted mb-2">
-          Don&apos;t need a countdown?{' '}
-          <Link href="/builder" className="text-marigold-deep underline underline-offset-2">
-            Tier 1
-          </Link>{' '}
-          or{' '}
-          <Link href="/builder/tier2" className="text-marigold-deep underline underline-offset-2">
-            Tier 2
-          </Link>{' '}
-          publish instantly instead. Rather not fill this in yourself?{' '}
-          <button
-            type="button"
-            onClick={() => setMode('manual')}
-            className="text-marigold-deep underline underline-offset-2"
-          >
-            Let us build it for you
-          </button>
-          .
-        </p>
+            <form className="sp-form" onSubmit={(e) => e.preventDefault()}>
+              <div className="sp-field">
+                <label>Who&apos;s it for?</label>
+                <input
+                  className="sp-input"
+                  value={config.recipientName}
+                  onChange={(e) => updateField('recipientName', e.target.value)}
+                  maxLength={40}
+                />
+              </div>
 
-        <label className="flex flex-col gap-1 text-sm text-ink-muted">
-          Recipient&apos;s name
-          <input
-            className="rounded-lg bg-paper-soft border border-paper-line px-3 py-2 text-ink"
-            value={config.recipientName}
-            onChange={(e) => updateField('recipientName', e.target.value)}
-            maxLength={40}
-          />
-        </label>
+              <div className="sp-field">
+                <label>And who&apos;s it from?</label>
+                <input
+                  className="sp-input"
+                  value={config.senderName}
+                  onChange={(e) => updateField('senderName', e.target.value)}
+                  maxLength={40}
+                />
+              </div>
 
-        <label className="flex flex-col gap-1 text-sm text-ink-muted">
-          Your name
-          <input
-            className="rounded-lg bg-paper-soft border border-paper-line px-3 py-2 text-ink"
-            value={config.senderName}
-            onChange={(e) => updateField('senderName', e.target.value)}
-            maxLength={40}
-          />
-        </label>
+              <div className="sp-field">
+                <label>Your message</label>
+                <textarea
+                  className="sp-textarea"
+                  placeholder="What they'll read the moment it unlocks."
+                  value={config.message}
+                  onChange={(e) => updateField('message', e.target.value)}
+                  maxLength={600}
+                />
+              </div>
 
-        <label className="flex flex-col gap-1 text-sm text-ink-muted">
-          Message
-          <textarea
-            className="rounded-lg bg-paper-soft border border-paper-line px-3 py-2 min-h-[120px] text-ink"
-            value={config.message}
-            onChange={(e) => updateField('message', e.target.value)}
-            maxLength={600}
-          />
-        </label>
+              <div className="sp-field">
+                <label>Photos <span className="sp-form-note" style={{ textTransform: 'none' }}>— paste up to 15 image links, comma separated</span></label>
+                <input
+                  className="sp-input"
+                  placeholder="https://…"
+                  onChange={(e) =>
+                    updateField(
+                      'photoUrls',
+                      e.target.value.split(',').map((s) => s.trim()).filter(Boolean).slice(0, 15)
+                    )
+                  }
+                />
+              </div>
 
-        <label className="flex flex-col gap-1 text-sm text-ink-muted">
-          Photo URL(s) — comma separated, up to 15
-          <input
-            className="rounded-lg bg-paper-soft border border-paper-line px-3 py-2 text-ink"
-            placeholder="https://..."
-            onChange={(e) =>
-              updateField(
-                'photoUrls',
-                e.target.value
-                  .split(',')
-                  .map((s) => s.trim())
-                  .filter(Boolean)
-                  .slice(0, 15)
-              )
-            }
-          />
-        </label>
+              <div className="sp-field">
+                <label>Opens on</label>
+                <input
+                  type="datetime-local"
+                  className="sp-input"
+                  value={revealAtLocal}
+                  min={defaultRevealAt()}
+                  onChange={(e) => setRevealAtLocal(e.target.value)}
+                />
+              </div>
 
-        <label className="flex flex-col gap-1 text-sm text-ink-muted">
-          Opens on
-          <input
-            type="datetime-local"
-            className="rounded-lg bg-paper-soft border border-paper-line px-3 py-2 text-ink"
-            value={revealAtLocal}
-            min={defaultRevealAt()}
-            onChange={(e) => setRevealAtLocal(e.target.value)}
-          />
-        </label>
+              <VideoInput onChange={(video) => updateField('video', video)} />
 
-        <VideoInput onChange={(video) => updateField('video', video)} />
+              <div className="sp-field">
+                <label>Pick an accent colour</label>
+                <div className="sp-swatches">
+                  {EXPANDED_ACCENT_COLORS.map((color) => (
+                    <button
+                      key={color}
+                      type="button"
+                      onClick={() => updateField('accentColor', color)}
+                      aria-pressed={config.accentColor === color}
+                      className="sp-swatch"
+                      style={{ backgroundColor: color }}
+                      aria-label={`Choose ${color}`}
+                    />
+                  ))}
+                </div>
+              </div>
 
-        <div className="flex flex-wrap gap-2">
-          {EXPANDED_ACCENT_COLORS.map((color) => (
-            <button
-              key={color}
-              type="button"
-              onClick={() => updateField('accentColor', color)}
-              className="h-8 w-8 rounded-full ring-2"
-              style={{
-                backgroundColor: color,
-                borderColor: config.accentColor === color ? '#0a0a0c' : 'transparent',
-              }}
-              aria-label={`Choose ${color}`}
-            />
-          ))}
+              <div className="sp-field">
+                <label>Set a 4-digit PIN for them</label>
+                <input
+                  className="sp-input sp-pin"
+                  inputMode="numeric"
+                  maxLength={4}
+                  value={pinCode}
+                  onChange={(e) => setPinCode(e.target.value.replace(/\D/g, ''))}
+                />
+              </div>
+
+              {(formError || errorMessage) && (
+                <p className="sp-field-error">{formError ?? errorMessage}</p>
+              )}
+
+              <button
+                type="button"
+                onClick={handleSubmit}
+                disabled={stage === 'creating' || stage === 'paying'}
+                className="sp-btn sp-btn-red"
+              >
+                {stage === 'editing' && 'Pay ₹299 & get your link'}
+                {stage === 'creating' && 'Creating your page…'}
+                {stage === 'paying' && 'Opening payment…'}
+              </button>
+            </form>
+          </div>
+
+          <div className="sp-preview">
+            <Tier3Template config={previewConfig} isPreview />
+          </div>
         </div>
-
-        <label className="flex flex-col gap-1 text-sm text-ink-muted">
-          4-digit PIN for the recipient
-          <input
-            className="rounded-lg bg-paper-soft border border-paper-line px-3 py-2 w-24 tracking-widest text-ink"
-            inputMode="numeric"
-            maxLength={4}
-            value={pinCode}
-            onChange={(e) => setPinCode(e.target.value.replace(/\D/g, ''))}
-          />
-        </label>
-
-        {(formError || errorMessage) && (
-          <p className="text-sm text-rose">{formError ?? errorMessage}</p>
-        )}
-
-        <button
-          type="button"
-          onClick={handleSubmit}
-          disabled={stage === 'creating' || stage === 'paying'}
-          className="mt-2 rounded-full bg-marigold px-6 py-3 font-semibold text-ivory disabled:opacity-50"
-        >
-          {stage === 'editing' && 'Pay ₹299 & get link'}
-          {stage === 'creating' && 'Creating order…'}
-          {stage === 'paying' && 'Opening payment…'}
-        </button>
-      </form>
-
-      <div className="rounded-2xl overflow-hidden ring-1 ring-plum-line shadow-lg shadow-black/5">
-        <Tier3Template config={previewConfig} isPreview />
       </div>
-    </div>
+    </section>
   );
 }

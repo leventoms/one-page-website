@@ -78,176 +78,185 @@ export default function Tier2Builder() {
   if (stage === 'done' && finalSlug) {
     const liveUrl = `${window.location.origin}/p/${finalSlug}?pin=${pinCode}`;
     return (
-      <div className="max-w-md mx-auto text-center py-16 px-6">
-        <h2 className="font-display text-xl text-ink mb-3">Payment received 🎉</h2>
-        <p className="text-ink-muted mb-4">
-          It may take a few seconds to go live. Share this link (with the PIN) once it does:
-        </p>
-        <code className="block break-all rounded-lg bg-paper-soft p-3 text-sm text-ink">{liveUrl}</code>
-      </div>
+      <section className="sp-builder">
+        <div className="sp-wrap">
+          <div className="sp-builder-done">
+            <div className="mark" aria-hidden="true">✓</div>
+            <h2>Your Memory Lane is on its way</h2>
+            <p>
+              It takes a few seconds to go live. Once it does, share this link — and the
+              4-digit PIN — with {config.recipientName || 'them'}.
+            </p>
+            <code className="sp-sharelink">{liveUrl}</code>
+          </div>
+        </div>
+      </section>
     );
   }
 
   return (
-    <div className="grid gap-8 lg:grid-cols-2 max-w-5xl mx-auto px-6 py-12">
+    <section className="sp-builder">
       <Script src="https://checkout.razorpay.com/v1/checkout.js" strategy="lazyOnload" />
+      <div className="sp-wrap">
+        <div className="sp-builder-grid">
+          <div>
+            <div className="sp-builder-intro">
+              <span className="sp-eyebrow">memory lane</span>
+              <h1>Build your <span className="sp-script">Memory Lane</span></h1>
+              <p className="lede">
+                A handful of moments, laid out like a little story — add a song or a short
+                video to set the mood.
+              </p>
+              <p className="sp-builder-switch">
+                Just one message?{' '}
+                <Link href="/builder" className="sp-alink">A Simple Wish</Link>{' '}
+                might fit better, or add a{' '}
+                <Link href="/builder/tier3" className="sp-alink">countdown reveal</Link>{' '}
+                with a Time Capsule. Rather we made it for you?{' '}
+                <button type="button" onClick={() => setMode('manual')} className="sp-textlink">
+                  Let us build it by hand
+                </button>.
+              </p>
+            </div>
 
-      <form className="flex flex-col gap-4" onSubmit={(e) => e.preventDefault()}>
-        <h1 className="font-display text-2xl text-ink mb-1">Build your Memory Lane</h1>
-        <p className="text-sm text-ink-muted mb-2">
-          Just one message?{' '}
-          <Link href="/builder" className="text-marigold-deep underline underline-offset-2">
-            The simpler Tier 1 page
-          </Link>{' '}
-          might be a better fit, or add a{' '}
-          <Link href="/builder/tier3" className="text-marigold-deep underline underline-offset-2">
-            countdown reveal
-          </Link>{' '}
-          with Tier 3. Rather not fill this in yourself?{' '}
-          <button
-            type="button"
-            onClick={() => setMode('manual')}
-            className="text-marigold-deep underline underline-offset-2"
-          >
-            Let us build it for you
-          </button>
-          .
-        </p>
+            <form className="sp-form" onSubmit={(e) => e.preventDefault()}>
+              <div className="sp-field">
+                <label>Who&apos;s it for?</label>
+                <input
+                  className="sp-input"
+                  value={config.recipientName}
+                  onChange={(e) => updateField('recipientName', e.target.value)}
+                  maxLength={40}
+                />
+              </div>
 
-        <label className="flex flex-col gap-1 text-sm text-ink-muted">
-          Recipient&apos;s name
-          <input
-            className="rounded-lg bg-paper-soft border border-paper-line px-3 py-2 text-ink"
-            value={config.recipientName}
-            onChange={(e) => updateField('recipientName', e.target.value)}
-            maxLength={40}
-          />
-        </label>
+              <div className="sp-field">
+                <label>And who&apos;s it from?</label>
+                <input
+                  className="sp-input"
+                  value={config.senderName}
+                  onChange={(e) => updateField('senderName', e.target.value)}
+                  maxLength={40}
+                />
+              </div>
 
-        <label className="flex flex-col gap-1 text-sm text-ink-muted">
-          Your name
-          <input
-            className="rounded-lg bg-paper-soft border border-paper-line px-3 py-2 text-ink"
-            value={config.senderName}
-            onChange={(e) => updateField('senderName', e.target.value)}
-            maxLength={40}
-          />
-        </label>
+              <div className="sp-field">
+                <label>Opening line</label>
+                <textarea
+                  className="sp-textarea"
+                  style={{ minHeight: '80px' }}
+                  placeholder="How the story starts…"
+                  value={config.introMessage}
+                  onChange={(e) => updateField('introMessage', e.target.value)}
+                  maxLength={300}
+                />
+              </div>
 
-        <label className="flex flex-col gap-1 text-sm text-ink-muted">
-          Opening line
-          <textarea
-            className="rounded-lg bg-paper-soft border border-paper-line px-3 py-2 min-h-[70px] text-ink"
-            value={config.introMessage}
-            onChange={(e) => updateField('introMessage', e.target.value)}
-            maxLength={300}
-          />
-        </label>
-
-        <div className="flex flex-col gap-3">
-          <div className="flex items-center justify-between">
-            <span className="text-sm text-ink-muted">
-              Memories ({config.memories.length}/{MAX_MEMORIES})
-            </span>
-            <button
-              type="button"
-              onClick={addMemory}
-              disabled={config.memories.length >= MAX_MEMORIES}
-              className="text-sm text-marigold-deep disabled:opacity-40"
-            >
-              + Add another
-            </button>
-          </div>
-
-          {config.memories.map((memory, i) => (
-            <div key={i} className="rounded-lg bg-paper-soft p-3 flex flex-col gap-2">
-              <div className="flex items-center justify-between">
-                <span className="text-xs text-ink-muted">Memory {i + 1}</span>
-                {config.memories.length > MIN_MEMORIES && (
+              <div className="sp-memories">
+                <div className="sp-memories-head">
+                  <span className="lbl">Memories ({config.memories.length}/{MAX_MEMORIES})</span>
                   <button
                     type="button"
-                    onClick={() => removeMemory(i)}
-                    className="text-xs text-rose"
+                    onClick={addMemory}
+                    disabled={config.memories.length >= MAX_MEMORIES}
+                    className="sp-textlink"
+                    style={{ opacity: config.memories.length >= MAX_MEMORIES ? 0.4 : 1 }}
                   >
-                    Remove
+                    + Add another
                   </button>
-                )}
+                </div>
+
+                {config.memories.map((memory, i) => (
+                  <div key={i} className="sp-memory">
+                    <div className="sp-memory-head">
+                      <span>Memory {i + 1}</span>
+                      {config.memories.length > MIN_MEMORIES && (
+                        <button type="button" onClick={() => removeMemory(i)} className="sp-textlink">
+                          Remove
+                        </button>
+                      )}
+                    </div>
+                    <input
+                      className="sp-input"
+                      placeholder="Photo link"
+                      value={memory.photoUrl}
+                      onChange={(e) => updateMemory(i, { photoUrl: e.target.value })}
+                    />
+                    <input
+                      className="sp-input"
+                      placeholder="Caption — e.g. “That trip to Goa”"
+                      value={memory.caption}
+                      onChange={(e) => updateMemory(i, { caption: e.target.value })}
+                      maxLength={120}
+                    />
+                  </div>
+                ))}
               </div>
-              <input
-                className="rounded-lg bg-paper border border-paper-line px-3 py-2 text-sm text-ink"
-                placeholder="Photo URL"
-                value={memory.photoUrl}
-                onChange={(e) => updateMemory(i, { photoUrl: e.target.value })}
-              />
-              <input
-                className="rounded-lg bg-paper border border-paper-line px-3 py-2 text-sm text-ink"
-                placeholder="Caption — e.g. 'That trip to Goa'"
-                value={memory.caption}
-                onChange={(e) => updateMemory(i, { caption: e.target.value })}
-                maxLength={120}
-              />
-            </div>
-          ))}
+
+              <div className="sp-field">
+                <label>Closing message</label>
+                <textarea
+                  className="sp-textarea"
+                  style={{ minHeight: '80px' }}
+                  placeholder="How you want to leave them feeling."
+                  value={config.closingMessage}
+                  onChange={(e) => updateField('closingMessage', e.target.value)}
+                  maxLength={300}
+                />
+              </div>
+
+              <VideoInput onChange={(video) => updateField('video', video)} />
+
+              <div className="sp-field">
+                <label>Pick an accent colour</label>
+                <div className="sp-swatches">
+                  {ALLOWED_ACCENT_COLORS.map((color) => (
+                    <button
+                      key={color}
+                      type="button"
+                      onClick={() => updateField('accentColor', color)}
+                      aria-pressed={config.accentColor === color}
+                      className="sp-swatch"
+                      style={{ backgroundColor: color }}
+                      aria-label={`Choose ${color}`}
+                    />
+                  ))}
+                </div>
+              </div>
+
+              <div className="sp-field">
+                <label>Set a 4-digit PIN for them</label>
+                <input
+                  className="sp-input sp-pin"
+                  inputMode="numeric"
+                  maxLength={4}
+                  value={pinCode}
+                  onChange={(e) => setPinCode(e.target.value.replace(/\D/g, ''))}
+                />
+              </div>
+
+              {(formError || errorMessage) && (
+                <p className="sp-field-error">{formError ?? errorMessage}</p>
+              )}
+
+              <button
+                type="button"
+                onClick={handleSubmit}
+                disabled={stage === 'creating' || stage === 'paying'}
+                className="sp-btn sp-btn-red"
+              >
+                {stage === 'editing' && 'Pay ₹199 & get your link'}
+                {stage === 'creating' && 'Creating your page…'}
+                {stage === 'paying' && 'Opening payment…'}
+              </button>
+            </form>
+          </div>
+
+          <div className="sp-preview scroll">
+            <Tier2Template config={config} isPreview />
+          </div>
         </div>
-
-        <label className="flex flex-col gap-1 text-sm text-ink-muted">
-          Closing message
-          <textarea
-            className="rounded-lg bg-paper-soft border border-paper-line px-3 py-2 min-h-[70px] text-ink"
-            value={config.closingMessage}
-            onChange={(e) => updateField('closingMessage', e.target.value)}
-            maxLength={300}
-          />
-        </label>
-
-        <VideoInput onChange={(video) => updateField('video', video)} />
-
-        <div className="flex gap-2">
-          {ALLOWED_ACCENT_COLORS.map((color) => (
-            <button
-              key={color}
-              type="button"
-              onClick={() => updateField('accentColor', color)}
-              className="h-8 w-8 rounded-full ring-2"
-              style={{
-                backgroundColor: color,
-                borderColor: config.accentColor === color ? '#0a0a0c' : 'transparent',
-              }}
-              aria-label={`Choose ${color}`}
-            />
-          ))}
-        </div>
-
-        <label className="flex flex-col gap-1 text-sm text-ink-muted">
-          4-digit PIN for the recipient
-          <input
-            className="rounded-lg bg-paper-soft border border-paper-line px-3 py-2 w-24 tracking-widest text-ink"
-            inputMode="numeric"
-            maxLength={4}
-            value={pinCode}
-            onChange={(e) => setPinCode(e.target.value.replace(/\D/g, ''))}
-          />
-        </label>
-
-        {(formError || errorMessage) && (
-          <p className="text-sm text-rose">{formError ?? errorMessage}</p>
-        )}
-
-        <button
-          type="button"
-          onClick={handleSubmit}
-          disabled={stage === 'creating' || stage === 'paying'}
-          className="mt-2 rounded-full bg-marigold px-6 py-3 font-semibold text-ivory disabled:opacity-50"
-        >
-          {stage === 'editing' && 'Pay ₹199 & get link'}
-          {stage === 'creating' && 'Creating order…'}
-          {stage === 'paying' && 'Opening payment…'}
-        </button>
-      </form>
-
-      <div className="rounded-2xl overflow-hidden ring-1 ring-plum-line shadow-lg shadow-black/5 max-h-[80vh] overflow-y-auto">
-        <Tier2Template config={config} isPreview />
       </div>
-    </div>
+    </section>
   );
 }

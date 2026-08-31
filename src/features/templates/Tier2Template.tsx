@@ -44,13 +44,13 @@ export default function Tier2Template({ config, isPreview }: TemplateProps<Tier2
 
       <div className="max-w-md mx-auto flex flex-col gap-10">
         {memories.slice(0, 10).map((memory, i) => (
-          <div key={memory.photoUrl + i} className="flex flex-col items-center text-center">
+          <div key={i} className="flex flex-col items-center text-center">
             <div
               className="relative h-56 w-full max-w-xs overflow-hidden rounded-2xl ring-2 mb-3"
               style={{ borderColor: config.accentColor } as never}
             >
               <Image
-                src={memory.photoUrl}
+                src={memory.photoUrl || PLACEHOLDER_PHOTO}
                 alt=""
                 fill
                 sizes="320px"

@@ -48,17 +48,16 @@ export default function VideoInput({
   }
 
   return (
-    <div className="flex flex-col gap-2">
-      <span className="text-sm text-ink-muted">Add a video (optional)</span>
-      <div className="flex gap-2">
+    <div className="sp-field">
+      <label>Add a video <span className="sp-form-note" style={{ textTransform: 'none' }}>(optional)</span></label>
+      <div className="sp-videomodes">
         {(['none', 'file', 'embed'] as const).map((m) => (
           <button
             key={m}
             type="button"
             onClick={() => changeMode(m)}
-            className={`rounded-full px-3 py-1 text-xs ${
-              mode === m ? 'bg-marigold text-ivory' : 'bg-paper-soft text-ink-muted'
-            }`}
+            aria-pressed={mode === m}
+            className="sp-videomode"
           >
             {m === 'none' ? 'No video' : m === 'file' ? 'Video URL' : 'YouTube / Instagram'}
           </button>
@@ -67,7 +66,7 @@ export default function VideoInput({
 
       {mode !== 'none' && (
         <input
-          className="rounded-lg bg-paper-soft border border-paper-line px-3 py-2 text-sm text-ink"
+          className="sp-input"
           placeholder={mode === 'file' ? 'https://…/clip.mp4' : 'Paste a YouTube or Instagram link'}
           value={url}
           onChange={(e) => changeUrl(e.target.value)}
@@ -75,7 +74,7 @@ export default function VideoInput({
       )}
 
       {embedInvalid && (
-        <p className="text-xs text-rose">
+        <p className="sp-field-error">
           That link isn&apos;t a supported YouTube or Instagram video.
         </p>
       )}

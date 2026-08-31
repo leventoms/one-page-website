@@ -46,7 +46,10 @@ const AUTUMN_ROUTES = new Set(['/about', '/contact', '/examples']);
 export default function Nav() {
   const pathname = usePathname();
   const isLanding = pathname === '/';
-  const isAutumn = isLanding || AUTUMN_ROUTES.has(pathname);
+  // The builder/dashboard pages now wear the same autumn chrome as the brand
+  // pages (they have no in-page anchors of their own, so they reuse the paper
+  // link set that points back to /#pricing and /#faq).
+  const isAutumn = isLanding || AUTUMN_ROUTES.has(pathname) || pathname.startsWith('/builder');
   const [open, setOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
 
