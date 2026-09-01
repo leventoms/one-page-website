@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import type { TemplateTier } from '@/types/order';
+import type { TemplateTier } from '@/types';
 
 interface ManualRequestFormProps {
   tier: TemplateTier;

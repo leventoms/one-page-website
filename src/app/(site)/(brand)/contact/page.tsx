@@ -1,11 +1,11 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
-import { Reveal } from '@/features/marketing/components/ui/Reveal';
-import { Eyebrow } from '@/features/marketing/components/ui/Eyebrow';
-import { SiteFooter } from '@/features/marketing/components/sections';
-import { ContactForm } from '@/features/marketing/components/ContactForm';
-import { landingContent } from '@/features/marketing/content';
-import { contactContent } from '@/features/marketing/pages.content';
+import { Reveal } from '@/components/marketing/ui/Reveal';
+import { Eyebrow } from '@/components/marketing/ui/Eyebrow';
+import { SiteFooter } from '@/components/marketing/sections/SiteFooter';
+import { ContactForm } from '@/components/marketing/ContactForm';
+import { landingContent } from '@/components/marketing/content';
+import { contactContent } from '@/components/marketing/pages.content';
 import { SITE } from '@/lib/site-config';
 
 export const metadata: Metadata = {

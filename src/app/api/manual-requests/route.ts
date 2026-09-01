@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { createManualRequestService } from '@/lib/composition-root';
-import { manualRequestInputSchema } from '@/lib/services/validation';
+import { submitManualRequest } from '@/lib/manual-requests';
+import { manualRequestInputSchema } from '@/lib/validation';
 
 export async function POST(request: NextRequest) {
   const json = await request.json().catch(() => null);
@@ -17,8 +17,7 @@ export async function POST(request: NextRequest) {
   }
 
   try {
-    const service = createManualRequestService();
-    const result = await service.submit(parsed.data);
+    const result = await submitManualRequest(parsed.data);
     return NextResponse.json({ id: result.id }, { status: 201 });
   } catch (err) {
     console.error('Failed to save manual request', err);

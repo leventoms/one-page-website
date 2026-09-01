@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { createOrderService } from '@/lib/composition-root';
-import { createOrderInputSchema } from '@/lib/services/validation';
+import { createOrder } from '@/lib/orders';
+import { createOrderInputSchema } from '@/lib/validation';
 
 export async function POST(request: NextRequest) {
   const json = await request.json().catch(() => null);
@@ -17,8 +17,7 @@ export async function POST(request: NextRequest) {
   }
 
   try {
-    const orderService = createOrderService();
-    const order = await orderService.createOrder(parsed.data);
+    const order = await createOrder(parsed.data);
     return NextResponse.json(
       { slug: order.slug, status: order.status },
       { status: 201 }

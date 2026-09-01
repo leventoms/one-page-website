@@ -1,12 +1,12 @@
 /* eslint-disable @next/next/no-img-element */
 import type { Metadata } from 'next';
-import { Reveal } from '@/features/marketing/components/ui/Reveal';
-import { Button } from '@/features/marketing/components/ui/Button';
-import { Eyebrow } from '@/features/marketing/components/ui/Eyebrow';
-import { SectionHeading } from '@/features/marketing/components/ui/SectionHeading';
-import { SiteFooter } from '@/features/marketing/components/sections';
-import { landingContent } from '@/features/marketing/content';
-import { aboutContent } from '@/features/marketing/pages.content';
+import { Reveal } from '@/components/marketing/ui/Reveal';
+import { Button } from '@/components/marketing/ui/Button';
+import { Eyebrow } from '@/components/marketing/ui/Eyebrow';
+import { SectionHeading } from '@/components/marketing/ui/SectionHeading';
+import { SiteFooter } from '@/components/marketing/sections/SiteFooter';
+import { landingContent } from '@/components/marketing/content';
+import { aboutContent } from '@/components/marketing/pages.content';
 
 export const metadata: Metadata = {
   title: 'About · Surprise Pages',

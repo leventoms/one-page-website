@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import type { Metadata } from 'next';
-import { LegalPage, type LegalSection } from '@/features/legal/LegalPage';
+import { LegalPage, type LegalSection } from '@/components/LegalPage';
 import { SITE } from '@/lib/site-config';
 
 export const metadata: Metadata = {

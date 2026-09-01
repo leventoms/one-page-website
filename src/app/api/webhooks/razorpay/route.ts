@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { createOrderService } from '@/lib/composition-root';
-import { createRazorpayGatewayFromEnv } from '@/lib/payments/razorpay-gateway';
+import { publishOrder } from '@/lib/orders';
+import { verifyRazorpayWebhook } from '@/lib/razorpay';
 
 /**
  * Razorpay calls this after a payment completes. We verify the signature
@@ -12,8 +12,7 @@ export async function POST(request: NextRequest) {
   const rawBody = await request.text();
   const signature = request.headers.get('x-razorpay-signature') ?? '';
 
-  const gateway = createRazorpayGatewayFromEnv();
-  const isValid = gateway.verifyWebhookSignature(rawBody, signature);
+  const isValid = verifyRazorpayWebhook(rawBody, signature);
 
   if (!isValid) {
     return NextResponse.json({ error: 'Invalid signature' }, { status: 401 });
@@ -37,8 +36,7 @@ export async function POST(request: NextRequest) {
   }
 
   try {
-    const orderService = createOrderService();
-    await orderService.markPaidAndPublished(receiptSlug, razorpayPaymentId);
+    await publishOrder(receiptSlug, razorpayPaymentId);
     return NextResponse.json({ received: true });
   } catch (err) {
     console.error('Failed to mark order paid', err);

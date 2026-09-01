@@ -1,7 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { createOrderService } from '@/lib/composition-root';
-import { createRazorpayGatewayFromEnv } from '@/lib/payments/razorpay-gateway';
-import { OrderNotFoundError } from '@/lib/services/order-service';
+import { getOrder, markPaymentStarted, OrderNotFoundError } from '@/lib/orders';
+import { createRazorpayOrder } from '@/lib/razorpay';
 
 /**
  * POST /api/orders/:slug/pay
@@ -13,23 +12,21 @@ export async function POST(
   { params }: { params: { slug: string } }
 ) {
   try {
-    const orderService = createOrderService();
-    const order = await orderService.getOrderForPreview(params.slug);
+    const order = await getOrder(params.slug);
 
     if (order.status === 'published') {
       return NextResponse.json({ error: 'Order already paid' }, { status: 409 });
     }
 
-    const gateway = createRazorpayGatewayFromEnv();
-    const paymentOrder = await gateway.createOrder(order.priceInPaise, order.slug);
+    const paymentOrder = await createRazorpayOrder(order.priceInPaise, order.slug);
 
-    await orderService.markRazorpayOrderCreated(order.slug, paymentOrder.gatewayOrderId);
+    await markPaymentStarted(order.slug, paymentOrder.gatewayOrderId);
 
     return NextResponse.json({
       razorpayOrderId: paymentOrder.gatewayOrderId,
       amountInPaise: paymentOrder.amountInPaise,
       currency: paymentOrder.currency,
-      keyId: process.env.RAZORPAY_KEY_ID,
+      keyId: paymentOrder.keyId,
     });
   } catch (err) {
     if (err instanceof OrderNotFoundError) {

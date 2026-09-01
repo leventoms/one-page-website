@@ -67,7 +67,7 @@ check in a restricted environment.
 
 1. Shared `ManualRequestForm` (recipient name + contact email required,
    everything else optional) → `POST /api/manual-requests`
-2. `ManualRequestService` saves the request to Supabase first, always —
+2. The manual-request module saves the request to Supabase first, always —
    then best-effort notifies the owner. A missing/broken notifier can
    never cause a lead to be lost; it just falls back to a console log.
 3. Owner reads the `manual_requests` table (or their email, once Resend
@@ -76,48 +76,47 @@ check in a restricted environment.
 
 ## Project structure
 
-Feature-first: `app/` is routing only, each product surface is a
-self-contained folder under `src/features/`, and `src/lib` + `src/types`
-hold the framework-agnostic domain core.
+Simple by purpose: `app/` contains routes and thin HTTP handlers,
+`components/` contains all UI, and `lib/` contains small direct server-side
+modules for orders, payments, email, and Supabase.
 
 ```
 src/
   app/                      # routes only (App Router)
     (site)/                 # everything under the shared marketing Nav
       layout.tsx            #   <Nav> + font variables
-      page.tsx              #   landing page (composes features/marketing)
+      page.tsx              #   landing page (composes marketing components)
       landing.css           #   autumn/painterly landing theme (.sp-*)
       builder/              #   self-serve builders (tiers 1-3 + white-glove)
       terms/  refunds/      #   policy pages
     p/[slug]/               # delivered gift page (PIN-gated, no Nav)
     api/                    # order / manual-request / payment endpoints
     layout.tsx  globals.css # root shell + shared paper-theme utilities
-  features/
-    marketing/              # the landing page, self-contained
-      components/{sections,effects,ui}/
-      hooks/  content.ts  types.ts  assets.ts  typography.ts
-    builder/                # Tier1-3 builder chrome (client forms)
-    templates/              # Tier1-3 live-page renderers
-    gift/                   # PinGate (recipient PIN entry)
-  components/               # genuinely shared: Nav, ManualRequestForm
-  lib/                      # domain core: services, repositories,
-                            #   composition-root, template-registry, payments
+  components/
+    marketing/              # landing page sections, effects, UI, and content
+    builders/                # Tier1-3 builder forms
+    templates/               # Tier1-3 live-page renderers
+    gift/                    # PIN entry
+    Nav.tsx  ManualRequestForm.tsx
+  lib/                      # direct server modules: orders, payments, email,
+                            #   Supabase, validation, template registry
   types/                    # shared TypeScript contracts
 ```
 
-Imports use the `@/*` alias (→ `src/*`) throughout; a feature reaches
-another feature only through its `@/features/*` entry points, never via
-relative paths into its internals.
+Imports use the `@/*` alias (→ `src/*`) throughout, so route files can point
+directly at the component or helper they use.
 
-## Where SOLID shows up
+## Keeping the code simple
 
-| Principle | Where |
-|---|---|
-| **S**ingle Responsibility | `SlugGenerator` only makes slugs. `OrderService`/`ManualRequestService` only hold their own business rules. `SupabaseOrderRepository`/`SupabaseManualRequestRepository` only talk to Postgres. Each API route is a thin controller that parses input and delegates. |
-| **O**pen/Closed | `template-registry.ts` is the only place tiers are listed. Adding a tier means writing a template component + one registry entry — `p/[slug]/page.tsx`, `OrderService`, and the API routes never change. |
-| **L**iskov Substitution | Every template component implements `TemplateProps<T>` and can be swapped into the live-page renderer interchangeably. Any future `IOrderRepository`/`INotifier` implementation can replace the Supabase/Resend ones without breaking the services that depend on them. |
-| **I**nterface Segregation | `IOrderRepository` only exposes what order-related code needs; `IPaymentGateway` only exposes payment concerns; `INotifier` only exposes "notify about a new manual request." None leak Supabase/Razorpay/Resend SDK types into the domain layer. |
-| **D**ependency Inversion | Services depend on interfaces, not concrete classes. `composition-root.ts` is the single place concrete implementations get wired in — everywhere else asks for the abstraction. |
+The app uses direct, typed functions instead of service classes, repository
+interfaces, and a composition root. For example, API handlers call
+`createOrder`, `getOrder`, and `publishOrder` from `lib/orders.ts`; that module
+contains the Supabase queries and the small amount of order-specific logic.
+
+This keeps a typical change to one or two files while preserving the important
+boundaries: route handlers parse HTTP requests, `lib` owns server integrations,
+and `components` owns UI. The template registry remains the single place that
+maps a tier to its price and renderer.
 
 ## Design system
 

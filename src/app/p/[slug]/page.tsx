@@ -1,8 +1,7 @@
 import { notFound } from 'next/navigation';
-import { createOrderService } from '@/lib/composition-root';
-import { getTemplateDefinition } from '@/lib/templates/template-registry';
-import { InvalidPinError, OrderNotFoundError } from '@/lib/services/order-service';
-import PinGate from '@/features/gift/PinGate';
+import { getOrderWithPin, InvalidPinError, OrderNotFoundError } from '@/lib/orders';
+import { getTemplateDefinition } from '@/lib/templates';
+import PinGate from '@/components/PinGate';
 
 interface PageProps {
   params: { slug: string };
@@ -15,7 +14,6 @@ interface PageProps {
  * reuse this exact route with zero changes (Open/Closed).
  */
 export default async function LivePage({ params, searchParams }: PageProps) {
-  const orderService = createOrderService();
   const pin = searchParams.pin ?? '';
 
   if (pin.length !== 4) {
@@ -23,7 +21,7 @@ export default async function LivePage({ params, searchParams }: PageProps) {
   }
 
   try {
-    const order = await orderService.getPublishedOrder(params.slug, pin);
+    const order = await getOrderWithPin(params.slug, pin);
 
     if (order.status !== 'published') {
       return (

@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { createContactNotifier } from '@/lib/composition-root';
-import { contactMessageInputSchema } from '@/lib/services/validation';
+import { sendContactMessage } from '@/lib/email';
+import { contactMessageInputSchema } from '@/lib/validation';
 
 /**
  * Public contact form endpoint. Thin controller, mirroring the manual-requests
@@ -24,8 +24,7 @@ export async function POST(request: NextRequest) {
   }
 
   try {
-    const notifier = createContactNotifier();
-    await notifier.notifyContactMessage(parsed.data);
+    await sendContactMessage(parsed.data);
     return NextResponse.json({ ok: true }, { status: 201 });
   } catch (err) {
     console.error('Failed to send contact message', err);

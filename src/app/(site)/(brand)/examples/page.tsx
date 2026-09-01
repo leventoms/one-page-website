@@ -2,12 +2,12 @@
 import type { CSSProperties } from 'react';
 import type { Metadata } from 'next';
 import Link from 'next/link';
-import { Reveal } from '@/features/marketing/components/ui/Reveal';
-import { Button } from '@/features/marketing/components/ui/Button';
-import { Eyebrow } from '@/features/marketing/components/ui/Eyebrow';
-import { SiteFooter } from '@/features/marketing/components/sections';
-import { landingContent } from '@/features/marketing/content';
-import { galleryContent } from '@/features/marketing/pages.content';
+import { Reveal } from '@/components/marketing/ui/Reveal';
+import { Button } from '@/components/marketing/ui/Button';
+import { Eyebrow } from '@/components/marketing/ui/Eyebrow';
+import { SiteFooter } from '@/components/marketing/sections/SiteFooter';
+import { landingContent } from '@/components/marketing/content';
+import { galleryContent } from '@/components/marketing/pages.content';
 
 export const metadata: Metadata = {
   title: 'Examples · Surprise Pages',

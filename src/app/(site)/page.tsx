@@ -1,8 +1,8 @@
 import './landing.css';
 
-import { fontVariables } from '@/features/marketing/typography';
-import { landingContent } from '@/features/marketing/content';
-import { FallingLeaves } from '@/features/marketing/components/effects/FallingLeaves';
+import { fontVariables } from '@/components/marketing/typography';
+import { landingContent } from '@/components/marketing/content';
+import { FallingLeaves } from '@/components/marketing/effects/FallingLeaves';
 import {
   Hero,
   TrustStrip,
@@ -13,8 +13,8 @@ import {
   Testimonials,
   Faq,
   FinalCta,
-  SiteFooter,
-} from '@/features/marketing/components/sections';
+} from '@/components/marketing/LandingSections';
+import { SiteFooter } from '@/components/marketing/sections/SiteFooter';
 
 /**
  * Composition root for the marketing landing page.
