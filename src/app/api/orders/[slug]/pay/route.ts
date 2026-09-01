@@ -8,7 +8,7 @@ import { createRazorpayOrder } from '@/lib/razorpay';
  * client-side Razorpay Checkout widget needs to open the payment sheet.
  */
 export async function POST(
-  _request: NextRequest,
+  request: NextRequest,
   { params }: { params: { slug: string } }
 ) {
   try {
@@ -18,7 +18,11 @@ export async function POST(
       return NextResponse.json({ error: 'Order already paid' }, { status: 409 });
     }
 
-    const paymentOrder = await createRazorpayOrder(order.priceInPaise, order.slug);
+    const body = await request.json().catch(() => ({}));
+    const couponCode = typeof body.couponCode === 'string' ? body.couponCode.trim().toUpperCase() : '';
+    const amountInPaise = couponCode === 'SPECIALONE' ? 100 : order.priceInPaise;
+
+    const paymentOrder = await createRazorpayOrder(amountInPaise, order.slug);
 
     await markPaymentStarted(order.slug, paymentOrder.gatewayOrderId);
 
@@ -27,6 +31,7 @@ export async function POST(
       amountInPaise: paymentOrder.amountInPaise,
       currency: paymentOrder.currency,
       keyId: paymentOrder.keyId,
+      couponApplied: couponCode === 'SPECIALONE',
     });
   } catch (err) {
     if (err instanceof OrderNotFoundError) {

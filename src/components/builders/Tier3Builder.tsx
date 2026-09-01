@@ -33,7 +33,7 @@ export default function Tier3Builder() {
   const [revealAtLocal, setRevealAtLocal] = useState(defaultRevealAt());
   const [pinCode, setPinCode] = useState('');
   const [formError, setFormError] = useState<string | null>(null);
-  const { stage, errorMessage, finalSlug, payAndPublish } = useOrderCheckout();
+  const { stage, errorMessage, finalSlug, couponCode, setCouponCode, payAndPublish } = useOrderCheckout();
 
   if (mode === 'manual') {
     return (
@@ -205,6 +205,11 @@ export default function Tier3Builder() {
                 />
               </div>
 
+              <div className="sp-field">
+                <label>Coupon code <span className="sp-form-note" style={{ textTransform: 'none' }}>— optional</span></label>
+                <input className="sp-input" value={couponCode} onChange={(e) => setCouponCode(e.target.value)} placeholder="Enter coupon" />
+              </div>
+
               {(formError || errorMessage) && (
                 <p className="sp-field-error">{formError ?? errorMessage}</p>
               )}
@@ -215,7 +220,7 @@ export default function Tier3Builder() {
                 disabled={stage === 'creating' || stage === 'paying'}
                 className="sp-btn sp-btn-red"
               >
-                {stage === 'editing' && 'Pay ₹299 & get your link'}
+                {stage === 'editing' && (couponCode.trim().toUpperCase() === 'SPECIALONE' ? 'Pay ₹1 & get your link' : 'Pay ₹299 & get your link')}
                 {stage === 'creating' && 'Creating your page…'}
                 {stage === 'paying' && 'Opening payment…'}
               </button>

@@ -7,6 +7,8 @@ interface UseOrderCheckoutResult {
   stage: CheckoutStage;
   errorMessage: string | null;
   finalSlug: string | null;
+  couponCode: string;
+  setCouponCode: (code: string) => void;
   payAndPublish: (config: TemplateConfig, pinCode: string) => Promise<void>;
   reset: () => void;
 }
@@ -22,6 +24,7 @@ export function useOrderCheckout(): UseOrderCheckoutResult {
   const [stage, setStage] = useState<CheckoutStage>('editing');
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [finalSlug, setFinalSlug] = useState<string | null>(null);
+  const [couponCode, setCouponCode] = useState('');
 
   function reset() {
     setStage('editing');
@@ -50,7 +53,11 @@ export function useOrderCheckout(): UseOrderCheckoutResult {
       const { slug } = await createRes.json();
       setStage('paying');
 
-      const payRes = await fetch(`/api/orders/${slug}/pay`, { method: 'POST' });
+      const payRes = await fetch(`/api/orders/${slug}/pay`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ couponCode }),
+      });
       if (!payRes.ok) throw new Error('Could not start payment');
       const { razorpayOrderId, amountInPaise, keyId } = await payRes.json();
 
@@ -99,5 +106,5 @@ export function useOrderCheckout(): UseOrderCheckoutResult {
     }
   }
 
-  return { stage, errorMessage, finalSlug, payAndPublish, reset };
+  return { stage, errorMessage, finalSlug, couponCode, setCouponCode, payAndPublish, reset };
 }
