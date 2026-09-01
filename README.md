@@ -55,11 +55,11 @@ check in a restricted environment.
 2. `POST /api/orders/[slug]/pay` → Razorpay order created, Checkout widget
    opens (price looked up server-side from the template registry, never
    trusted from the client)
-3. User pays → Razorpay calls `POST /api/webhooks/razorpay`
-   (signature-verified via `crypto.timingSafeEqual`) → order marked
-   `published`. **This webhook is the only thing that ever publishes a
-   page** — the client-side "success" callback is UX only, never a trust
-   boundary.
+3. User pays → Checkout returns payment fields to the browser →
+   `POST /api/verify-payment` verifies Razorpay's HMAC signature server-side
+   before marking the order `published`. Razorpay's signed
+   `POST /api/webhooks/razorpay` is also configured as a reliable asynchronous
+   confirmation path.
 4. `/p/[slug]?pin=XXXX` → server component fetches the order, checks the
    PIN, renders it through the template registry
 

@@ -1,7 +1,6 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import Image from 'next/image';
 import type { Tier3Config } from '@/types';
 import type { TemplateProps } from '@/types';
 import VideoBlock from '@/components/templates/VideoBlock';
@@ -115,7 +114,9 @@ export default function Tier3Template({ config, isPreview }: TemplateProps<Tier3
               className="relative h-24 w-20 overflow-hidden rounded-xl ring-2"
               style={{ borderColor: config.accentColor } as never}
             >
-              <Image src={url} alt="" fill sizes="80px" className="object-cover" />
+              {/* User-supplied image URLs can come from any HTTPS host. */}
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img src={url} alt="" className="h-full w-full object-cover" />
             </div>
           ))}
         </div>

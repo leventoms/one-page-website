@@ -1,4 +1,3 @@
-import Image from 'next/image';
 import type { Tier2Config } from '@/types';
 import type { TemplateProps } from '@/types';
 import VideoBlock from '@/components/templates/VideoBlock';
@@ -49,12 +48,12 @@ export default function Tier2Template({ config, isPreview }: TemplateProps<Tier2
               className="relative h-56 w-full max-w-xs overflow-hidden rounded-2xl ring-2 mb-3"
               style={{ borderColor: config.accentColor } as never}
             >
-              <Image
+              {/* User-supplied image URLs can come from any HTTPS host. */}
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
                 src={memory.photoUrl || PLACEHOLDER_PHOTO}
                 alt=""
-                fill
-                sizes="320px"
-                className="object-cover"
+                className="h-full w-full object-cover"
               />
             </div>
             <p className="text-white/75 text-sm max-w-xs">{memory.caption}</p>

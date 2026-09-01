@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useState } from 'react';
 import type { CSSProperties } from 'react';
 
 const LEAF_COLORS = ['#e23b2e', '#e08a2c', '#d9552e', '#c22b22'];
@@ -11,6 +11,24 @@ const LEAF_COUNT = 10;
 interface Leaf {
   style: CSSProperties;
 }
+
+// Fixed values keep server HTML and the first client render identical.
+// Random values here would trigger a React hydration warning.
+const LEAVES: Leaf[] = Array.from({ length: LEAF_COUNT }, (_, i) => {
+  const size = 10 + ((i * 7) % 14);
+  return {
+    style: {
+      left: `${(i * 37 + 11) % 100}vw`,
+      width: `${size}px`,
+      height: `${size}px`,
+      opacity: 0.45 + ((i * 13) % 30) / 100,
+      background: LEAF_COLORS[i % LEAF_COLORS.length],
+      clipPath: LEAF_CLIP,
+      animationDuration: `${9 + ((i * 5) % 9)}s`,
+      animationDelay: `${(i * 1.3) % 10}s`,
+    },
+  };
+});
 
 /**
  * Decorative autumn leaves drifting down the page.
@@ -30,31 +48,11 @@ export function FallingLeaves() {
     return () => media.removeEventListener('change', update);
   }, []);
 
-  const leaves = useMemo<Leaf[]>(
-    () =>
-      Array.from({ length: LEAF_COUNT }, (_, i) => {
-        const size = 10 + Math.random() * 14;
-        return {
-          style: {
-            left: `${Math.random() * 100}vw`,
-            width: `${size}px`,
-            height: `${size}px`,
-            opacity: 0.4 + Math.random() * 0.4,
-            background: LEAF_COLORS[i % LEAF_COLORS.length],
-            clipPath: LEAF_CLIP,
-            animationDuration: `${9 + Math.random() * 9}s`,
-            animationDelay: `${Math.random() * 10}s`,
-          } satisfies CSSProperties,
-        };
-      }),
-    [],
-  );
-
   if (reduced) return null;
 
   return (
     <div className="sp-leaves" aria-hidden="true">
-      {leaves.map((leaf, i) => (
+      {LEAVES.map((leaf, i) => (
         <div key={i} className="sp-leaf" style={leaf.style} />
       ))}
     </div>

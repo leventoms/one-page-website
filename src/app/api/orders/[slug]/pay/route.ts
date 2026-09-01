@@ -32,6 +32,9 @@ export async function POST(
     if (err instanceof OrderNotFoundError) {
       return NextResponse.json({ error: 'Not found' }, { status: 404 });
     }
+    if (typeof err === 'object' && err !== null && 'statusCode' in err && err.statusCode === 401) {
+      return NextResponse.json({ error: 'Razorpay authentication failed' }, { status: 401 });
+    }
     console.error('Failed to initiate payment', err);
     return NextResponse.json({ error: 'Could not start payment' }, { status: 500 });
   }

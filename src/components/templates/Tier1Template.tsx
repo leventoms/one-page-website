@@ -1,4 +1,3 @@
-import Image from 'next/image';
 import type { Tier1Config } from '@/types';
 import type { TemplateProps } from '@/types';
 
@@ -38,7 +37,9 @@ export default function Tier1Template({ config, isPreview }: TemplateProps<Tier1
               className="relative h-28 w-24 overflow-hidden rounded-xl ring-2"
               style={{ borderColor: config.accentColor, ringColor: config.accentColor } as never}
             >
-              <Image src={url} alt="" fill sizes="96px" className="object-cover" />
+              {/* User-supplied image URLs can come from any HTTPS host. */}
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img src={url} alt="" className="h-full w-full object-cover" />
             </div>
           ))}
         </div>

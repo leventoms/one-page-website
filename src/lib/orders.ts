@@ -70,6 +70,18 @@ export async function getOrder(slug: string): Promise<Order> {
   return toOrder(data);
 }
 
+export async function getOrderByRazorpayOrderId(razorpayOrderId: string): Promise<Order> {
+  const { data, error } = await getSupabaseServerClient()
+    .from('orders')
+    .select()
+    .eq('razorpay_order_id', razorpayOrderId)
+    .maybeSingle<OrderRow>();
+
+  if (error) throw new Error(`Failed to fetch Razorpay order: ${error.message}`);
+  if (!data) throw new OrderNotFoundError(razorpayOrderId);
+  return toOrder(data);
+}
+
 export async function getOrderWithPin(slug: string, pinCode: string): Promise<Order> {
   const order = await getOrder(slug);
   if (order.pinCode !== pinCode) throw new InvalidPinError();

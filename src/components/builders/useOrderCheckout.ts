@@ -41,7 +41,10 @@ export function useOrderCheckout(): UseOrderCheckoutResult {
 
       if (!createRes.ok) {
         const body = await createRes.json();
-        throw new Error(body.error ?? 'Could not create order');
+        const problems = body.details?.fieldErrors
+          ? Object.values(body.details.fieldErrors).flat().filter(Boolean).join(' ')
+          : '';
+        throw new Error(problems || body.error || 'Could not create order');
       }
 
       const { slug } = await createRes.json();
@@ -58,15 +61,35 @@ export function useOrderCheckout(): UseOrderCheckoutResult {
         order_id: razorpayOrderId,
         name: 'Surprise Pages',
         description: `For ${config.data.recipientName}`,
-        handler: () => {
-          // Publishing itself happens via the server-side webhook, which is
-          // the only trusted source of truth — this just improves UX.
-          setFinalSlug(slug);
-          setStage('done');
+        handler: async (payment: {
+          razorpay_payment_id: string;
+          razorpay_order_id: string;
+          razorpay_signature: string;
+        }) => {
+          try {
+            const verifyRes = await fetch('/api/verify-payment', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify(payment),
+            });
+            const result = await verifyRes.json();
+            if (!verifyRes.ok) throw new Error(result.error ?? 'Payment verification failed');
+
+            setFinalSlug(result.slug);
+            setStage('done');
+          } catch (err) {
+            setErrorMessage(err instanceof Error ? err.message : 'Payment verification failed');
+            setStage('editing');
+          }
         },
         modal: {
           ondismiss: () => setStage('editing'),
         },
+      });
+
+      rzp.on('payment.failed', (response: any) => {
+        setErrorMessage(response.error?.description ?? 'Payment failed. Please try again.');
+        setStage('editing');
       });
 
       rzp.open();
