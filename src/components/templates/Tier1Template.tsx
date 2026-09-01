@@ -39,7 +39,13 @@ export default function Tier1Template({ config, isPreview }: TemplateProps<Tier1
             >
               {/* User-supplied image URLs can come from any HTTPS host. */}
               {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img src={url} alt="" className="h-full w-full object-cover" />
+              <img
+                src={url}
+                alt=""
+                referrerPolicy="no-referrer"
+                onError={(event) => { event.currentTarget.src = PLACEHOLDER_PHOTO; }}
+                className="h-full w-full object-cover"
+              />
             </div>
           ))}
         </div>

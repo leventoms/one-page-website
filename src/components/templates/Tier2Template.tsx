@@ -53,6 +53,8 @@ export default function Tier2Template({ config, isPreview }: TemplateProps<Tier2
               <img
                 src={memory.photoUrl || PLACEHOLDER_PHOTO}
                 alt=""
+                referrerPolicy="no-referrer"
+                onError={(event) => { event.currentTarget.src = PLACEHOLDER_PHOTO; }}
                 className="h-full w-full object-cover"
               />
             </div>
