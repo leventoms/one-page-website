@@ -174,7 +174,7 @@ export const landingContent: LandingContent = {
     items: [
       {
         quote: 'Sent this to my mom on her birthday — she watched the countdown all week.',
-        author: 'Rohan, Mumbai',
+        author: 'Adittya, Mumbai',
         initial: 'R',
       },
       {
