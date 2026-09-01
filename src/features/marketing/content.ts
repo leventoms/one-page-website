@@ -79,7 +79,7 @@ export const landingContent: LandingContent = {
     subtitle: 'From blank page to sent link, faster than wrapping a real gift.',
     steps: [
       {
-        image: illustration('letter.webp', '', 757, 482),
+        image: illustration('letter.png', '', 757, 482),
         title: 'Write your heart out',
         body: 'Pick a tier that fits the moment, then add your message — we handle the pretty part.',
       },
@@ -89,7 +89,7 @@ export const landingContent: LandingContent = {
         body: 'Drop in the moments that matter. Set a countdown so it unlocks at the perfect time.',
       },
       {
-        image: illustration('ribbonheart.webp', '', 750, 735),
+        image: illustration('ribbonheart.png', '', 750, 735),
         title: 'Send one private link',
         body: 'Pay once, get a link, send it. No accounts on either end — it opens whenever they click.',
       },
