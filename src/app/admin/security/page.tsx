@@ -7,6 +7,7 @@ export default function MfaSecurityPage() {
   const [factors, setFactors] = useState<any[]>([]);
   const [enrolling, setEnrolling] = useState(false);
   const [qrCode, setQrCode] = useState<string | null>(null);
+  const [manualKey, setManualKey] = useState<string | null>(null);
   const [factorId, setFactorId] = useState<string | null>(null);
   const [verifyCode, setVerifyCode] = useState('');
   const [error, setError] = useState<string | null>(null);
@@ -26,6 +27,7 @@ export default function MfaSecurityPage() {
     if (enrollError || !data) { setError(enrollError?.message ?? 'Enroll failed'); return; }
     setFactorId(data.id);
     setQrCode(data.totp.qr_code);
+    setManualKey(data.totp.secret);
     setEnrolling(true);
   }
 
@@ -43,8 +45,19 @@ export default function MfaSecurityPage() {
     setMessage('MFA enrolled successfully.');
     setEnrolling(false);
     setQrCode(null);
+    setManualKey(null);
     const { data } = await supabase.auth.mfa.listFactors();
     setFactors(data?.totp ?? []);
+  }
+
+  async function copyManualKey() {
+    if (!manualKey) return;
+    try {
+      await navigator.clipboard.writeText(manualKey);
+      setMessage('Setup key copied.');
+    } catch {
+      setError('Could not copy the setup key. Select and copy it manually.');
+    }
   }
 
   async function unenroll(id: string) {
@@ -85,7 +98,29 @@ export default function MfaSecurityPage() {
           <p style={{ marginBottom: '1rem' }}>Scan this QR code with your authenticator app, then enter the code below.</p>
           {qrCode && (
             // eslint-disable-next-line @next/next/no-img-element
-            <img src={qrCode} alt="TOTP QR code" style={{ marginBottom: '1rem', display: 'block' }} />
+            <img
+              src={qrCode}
+              alt="TOTP QR code"
+              width={280}
+              height={280}
+              style={{ marginBottom: '1rem', display: 'block', background: '#fff', imageRendering: 'pixelated' }}
+            />
+          )}
+          {manualKey && (
+            <div style={{ marginBottom: '1rem' }}>
+              <p style={{ marginBottom: '0.5rem' }}>
+                Can&apos;t scan it? In your authenticator app choose <strong>Enter a setup key</strong>, then use this key.
+              </p>
+              <div style={{ display: 'flex', gap: '0.5rem' }}>
+                <code style={{ flex: 1, overflowWrap: 'anywhere', padding: '0.75rem', background: '#f3f4f6', borderRadius: 8 }}>
+                  {manualKey}
+                </code>
+                <button type="button" onClick={copyManualKey} style={{ padding: '0.5rem 0.75rem', borderRadius: 8, border: '1px solid #ccc', cursor: 'pointer' }}>
+                  Copy
+                </button>
+              </div>
+              <p style={{ marginTop: '0.5rem', fontSize: '0.875rem', color: '#555' }}>Select time-based / TOTP when the app asks for the key type.</p>
+            </div>
           )}
           <input
             type="text"
