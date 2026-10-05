@@ -1,0 +1,977 @@
+{
+  "pbtResults": {},
+  "executionHistory": {
+    "1. Dependencies, environment variables, and migration structure": [
+      {
+        "executionId": "e82c32e4-164b-4c46-9b51-76f3d4d4d598",
+        "chatSessionId": "sess_0206d61f-c656-4549-941e-4bb2889eb1d6",
+        "timestamp": 1790611050506
+      },
+      {
+        "executionId": "e82c32e4-164b-4c46-9b51-76f3d4d4d598",
+        "chatSessionId": "sess_0206d61f-c656-4549-941e-4bb2889eb1d6",
+        "timestamp": 1790611088921
+      },
+      {
+        "executionId": "0b3b8d5c-4f21-45b8-a002-462395adcdd5",
+        "chatSessionId": "sess_0206d61f-c656-4549-941e-4bb2889eb1d6",
+        "timestamp": 1790612581521
+      },
+      {
+        "executionId": "24dc54b5-5535-4657-abdf-2a6467bd1b12",
+        "chatSessionId": "sess_0206d61f-c656-4549-941e-4bb2889eb1d6",
+        "timestamp": 1790696627384
+      }
+    ],
+    "2.1 Create `src/platform/supabase/browser.ts` with `getSupabaseBrowserClient()` singleton using `createBrowserClient` from `@supabase/ssr` and `NEXT_PUBLIC_SUPABASE_URL` / `NEXT_PUBLIC_SUPABASE_ANON_KEY`": [
+      {
+        "executionId": "e82c32e4-164b-4c46-9b51-76f3d4d4d598",
+        "chatSessionId": "sess_0206d61f-c656-4549-941e-4bb2889eb1d6",
+        "timestamp": 1790611050715
+      },
+      {
+        "executionId": "24dc54b5-5535-4657-abdf-2a6467bd1b12",
+        "chatSessionId": "sess_0206d61f-c656-4549-941e-4bb2889eb1d6",
+        "timestamp": 1790696635827
+      }
+    ],
+    "2.2 Create `src/platform/supabase/server.ts` with `getSupabaseSessionClient()` using `createServerClient` from `@supabase/ssr` with `cookies()` from `next/headers`; cookie `set` and `remove` callbacks are no-ops (middleware owns writes)": [
+      {
+        "executionId": "e82c32e4-164b-4c46-9b51-76f3d4d4d598",
+        "chatSessionId": "sess_0206d61f-c656-4549-941e-4bb2889eb1d6",
+        "timestamp": 1790611050922
+      },
+      {
+        "executionId": "24dc54b5-5535-4657-abdf-2a6467bd1b12",
+        "chatSessionId": "sess_0206d61f-c656-4549-941e-4bb2889eb1d6",
+        "timestamp": 1790696644133
+      }
+    ],
+    "2.3 Create barrel `src/platform/supabase/index.ts` exporting both functions": [
+      {
+        "executionId": "e82c32e4-164b-4c46-9b51-76f3d4d4d598",
+        "chatSessionId": "sess_0206d61f-c656-4549-941e-4bb2889eb1d6",
+        "timestamp": 1790611051166
+      },
+      {
+        "executionId": "24dc54b5-5535-4657-abdf-2a6467bd1b12",
+        "chatSessionId": "sess_0206d61f-c656-4549-941e-4bb2889eb1d6",
+        "timestamp": 1790696652509
+      }
+    ],
+    "3.1 Create `src/platform/routes.ts` exporting `PROTECTED_ROUTES: Array<{ prefix: string; role: 'user' | 'admin' }>` = `[{ prefix: '/mature', role: 'user' }, { prefix: '/admin', role: 'admin' }]`": [
+      {
+        "executionId": "e82c32e4-164b-4c46-9b51-76f3d4d4d598",
+        "chatSessionId": "sess_0206d61f-c656-4549-941e-4bb2889eb1d6",
+        "timestamp": 1790611051325
+      },
+      {
+        "executionId": "24dc54b5-5535-4657-abdf-2a6467bd1b12",
+        "chatSessionId": "sess_0206d61f-c656-4549-941e-4bb2889eb1d6",
+        "timestamp": 1790696661901
+      }
+    ],
+    "3.2 Create `src/middleware.ts`: refreshes session using `@supabase/ssr` `createServerClient` with full cookie read+write. Calls `supabase.auth.getUser()`. For routes matching a protected prefix: no session → redirect to `/login?next={pathname}`; admin prefix + non-admin role → `return new NextResponse(null, { status: 404 })`": [
+      {
+        "executionId": "e82c32e4-164b-4c46-9b51-76f3d4d4d598",
+        "chatSessionId": "sess_0206d61f-c656-4549-941e-4bb2889eb1d6",
+        "timestamp": 1790611051565
+      },
+      {
+        "executionId": "24dc54b5-5535-4657-abdf-2a6467bd1b12",
+        "chatSessionId": "sess_0206d61f-c656-4549-941e-4bb2889eb1d6",
+        "timestamp": 1790696670540
+      }
+    ],
+    "3.3 Create `src/app/auth/callback/route.ts`: GET handler; validate `next` param (must start with `/` AND must NOT start with `//`; fallback to `/`); call `supabase.auth.exchangeCodeForSession(code)`; redirect to validated `next`": [
+      {
+        "executionId": "e82c32e4-164b-4c46-9b51-76f3d4d4d598",
+        "chatSessionId": "sess_0206d61f-c656-4549-941e-4bb2889eb1d6",
+        "timestamp": 1790611051771
+      },
+      {
+        "executionId": "24dc54b5-5535-4657-abdf-2a6467bd1b12",
+        "chatSessionId": "sess_0206d61f-c656-4549-941e-4bb2889eb1d6",
+        "timestamp": 1790696680460
+      }
+    ],
+    "4.1 Create `src/components/auth/LoginForm.tsx` ('use client'): email input + submit; calls `supabase.auth.signInWithOtp({ email, options: { emailRedirectTo: NEXT_PUBLIC_SITE_URL + '/auth/callback?next=' + next } })`; 60-second client-side cooldown; two states — form and \"Check your inbox\"; styled with `sp-form`, `sp-input`, `sp-btn` CSS classes": [
+      {
+        "executionId": "e82c32e4-164b-4c46-9b51-76f3d4d4d598",
+        "chatSessionId": "sess_0206d61f-c656-4549-941e-4bb2889eb1d6",
+        "timestamp": 1790611052034
+      },
+      {
+        "executionId": "24dc54b5-5535-4657-abdf-2a6467bd1b12",
+        "chatSessionId": "sess_0206d61f-c656-4549-941e-4bb2889eb1d6",
+        "timestamp": 1790696691610
+      }
+    ],
+    "4.2 Create `src/app/(site)/login/page.tsx` (Server Component): check session → redirect to validated `next` if logged in; render `<LoginForm next={next} />`; export `generateMetadata` returning `{ robots: 'noindex' }`": [
+      {
+        "executionId": "e82c32e4-164b-4c46-9b51-76f3d4d4d598",
+        "chatSessionId": "sess_0206d61f-c656-4549-941e-4bb2889eb1d6",
+        "timestamp": 1790611052273
+      },
+      {
+        "executionId": "24dc54b5-5535-4657-abdf-2a6467bd1b12",
+        "chatSessionId": "sess_0206d61f-c656-4549-941e-4bb2889eb1d6",
+        "timestamp": 1790696760795
+      }
+    ],
+    "5. Checkpoint — Ensure auth flow compiles and tests pass": [
+      {
+        "executionId": "e82c32e4-164b-4c46-9b51-76f3d4d4d598",
+        "chatSessionId": "sess_0206d61f-c656-4549-941e-4bb2889eb1d6",
+        "timestamp": 1790611052485
+      },
+      {
+        "executionId": "24dc54b5-5535-4657-abdf-2a6467bd1b12",
+        "chatSessionId": "sess_0206d61f-c656-4549-941e-4bb2889eb1d6",
+        "timestamp": 1790696886853
+      },
+      {
+        "executionId": "24dc54b5-5535-4657-abdf-2a6467bd1b12",
+        "chatSessionId": "sess_0206d61f-c656-4549-941e-4bb2889eb1d6",
+        "timestamp": 1790697238520
+      }
+    ],
+    "6.1 Create `src/platform/auth.ts`:": [
+      {
+        "executionId": "e82c32e4-164b-4c46-9b51-76f3d4d4d598",
+        "chatSessionId": "sess_0206d61f-c656-4549-941e-4bb2889eb1d6",
+        "timestamp": 1790611052648
+      },
+      {
+        "executionId": "24dc54b5-5535-4657-abdf-2a6467bd1b12",
+        "chatSessionId": "sess_0206d61f-c656-4549-941e-4bb2889eb1d6",
+        "timestamp": 1790696769867
+      }
+    ],
+    "6.2 Create `scripts/grant-admin.ts`: reads `ADMIN_EMAILS` and `SUPABASE_SERVICE_ROLE_KEY`; validates each email format; looks up user by email via admin API; calls `supabase.auth.admin.updateUserById(id, { app_metadata: { role: 'admin' } })`": [
+      {
+        "executionId": "e82c32e4-164b-4c46-9b51-76f3d4d4d598",
+        "chatSessionId": "sess_0206d61f-c656-4549-941e-4bb2889eb1d6",
+        "timestamp": 1790611052815
+      },
+      {
+        "executionId": "24dc54b5-5535-4657-abdf-2a6467bd1b12",
+        "chatSessionId": "sess_0206d61f-c656-4549-941e-4bb2889eb1d6",
+        "timestamp": 1790696778401
+      }
+    ],
+    "7.1 Create `src/app/admin/security/page.tsx`: MFA enrollment status page; calls `supabase.auth.mfa.enroll()` to display QR code; unenroll option": [
+      {
+        "executionId": "e82c32e4-164b-4c46-9b51-76f3d4d4d598",
+        "chatSessionId": "sess_0206d61f-c656-4549-941e-4bb2889eb1d6",
+        "timestamp": 1790611053839
+      },
+      {
+        "executionId": "24dc54b5-5535-4657-abdf-2a6467bd1b12",
+        "chatSessionId": "sess_0206d61f-c656-4549-941e-4bb2889eb1d6",
+        "timestamp": 1790696787477
+      }
+    ],
+    "7.2 Create `src/app/admin/security/challenge/page.tsx`: TOTP input form; on submit calls `supabase.auth.mfa.challengeAndVerify({ factorId, code })`; redirects to `/admin` on success": [
+      {
+        "executionId": "e82c32e4-164b-4c46-9b51-76f3d4d4d598",
+        "chatSessionId": "sess_0206d61f-c656-4549-941e-4bb2889eb1d6",
+        "timestamp": 1790611054349
+      },
+      {
+        "executionId": "24dc54b5-5535-4657-abdf-2a6467bd1b12",
+        "chatSessionId": "sess_0206d61f-c656-4549-941e-4bb2889eb1d6",
+        "timestamp": 1790696796253
+      }
+    ],
+    "8.1 Create `src/platform/with-api.ts`: `withApi(schema, handler)` wrapper that (1) parses JSON body against Zod schema → 400 on failure; (2) calls `handler(validatedData, request)`; (3) maps error types: `AuthRequiredError` → 401, `AdminRequiredError` → 404, `AdminMfaRequiredError` → 403, `ZodError` → 422, generic `Error` → 500 (message hidden, logged server-side)": [
+      {
+        "executionId": "e82c32e4-164b-4c46-9b51-76f3d4d4d598",
+        "chatSessionId": "sess_0206d61f-c656-4549-941e-4bb2889eb1d6",
+        "timestamp": 1790611054588
+      },
+      {
+        "executionId": "24dc54b5-5535-4657-abdf-2a6467bd1b12",
+        "chatSessionId": "sess_0206d61f-c656-4549-941e-4bb2889eb1d6",
+        "timestamp": 1790696809436
+      }
+    ],
+    "8.2 Create `src/platform/email.ts`: `sendEmail(to: string, subject: string, text: string): Promise<void>` using the same Resend fetch pattern as `src/lib/email.ts` without modifying that file": [
+      {
+        "executionId": "e82c32e4-164b-4c46-9b51-76f3d4d4d598",
+        "chatSessionId": "sess_0206d61f-c656-4549-941e-4bb2889eb1d6",
+        "timestamp": 1790611055011
+      },
+      {
+        "executionId": "24dc54b5-5535-4657-abdf-2a6467bd1b12",
+        "chatSessionId": "sess_0206d61f-c656-4549-941e-4bb2889eb1d6",
+        "timestamp": 1790696818310
+      }
+    ],
+    "8.3 Create `supabase/migrations/002_rate_limit_buckets.sql` with the `rate_limit_buckets` table (key text, window_start bigint, count integer, PRIMARY KEY (key, window_start))": [
+      {
+        "executionId": "e82c32e4-164b-4c46-9b51-76f3d4d4d598",
+        "chatSessionId": "sess_0206d61f-c656-4549-941e-4bb2889eb1d6",
+        "timestamp": 1790611055372
+      },
+      {
+        "executionId": "24dc54b5-5535-4657-abdf-2a6467bd1b12",
+        "chatSessionId": "sess_0206d61f-c656-4549-941e-4bb2889eb1d6",
+        "timestamp": 1790696826918
+      }
+    ],
+    "8.4 Create `src/platform/rate-limit.ts`: `rateLimit(key, limit, windowSeconds): Promise<boolean>` using upsert on `rate_limit_buckets` with service-role client; window_start = `Math.floor(Date.now() / 1000 / windowSeconds) * windowSeconds`; returns true if under limit": [
+      {
+        "executionId": "e82c32e4-164b-4c46-9b51-76f3d4d4d598",
+        "chatSessionId": "sess_0206d61f-c656-4549-941e-4bb2889eb1d6",
+        "timestamp": 1790611055662
+      },
+      {
+        "executionId": "24dc54b5-5535-4657-abdf-2a6467bd1b12",
+        "chatSessionId": "sess_0206d61f-c656-4549-941e-4bb2889eb1d6",
+        "timestamp": 1790696835872
+      }
+    ],
+    "8.5 Create `src/platform/audit.ts`: `audit(entry: AuditEntry): Promise<void>` writing to `admin_actions` using service-role client; never throws; logs on error": [
+      {
+        "executionId": "e82c32e4-164b-4c46-9b51-76f3d4d4d598",
+        "chatSessionId": "sess_0206d61f-c656-4549-941e-4bb2889eb1d6",
+        "timestamp": 1790611056013
+      },
+      {
+        "executionId": "24dc54b5-5535-4657-abdf-2a6467bd1b12",
+        "chatSessionId": "sess_0206d61f-c656-4549-941e-4bb2889eb1d6",
+        "timestamp": 1790696844345
+      }
+    ],
+    "9.1 Create `src/platform/admin-nav.ts`: `ADMIN_NAV: Array<{ label: string; href: string }>` = `[{ label: 'Dashboard', href: '/admin' }]`": [
+      {
+        "executionId": "e82c32e4-164b-4c46-9b51-76f3d4d4d598",
+        "chatSessionId": "sess_0206d61f-c656-4549-941e-4bb2889eb1d6",
+        "timestamp": 1790611056366
+      },
+      {
+        "executionId": "24dc54b5-5535-4657-abdf-2a6467bd1b12",
+        "chatSessionId": "sess_0206d61f-c656-4549-941e-4bb2889eb1d6",
+        "timestamp": 1790696853070
+      }
+    ],
+    "9.2 Create `src/app/admin/layout.tsx` (Server Component): calls `requireAdmin()`; two-column layout with sidebar from `ADMIN_NAV` + content slot; dark styling distinct from marketing site; `generateMetadata` returns `{ robots: 'noindex, nofollow' }`": [
+      {
+        "executionId": "e82c32e4-164b-4c46-9b51-76f3d4d4d598",
+        "chatSessionId": "sess_0206d61f-c656-4549-941e-4bb2889eb1d6",
+        "timestamp": 1790611056672
+      },
+      {
+        "executionId": "24dc54b5-5535-4657-abdf-2a6467bd1b12",
+        "chatSessionId": "sess_0206d61f-c656-4549-941e-4bb2889eb1d6",
+        "timestamp": 1790696860939
+      }
+    ],
+    "9.3 Create `src/app/admin/page.tsx`: dashboard with placeholder count cards for orders, reports, subscriptions, and manual requests using Supabase count queries": [
+      {
+        "executionId": "e82c32e4-164b-4c46-9b51-76f3d4d4d598",
+        "chatSessionId": "sess_0206d61f-c656-4549-941e-4bb2889eb1d6",
+        "timestamp": 1790611056962
+      },
+      {
+        "executionId": "24dc54b5-5535-4657-abdf-2a6467bd1b12",
+        "chatSessionId": "sess_0206d61f-c656-4549-941e-4bb2889eb1d6",
+        "timestamp": 1790696870021
+      }
+    ],
+    "10. Checkpoint — Ensure platform shell is complete, all tests pass": [
+      {
+        "executionId": "e82c32e4-164b-4c46-9b51-76f3d4d4d598",
+        "chatSessionId": "sess_0206d61f-c656-4549-941e-4bb2889eb1d6",
+        "timestamp": 1790611057284
+      },
+      {
+        "executionId": "24dc54b5-5535-4657-abdf-2a6467bd1b12",
+        "chatSessionId": "sess_0206d61f-c656-4549-941e-4bb2889eb1d6",
+        "timestamp": 1790696887439
+      },
+      {
+        "executionId": "24dc54b5-5535-4657-abdf-2a6467bd1b12",
+        "chatSessionId": "sess_0206d61f-c656-4549-941e-4bb2889eb1d6",
+        "timestamp": 1790697245958
+      }
+    ],
+    "11.1 Create `supabase/migrations/003_reports.sql`: add `disabled boolean NOT NULL DEFAULT false`, `disabled_reason text`, `disabled_at timestamptz`, `contact_email text` columns to `orders`; create `reports` table with constrained `reason` and `status` enums; enable RLS on `reports`": [
+      {
+        "executionId": "e82c32e4-164b-4c46-9b51-76f3d4d4d598",
+        "chatSessionId": "sess_0206d61f-c656-4549-941e-4bb2889eb1d6",
+        "timestamp": 1790611057603
+      },
+      {
+        "executionId": "24dc54b5-5535-4657-abdf-2a6467bd1b12",
+        "chatSessionId": "sess_0206d61f-c656-4549-941e-4bb2889eb1d6",
+        "timestamp": 1790696888023
+      },
+      {
+        "executionId": "24dc54b5-5535-4657-abdf-2a6467bd1b12",
+        "chatSessionId": "sess_0206d61f-c656-4549-941e-4bb2889eb1d6",
+        "timestamp": 1790697280293
+      }
+    ],
+    "11.2 Create `supabase/migrations/004_audit_log.sql`: create `admin_actions` table with `admin_id uuid REFERENCES auth.users(id)`, `action`, `target_type`, `target_id`, `details jsonb`, `created_at`; enable RLS": [
+      {
+        "executionId": "e82c32e4-164b-4c46-9b51-76f3d4d4d598",
+        "chatSessionId": "sess_0206d61f-c656-4549-941e-4bb2889eb1d6",
+        "timestamp": 1790611057898
+      },
+      {
+        "executionId": "24dc54b5-5535-4657-abdf-2a6467bd1b12",
+        "chatSessionId": "sess_0206d61f-c656-4549-941e-4bb2889eb1d6",
+        "timestamp": 1790696888741
+      },
+      {
+        "executionId": "24dc54b5-5535-4657-abdf-2a6467bd1b12",
+        "chatSessionId": "sess_0206d61f-c656-4549-941e-4bb2889eb1d6",
+        "timestamp": 1790697280652
+      }
+    ],
+    "12.1 Create `src/modules/reports/lib.ts` with functions: `createReport(input)`, `notifyReport(report, order)` (emails `ADMIN_ALERT_EMAIL`; `[URGENT]` prefix for `reason=minor`), `getOpenReports(): Promise<ReportWithOrder[]>`, `disableOrder(slug, reason, adminId)` (sets disabled fields, actions open reports, calls `audit()`), `dismissReport(reportId, adminId)` (sets `status='dismissed'`, calls `audit()`)": [
+      {
+        "executionId": "e82c32e4-164b-4c46-9b51-76f3d4d4d598",
+        "chatSessionId": "sess_0206d61f-c656-4549-941e-4bb2889eb1d6",
+        "timestamp": 1790611058226
+      },
+      {
+        "executionId": "24dc54b5-5535-4657-abdf-2a6467bd1b12",
+        "chatSessionId": "sess_0206d61f-c656-4549-941e-4bb2889eb1d6",
+        "timestamp": 1790696889218
+      }
+    ],
+    "12.2 Create `src/app/api/reports/route.ts`: `withApi`-wrapped POST with schema `{ orderId: uuid, reason: enum, details?: string max 500, reporterEmail?: email }`; rate limit 5/IP/10min; calls `createReport()` then best-effort `notifyReport()`; always returns `{ ok: true }` — never reveals if orderId exists": [
+      {
+        "executionId": "e82c32e4-164b-4c46-9b51-76f3d4d4d598",
+        "chatSessionId": "sess_0206d61f-c656-4549-941e-4bb2889eb1d6",
+        "timestamp": 1790611058543
+      },
+      {
+        "executionId": "24dc54b5-5535-4657-abdf-2a6467bd1b12",
+        "chatSessionId": "sess_0206d61f-c656-4549-941e-4bb2889eb1d6",
+        "timestamp": 1790696889646
+      }
+    ],
+    "12.3 Update `src/app/p/[slug]/page.tsx`: after `getOrderWithPin()`, if `order.disabled === true`, return `<main>This page is no longer available.</main>` without rendering template or config; add `<ReportLink orderId={order.id} />` to the published page view (not in preview mode)": [
+      {
+        "executionId": "e82c32e4-164b-4c46-9b51-76f3d4d4d598",
+        "chatSessionId": "sess_0206d61f-c656-4549-941e-4bb2889eb1d6",
+        "timestamp": 1790611058834
+      },
+      {
+        "executionId": "24dc54b5-5535-4657-abdf-2a6467bd1b12",
+        "chatSessionId": "sess_0206d61f-c656-4549-941e-4bb2889eb1d6",
+        "timestamp": 1790696890079
+      }
+    ],
+    "12.4 Create `src/components/reports/ReportModal.tsx` ('use client'): reason dropdown, optional details textarea (max 500 chars), optional email, content policy link; POST to `/api/reports`; shows confirmation on success; no login required": [
+      {
+        "executionId": "e82c32e4-164b-4c46-9b51-76f3d4d4d598",
+        "chatSessionId": "sess_0206d61f-c656-4549-941e-4bb2889eb1d6",
+        "timestamp": 1790611059149
+      },
+      {
+        "executionId": "24dc54b5-5535-4657-abdf-2a6467bd1b12",
+        "chatSessionId": "sess_0206d61f-c656-4549-941e-4bb2889eb1d6",
+        "timestamp": 1790696890544
+      }
+    ],
+    "12.5 Create `src/components/reports/ReportLink.tsx` ('use client'): \"Report this page\" link that opens `ReportModal`": [
+      {
+        "executionId": "e82c32e4-164b-4c46-9b51-76f3d4d4d598",
+        "chatSessionId": "sess_0206d61f-c656-4549-941e-4bb2889eb1d6",
+        "timestamp": 1790611059460
+      },
+      {
+        "executionId": "24dc54b5-5535-4657-abdf-2a6467bd1b12",
+        "chatSessionId": "sess_0206d61f-c656-4549-941e-4bb2889eb1d6",
+        "timestamp": 1790696890996
+      }
+    ],
+    "13.1 Append to `ADMIN_NAV` in `src/platform/admin-nav.ts`: `{ label: 'Reports', href: '/admin/reports' }`, `{ label: 'Orders', href: '/admin/orders' }`": [
+      {
+        "executionId": "e82c32e4-164b-4c46-9b51-76f3d4d4d598",
+        "chatSessionId": "sess_0206d61f-c656-4549-941e-4bb2889eb1d6",
+        "timestamp": 1790611059814
+      },
+      {
+        "executionId": "24dc54b5-5535-4657-abdf-2a6467bd1b12",
+        "chatSessionId": "sess_0206d61f-c656-4549-941e-4bb2889eb1d6",
+        "timestamp": 1790696891440
+      }
+    ],
+    "13.2 Create `src/app/admin/reports/page.tsx` (Server Component): open reports queue; each row shows order preview link, reason, details, reporter email, timestamp; Disable and Dismiss action buttons; pagination": [
+      {
+        "executionId": "e82c32e4-164b-4c46-9b51-76f3d4d4d598",
+        "chatSessionId": "sess_0206d61f-c656-4549-941e-4bb2889eb1d6",
+        "timestamp": 1790611060165
+      },
+      {
+        "executionId": "24dc54b5-5535-4657-abdf-2a6467bd1b12",
+        "chatSessionId": "sess_0206d61f-c656-4549-941e-4bb2889eb1d6",
+        "timestamp": 1790696892112
+      }
+    ],
+    "13.3 Create `src/app/admin/orders/page.tsx` (Server Component): all orders across all tiers; columns: slug, tier (color-coded badge), status, created_at, paid_at, contact_email, disabled flag, report count; filter by tier/status/date range; actions: View, Disable, Re-enable, View reports": [
+      {
+        "executionId": "e82c32e4-164b-4c46-9b51-76f3d4d4d598",
+        "chatSessionId": "sess_0206d61f-c656-4549-941e-4bb2889eb1d6",
+        "timestamp": 1790611060524
+      },
+      {
+        "executionId": "24dc54b5-5535-4657-abdf-2a6467bd1b12",
+        "chatSessionId": "sess_0206d61f-c656-4549-941e-4bb2889eb1d6",
+        "timestamp": 1790696892577
+      }
+    ],
+    "13.4 Create `src/app/api/admin/orders/[slug]/disable/route.ts`: `withApi` POST, `requireAdmin()`, calls `disableOrder()`, returns `{ ok: true }`": [
+      {
+        "executionId": "e82c32e4-164b-4c46-9b51-76f3d4d4d598",
+        "chatSessionId": "sess_0206d61f-c656-4549-941e-4bb2889eb1d6",
+        "timestamp": 1790611060748
+      },
+      {
+        "executionId": "24dc54b5-5535-4657-abdf-2a6467bd1b12",
+        "chatSessionId": "sess_0206d61f-c656-4549-941e-4bb2889eb1d6",
+        "timestamp": 1790696893106
+      }
+    ],
+    "13.5 Create `src/app/api/admin/orders/[slug]/enable/route.ts`: `withApi` POST, `requireAdmin()`, clears `disabled` fields, calls `audit()`, returns `{ ok: true }`": [
+      {
+        "executionId": "e82c32e4-164b-4c46-9b51-76f3d4d4d598",
+        "chatSessionId": "sess_0206d61f-c656-4549-941e-4bb2889eb1d6",
+        "timestamp": 1790611060991
+      },
+      {
+        "executionId": "24dc54b5-5535-4657-abdf-2a6467bd1b12",
+        "chatSessionId": "sess_0206d61f-c656-4549-941e-4bb2889eb1d6",
+        "timestamp": 1790696893556
+      }
+    ],
+    "13.6 Create `src/app/api/admin/reports/[id]/dismiss/route.ts`: `withApi` POST, `requireAdmin()`, calls `dismissReport()`, returns `{ ok: true }`": [
+      {
+        "executionId": "e82c32e4-164b-4c46-9b51-76f3d4d4d598",
+        "chatSessionId": "sess_0206d61f-c656-4549-941e-4bb2889eb1d6",
+        "timestamp": 1790611061293
+      },
+      {
+        "executionId": "24dc54b5-5535-4657-abdf-2a6467bd1b12",
+        "chatSessionId": "sess_0206d61f-c656-4549-941e-4bb2889eb1d6",
+        "timestamp": 1790696893968
+      }
+    ],
+    "14.1 Append to `ADMIN_NAV`: `{ label: 'Manual Requests', href: '/admin/manual-requests' }`": [
+      {
+        "executionId": "e82c32e4-164b-4c46-9b51-76f3d4d4d598",
+        "chatSessionId": "sess_0206d61f-c656-4549-941e-4bb2889eb1d6",
+        "timestamp": 1790611061578
+      },
+      {
+        "executionId": "24dc54b5-5535-4657-abdf-2a6467bd1b12",
+        "chatSessionId": "sess_0206d61f-c656-4549-941e-4bb2889eb1d6",
+        "timestamp": 1790696894474
+      }
+    ],
+    "14.2 Create `src/app/admin/manual-requests/page.tsx` (Server Component): all `manual_requests` rows with tier, recipient name, contact email, optional fields, status; status-update action per row": [
+      {
+        "executionId": "e82c32e4-164b-4c46-9b51-76f3d4d4d598",
+        "chatSessionId": "sess_0206d61f-c656-4549-941e-4bb2889eb1d6",
+        "timestamp": 1790611061883
+      },
+      {
+        "executionId": "24dc54b5-5535-4657-abdf-2a6467bd1b12",
+        "chatSessionId": "sess_0206d61f-c656-4549-941e-4bb2889eb1d6",
+        "timestamp": 1790696895050
+      }
+    ],
+    "14.3 Create `src/app/api/admin/manual-requests/[id]/status/route.ts`: `withApi` POST with schema `{ status: 'new' | 'in_progress' | 'delivered' }`, `requireAdmin()`, updates status field, calls `audit()`, returns `{ ok: true }`": [
+      {
+        "executionId": "e82c32e4-164b-4c46-9b51-76f3d4d4d598",
+        "chatSessionId": "sess_0206d61f-c656-4549-941e-4bb2889eb1d6",
+        "timestamp": 1790611062201
+      },
+      {
+        "executionId": "24dc54b5-5535-4657-abdf-2a6467bd1b12",
+        "chatSessionId": "sess_0206d61f-c656-4549-941e-4bb2889eb1d6",
+        "timestamp": 1790696895482
+      }
+    ],
+    "15. Checkpoint — Ensure reports module is complete, all tests pass": [
+      {
+        "executionId": "e82c32e4-164b-4c46-9b51-76f3d4d4d598",
+        "chatSessionId": "sess_0206d61f-c656-4549-941e-4bb2889eb1d6",
+        "timestamp": 1790611062550
+      },
+      {
+        "executionId": "24dc54b5-5535-4657-abdf-2a6467bd1b12",
+        "chatSessionId": "sess_0206d61f-c656-4549-941e-4bb2889eb1d6",
+        "timestamp": 1790696895919
+      }
+    ],
+    "16.1 Create `src/modules/policy/content.ts` with editable content constants sections: allowed content, prohibited content, report process, 24–48 hour response target, consequences (page disabled, subscription suspended, no refund on violation)": [
+      {
+        "executionId": "e82c32e4-164b-4c46-9b51-76f3d4d4d598",
+        "chatSessionId": "sess_0206d61f-c656-4549-941e-4bb2889eb1d6",
+        "timestamp": 1790611062864
+      },
+      {
+        "executionId": "24dc54b5-5535-4657-abdf-2a6467bd1b12",
+        "chatSessionId": "sess_0206d61f-c656-4549-941e-4bb2889eb1d6",
+        "timestamp": 1790696896385
+      },
+      {
+        "executionId": "24dc54b5-5535-4657-abdf-2a6467bd1b12",
+        "chatSessionId": "sess_0206d61f-c656-4549-941e-4bb2889eb1d6",
+        "timestamp": 1790697281527
+      }
+    ],
+    "16.2 Create `src/app/(site)/content-policy/page.tsx` using `<LegalPage>` component and constants from `content.ts`": [
+      {
+        "executionId": "e82c32e4-164b-4c46-9b51-76f3d4d4d598",
+        "chatSessionId": "sess_0206d61f-c656-4549-941e-4bb2889eb1d6",
+        "timestamp": 1790611063232
+      },
+      {
+        "executionId": "24dc54b5-5535-4657-abdf-2a6467bd1b12",
+        "chatSessionId": "sess_0206d61f-c656-4549-941e-4bb2889eb1d6",
+        "timestamp": 1790696896774
+      }
+    ],
+    "16.3 Update `src/app/(site)/terms/page.tsx`, `refunds/page.tsx`, `privacy/page.tsx` with real placeholder policy copy (not \"coming soon\")": [
+      {
+        "executionId": "e82c32e4-164b-4c46-9b51-76f3d4d4d598",
+        "chatSessionId": "sess_0206d61f-c656-4549-941e-4bb2889eb1d6",
+        "timestamp": 1790611063558
+      },
+      {
+        "executionId": "24dc54b5-5535-4657-abdf-2a6467bd1b12",
+        "chatSessionId": "sess_0206d61f-c656-4549-941e-4bb2889eb1d6",
+        "timestamp": 1790696897248
+      }
+    ],
+    "16.4 Update site footer (in `src/components/Nav.tsx` or footer component) to link `/content-policy`, `/terms`, `/privacy`, `/refunds`; ensure no `noindex` on these pages": [
+      {
+        "executionId": "e82c32e4-164b-4c46-9b51-76f3d4d4d598",
+        "chatSessionId": "sess_0206d61f-c656-4549-941e-4bb2889eb1d6",
+        "timestamp": 1790611063853
+      },
+      {
+        "executionId": "24dc54b5-5535-4657-abdf-2a6467bd1b12",
+        "chatSessionId": "sess_0206d61f-c656-4549-941e-4bb2889eb1d6",
+        "timestamp": 1790696897703
+      }
+    ],
+    "17.1 Create `supabase/migrations/005_mature_section.sql`: add `mature_section boolean NOT NULL DEFAULT false`, `user_id uuid REFERENCES auth.users(id)`, `policy_accepted_at timestamptz` columns and `orders_user_id_idx` index to `orders`; update `manual_requests` tier constraint to include `'mature1'`, `'mature2'`, `'mature3'`; create `subscription_orders` and `subscriptions` tables with RLS policy \"Users read own subscription\"": [
+      {
+        "executionId": "e82c32e4-164b-4c46-9b51-76f3d4d4d598",
+        "chatSessionId": "sess_0206d61f-c656-4549-941e-4bb2889eb1d6",
+        "timestamp": 1790611064188
+      },
+      {
+        "executionId": "24dc54b5-5535-4657-abdf-2a6467bd1b12",
+        "chatSessionId": "sess_0206d61f-c656-4549-941e-4bb2889eb1d6",
+        "timestamp": 1790696898481
+      }
+    ],
+    "18.1 Extend `src/types.ts`: add `'mature1' | 'mature2' | 'mature3'` to `TemplateTier`; add `Mature1Config`, `Mature2Config`, `Mature3Config`, `Subscription` interfaces; extend `TemplateConfig` discriminated union with mature1/2/3 branches": [
+      {
+        "executionId": "e82c32e4-164b-4c46-9b51-76f3d4d4d598",
+        "chatSessionId": "sess_0206d61f-c656-4549-941e-4bb2889eb1d6",
+        "timestamp": 1790611064497
+      },
+      {
+        "executionId": "24dc54b5-5535-4657-abdf-2a6467bd1b12",
+        "chatSessionId": "sess_0206d61f-c656-4549-941e-4bb2889eb1d6",
+        "timestamp": 1790696898884
+      }
+    ],
+    "18.2 Add `imageUrlSchema` to `src/lib/validation.ts`: `z.string().url().refine(url => { try { const u = new URL(url); return u.protocol === 'https:' && !u.username && !u.password; } catch { return false; } })`; backfill all existing tier photo URL fields to use it": [
+      {
+        "executionId": "e82c32e4-164b-4c46-9b51-76f3d4d4d598",
+        "chatSessionId": "sess_0206d61f-c656-4549-941e-4bb2889eb1d6",
+        "timestamp": 1790611064838
+      },
+      {
+        "executionId": "24dc54b5-5535-4657-abdf-2a6467bd1b12",
+        "chatSessionId": "sess_0206d61f-c656-4549-941e-4bb2889eb1d6",
+        "timestamp": 1790696899353
+      }
+    ],
+    "18.3 Add `mature1ConfigSchema` (photoUrls max 5), `mature2ConfigSchema`, `mature3ConfigSchema` (photoUrls max 20, message max 1000) using `EXPANDED_ACCENT_COLORS` to `src/lib/validation.ts`; add to `templateConfigSchema` discriminated union": [
+      {
+        "executionId": "e82c32e4-164b-4c46-9b51-76f3d4d4d598",
+        "chatSessionId": "sess_0206d61f-c656-4549-941e-4bb2889eb1d6",
+        "timestamp": 1790611065202
+      },
+      {
+        "executionId": "24dc54b5-5535-4657-abdf-2a6467bd1b12",
+        "chatSessionId": "sess_0206d61f-c656-4549-941e-4bb2889eb1d6",
+        "timestamp": 1790696899790
+      }
+    ],
+    "18.4 Create `src/components/templates/Mature1Template.tsx` (based on `Tier1Template`), `Mature2Template.tsx` (based on `Tier2Template`), `Mature3Template.tsx` (based on `Tier2Template`); wrap output in `<MatureInterstitial>` when `!isPreview`; preserve `referrerPolicy=\"no-referrer\"` and `loading=\"lazy\"` on images": [
+      {
+        "executionId": "e82c32e4-164b-4c46-9b51-76f3d4d4d598",
+        "chatSessionId": "sess_0206d61f-c656-4549-941e-4bb2889eb1d6",
+        "timestamp": 1790611065554
+      },
+      {
+        "executionId": "24dc54b5-5535-4657-abdf-2a6467bd1b12",
+        "chatSessionId": "sess_0206d61f-c656-4549-941e-4bb2889eb1d6",
+        "timestamp": 1790696900213
+      }
+    ],
+    "18.5 Register mature templates in `src/lib/templates.ts`: `mature1` (Romantic Wish, 9900), `mature2` (Romantic Memories, 19900), `mature3` (Freeform, 29900)": [
+      {
+        "executionId": "e82c32e4-164b-4c46-9b51-76f3d4d4d598",
+        "chatSessionId": "sess_0206d61f-c656-4549-941e-4bb2889eb1d6",
+        "timestamp": 1790611065891
+      },
+      {
+        "executionId": "24dc54b5-5535-4657-abdf-2a6467bd1b12",
+        "chatSessionId": "sess_0206d61f-c656-4549-941e-4bb2889eb1d6",
+        "timestamp": 1790696900661
+      }
+    ],
+    "19.1 Create `src/modules/mature/subscriptions.ts`:": [
+      {
+        "executionId": "e82c32e4-164b-4c46-9b51-76f3d4d4d598",
+        "chatSessionId": "sess_0206d61f-c656-4549-941e-4bb2889eb1d6",
+        "timestamp": 1790611066232
+      },
+      {
+        "executionId": "24dc54b5-5535-4657-abdf-2a6467bd1b12",
+        "chatSessionId": "sess_0206d61f-c656-4549-941e-4bb2889eb1d6",
+        "timestamp": 1790696901212
+      }
+    ],
+    "20.1 Create `src/app/api/subscriptions/pay/route.ts`: `withApi` POST with schema `{ ageDeclared: z.literal(true), policyAccepted: z.literal(true) }`; `requireUser()` → 401; `getActiveSubscription()` → 409 if active; create Razorpay order 9900 paise with receipt `sub_<userId>`; INSERT `subscription_orders` with server-captured `ageDeclaredAt` and `policyAcceptedAt` (never from client); return `{ razorpayOrderId, amountInPaise: 9900, keyId }`": [
+      {
+        "executionId": "e82c32e4-164b-4c46-9b51-76f3d4d4d598",
+        "chatSessionId": "sess_0206d61f-c656-4549-941e-4bb2889eb1d6",
+        "timestamp": 1790611066588
+      },
+      {
+        "executionId": "24dc54b5-5535-4657-abdf-2a6467bd1b12",
+        "chatSessionId": "sess_0206d61f-c656-4549-941e-4bb2889eb1d6",
+        "timestamp": 1790696901661
+      }
+    ],
+    "20.2 Create `src/app/api/subscriptions/verify/route.ts`: `withApi` POST with schema `{ razorpay_payment_id, razorpay_order_id, razorpay_signature }`; `requireUser()` → 401; fetch `subscription_orders` by `razorpay_order_id`; verify `user_id` matches session user; verify HMAC using `verifyRazorpayPaymentSignature`; mark `subscription_orders.status='paid'`; call `createSubscription()` (idempotent); return `{ ok: true }`": [
+      {
+        "executionId": "e82c32e4-164b-4c46-9b51-76f3d4d4d598",
+        "chatSessionId": "sess_0206d61f-c656-4549-941e-4bb2889eb1d6",
+        "timestamp": 1790611066914
+      },
+      {
+        "executionId": "24dc54b5-5535-4657-abdf-2a6467bd1b12",
+        "chatSessionId": "sess_0206d61f-c656-4549-941e-4bb2889eb1d6",
+        "timestamp": 1790696902069
+      }
+    ],
+    "20.3 Extend `src/app/api/webhooks/razorpay/route.ts` with receipt-based dispatch: receipt starts with `sub_` → subscription handler (fetch `subscription_orders` by `razorpay_order_id`, call `createSubscription()` — idempotent); all other receipts → existing `publishOrder()` path; both paths return 500 on unexpected failure for Razorpay retry": [
+      {
+        "executionId": "e82c32e4-164b-4c46-9b51-76f3d4d4d598",
+        "chatSessionId": "sess_0206d61f-c656-4549-941e-4bb2889eb1d6",
+        "timestamp": 1790611067230
+      },
+      {
+        "executionId": "24dc54b5-5535-4657-abdf-2a6467bd1b12",
+        "chatSessionId": "sess_0206d61f-c656-4549-941e-4bb2889eb1d6",
+        "timestamp": 1790696902495
+      }
+    ],
+    "21.1 Update `src/app/api/orders/route.ts`: derive `isMature = ['mature1','mature2','mature3'].includes(parsed.data.config.tier)` server-side; if `isMature`: `requireUser()` → 401; `getActiveSubscription()` → 403 'Subscription required'; require `policyAccepted: true` in body → 403 'Policy acceptance required'; capture `policyAcceptedAt = new Date().toISOString()` server-side": [
+      {
+        "executionId": "e82c32e4-164b-4c46-9b51-76f3d4d4d598",
+        "chatSessionId": "sess_0206d61f-c656-4549-941e-4bb2889eb1d6",
+        "timestamp": 1790611067554
+      },
+      {
+        "executionId": "24dc54b5-5535-4657-abdf-2a6467bd1b12",
+        "chatSessionId": "sess_0206d61f-c656-4549-941e-4bb2889eb1d6",
+        "timestamp": 1790696902939
+      }
+    ],
+    "21.2 Extend `createOrderInputSchema` in `src/lib/validation.ts`: add `policyAccepted: z.boolean().optional()`, `contactEmail: z.string().email().optional()`": [
+      {
+        "executionId": "e82c32e4-164b-4c46-9b51-76f3d4d4d598",
+        "chatSessionId": "sess_0206d61f-c656-4549-941e-4bb2889eb1d6",
+        "timestamp": 1790611067860
+      },
+      {
+        "executionId": "24dc54b5-5535-4657-abdf-2a6467bd1b12",
+        "chatSessionId": "sess_0206d61f-c656-4549-941e-4bb2889eb1d6",
+        "timestamp": 1790696903345
+      }
+    ],
+    "21.3 Extend `createOrder()` in `src/lib/orders.ts`: accept optional `userId`, `policyAcceptedAt`, `matureSection`, `contactEmail` parameters; persist them; public tier orders always receive `userId=null, policyAcceptedAt=null, matureSection=false`": [
+      {
+        "executionId": "e82c32e4-164b-4c46-9b51-76f3d4d4d598",
+        "chatSessionId": "sess_0206d61f-c656-4549-941e-4bb2889eb1d6",
+        "timestamp": 1790611068215
+      },
+      {
+        "executionId": "24dc54b5-5535-4657-abdf-2a6467bd1b12",
+        "chatSessionId": "sess_0206d61f-c656-4549-941e-4bb2889eb1d6",
+        "timestamp": 1790696904134
+      }
+    ],
+    "22. Checkpoint — Ensure mature payment and enforcement logic is complete, all tests pass": [
+      {
+        "executionId": "e82c32e4-164b-4c46-9b51-76f3d4d4d598",
+        "chatSessionId": "sess_0206d61f-c656-4549-941e-4bb2889eb1d6",
+        "timestamp": 1790611068532
+      },
+      {
+        "executionId": "24dc54b5-5535-4657-abdf-2a6467bd1b12",
+        "chatSessionId": "sess_0206d61f-c656-4549-941e-4bb2889eb1d6",
+        "timestamp": 1790696904491
+      }
+    ],
+    "23.1 Create `src/components/mature/AgeGate.tsx` ('use client'): Step 1 — two required checkboxes (\"I am 18+\" and \"I agree to content policy [link]\"); Step 2 — \"Unlock mature section — ₹99/year\" button; POST `/api/subscriptions/pay` → Razorpay Checkout widget (Script lazyOnload) → POST `/api/subscriptions/verify` → `router.refresh()`; dark styling (`bg-[#0a0a0c]`, warm accent) distinct from paper-theme": [
+      {
+        "executionId": "e82c32e4-164b-4c46-9b51-76f3d4d4d598",
+        "chatSessionId": "sess_0206d61f-c656-4549-941e-4bb2889eb1d6",
+        "timestamp": 1790611068738
+      },
+      {
+        "executionId": "24dc54b5-5535-4657-abdf-2a6467bd1b12",
+        "chatSessionId": "sess_0206d61f-c656-4549-941e-4bb2889eb1d6",
+        "timestamp": 1790696904897
+      }
+    ],
+    "23.2 Create `src/app/(site)/(brand)/mature/page.tsx` (Server Component): hub with three builder cards (`Romantic Wish`, `Romantic Memories`, `Freeform`); server-side subscription check (`getActiveSubscription`); lock icon on cards if no active subscription": [
+      {
+        "executionId": "e82c32e4-164b-4c46-9b51-76f3d4d4d598",
+        "chatSessionId": "sess_0206d61f-c656-4549-941e-4bb2889eb1d6",
+        "timestamp": 1790611069015
+      },
+      {
+        "executionId": "24dc54b5-5535-4657-abdf-2a6467bd1b12",
+        "chatSessionId": "sess_0206d61f-c656-4549-941e-4bb2889eb1d6",
+        "timestamp": 1790696905430
+      }
+    ],
+    "23.3 Create `src/app/(site)/(brand)/mature/wish/page.tsx` (Server Component): `requireUser()` → `getActiveSubscription()` check; render `<AgeGate>` if no subscription, `<Mature1Builder>` if subscribed": [
+      {
+        "executionId": "e82c32e4-164b-4c46-9b51-76f3d4d4d598",
+        "chatSessionId": "sess_0206d61f-c656-4549-941e-4bb2889eb1d6",
+        "timestamp": 1790611069294
+      },
+      {
+        "executionId": "24dc54b5-5535-4657-abdf-2a6467bd1b12",
+        "chatSessionId": "sess_0206d61f-c656-4549-941e-4bb2889eb1d6",
+        "timestamp": 1790696905869
+      }
+    ],
+    "23.4 Create `src/app/(site)/(brand)/mature/memories/page.tsx` (Server Component): same pattern for `<Mature2Builder>`": [
+      {
+        "executionId": "e82c32e4-164b-4c46-9b51-76f3d4d4d598",
+        "chatSessionId": "sess_0206d61f-c656-4549-941e-4bb2889eb1d6",
+        "timestamp": 1790611069541
+      },
+      {
+        "executionId": "24dc54b5-5535-4657-abdf-2a6467bd1b12",
+        "chatSessionId": "sess_0206d61f-c656-4549-941e-4bb2889eb1d6",
+        "timestamp": 1790696906292
+      }
+    ],
+    "23.5 Create `src/app/(site)/(brand)/mature/freeform/page.tsx` (Server Component): same pattern for `<Mature3Builder>`": [
+      {
+        "executionId": "e82c32e4-164b-4c46-9b51-76f3d4d4d598",
+        "chatSessionId": "sess_0206d61f-c656-4549-941e-4bb2889eb1d6",
+        "timestamp": 1790611069864
+      },
+      {
+        "executionId": "24dc54b5-5535-4657-abdf-2a6467bd1b12",
+        "chatSessionId": "sess_0206d61f-c656-4549-941e-4bb2889eb1d6",
+        "timestamp": 1790696906702
+      }
+    ],
+    "23.6 Create `src/components/builders/Mature1Builder.tsx`, `Mature2Builder.tsx`, `Mature3Builder.tsx`: same structure as tier builders; reuse `useOrderCheckout` unchanged; required policy checkbox in form; helper text: \"Link to an image you own or have permission to share. Explicit nudity isn't permitted — see the content policy.\"; send `policyAccepted: true` in POST `/api/orders` body": [
+      {
+        "executionId": "e82c32e4-164b-4c46-9b51-76f3d4d4d598",
+        "chatSessionId": "sess_0206d61f-c656-4549-941e-4bb2889eb1d6",
+        "timestamp": 1790611070209
+      },
+      {
+        "executionId": "24dc54b5-5535-4657-abdf-2a6467bd1b12",
+        "chatSessionId": "sess_0206d61f-c656-4549-941e-4bb2889eb1d6",
+        "timestamp": 1790696907176
+      }
+    ],
+    "24.1 Create `src/components/mature/MatureInterstitial.tsx` ('use client'): \"This page contains mature themes. Continue?\" with Confirm and Go Back; on confirm: `sessionStorage.setItem('mature_ok', '1')`; on re-visit same session: skipped": [
+      {
+        "executionId": "e82c32e4-164b-4c46-9b51-76f3d4d4d598",
+        "chatSessionId": "sess_0206d61f-c656-4549-941e-4bb2889eb1d6",
+        "timestamp": 1790611070511
+      },
+      {
+        "executionId": "24dc54b5-5535-4657-abdf-2a6467bd1b12",
+        "chatSessionId": "sess_0206d61f-c656-4549-941e-4bb2889eb1d6",
+        "timestamp": 1790696907558
+      }
+    ],
+    "24.2 Add `noindex, nofollow` via `generateMetadata` on all `/mature/*` pages and `/admin/*` layout; add `noindex` on `/login` page (already done in Task 4)": [
+      {
+        "executionId": "e82c32e4-164b-4c46-9b51-76f3d4d4d598",
+        "chatSessionId": "sess_0206d61f-c656-4549-941e-4bb2889eb1d6",
+        "timestamp": 1790611070768
+      },
+      {
+        "executionId": "24dc54b5-5535-4657-abdf-2a6467bd1b12",
+        "chatSessionId": "sess_0206d61f-c656-4549-941e-4bb2889eb1d6",
+        "timestamp": 1790696908046
+      }
+    ],
+    "24.3 Update `generateMetadata` in `src/app/p/[slug]/page.tsx` to check `order.mature_section` and return `{ robots: 'noindex, nofollow' }` when true": [
+      {
+        "executionId": "e82c32e4-164b-4c46-9b51-76f3d4d4d598",
+        "chatSessionId": "sess_0206d61f-c656-4549-941e-4bb2889eb1d6",
+        "timestamp": 1790611071055
+      },
+      {
+        "executionId": "24dc54b5-5535-4657-abdf-2a6467bd1b12",
+        "chatSessionId": "sess_0206d61f-c656-4549-941e-4bb2889eb1d6",
+        "timestamp": 1790696908470
+      }
+    ],
+    "24.4 Add CSP header in `next.config.mjs` via `headers()`: `Content-Security-Policy: img-src 'self' https: data:` applying to all routes": [
+      {
+        "executionId": "e82c32e4-164b-4c46-9b51-76f3d4d4d598",
+        "chatSessionId": "sess_0206d61f-c656-4549-941e-4bb2889eb1d6",
+        "timestamp": 1790611071363
+      },
+      {
+        "executionId": "24dc54b5-5535-4657-abdf-2a6467bd1b12",
+        "chatSessionId": "sess_0206d61f-c656-4549-941e-4bb2889eb1d6",
+        "timestamp": 1790696908932
+      }
+    ],
+    "25.1 Append to `ADMIN_NAV`: `{ label: 'Subscriptions', href: '/admin/subscriptions' }`": [
+      {
+        "executionId": "e82c32e4-164b-4c46-9b51-76f3d4d4d598",
+        "chatSessionId": "sess_0206d61f-c656-4549-941e-4bb2889eb1d6",
+        "timestamp": 1790611071762
+      },
+      {
+        "executionId": "24dc54b5-5535-4657-abdf-2a6467bd1b12",
+        "chatSessionId": "sess_0206d61f-c656-4549-941e-4bb2889eb1d6",
+        "timestamp": 1790696909393
+      }
+    ],
+    "25.2 Create `src/app/admin/subscriptions/page.tsx` (Server Component): look up user by email; display plan, status, starts_at, expires_at, age_declared_at, policy_accepted_at; Suspend and Reinstate buttons": [
+      {
+        "executionId": "e82c32e4-164b-4c46-9b51-76f3d4d4d598",
+        "chatSessionId": "sess_0206d61f-c656-4549-941e-4bb2889eb1d6",
+        "timestamp": 1790611072089
+      },
+      {
+        "executionId": "24dc54b5-5535-4657-abdf-2a6467bd1b12",
+        "chatSessionId": "sess_0206d61f-c656-4549-941e-4bb2889eb1d6",
+        "timestamp": 1790696909983
+      }
+    ],
+    "25.3 Create `src/app/api/admin/subscriptions/suspend/route.ts`: `withApi` POST with schema `{ userId: string }`, `requireAdmin()`, calls `suspendSubscription(userId, adminId)`, returns `{ ok: true }`": [
+      {
+        "executionId": "e82c32e4-164b-4c46-9b51-76f3d4d4d598",
+        "chatSessionId": "sess_0206d61f-c656-4549-941e-4bb2889eb1d6",
+        "timestamp": 1790611072405
+      },
+      {
+        "executionId": "24dc54b5-5535-4657-abdf-2a6467bd1b12",
+        "chatSessionId": "sess_0206d61f-c656-4549-941e-4bb2889eb1d6",
+        "timestamp": 1790696910430
+      }
+    ],
+    "25.4 Create `src/app/api/admin/subscriptions/reinstate/route.ts`: `withApi` POST with schema `{ userId: string }`, `requireAdmin()`, calls `reinstateSubscription(userId, adminId)`, returns `{ ok: true }`": [
+      {
+        "executionId": "e82c32e4-164b-4c46-9b51-76f3d4d4d598",
+        "chatSessionId": "sess_0206d61f-c656-4549-941e-4bb2889eb1d6",
+        "timestamp": 1790611072725
+      },
+      {
+        "executionId": "24dc54b5-5535-4657-abdf-2a6467bd1b12",
+        "chatSessionId": "sess_0206d61f-c656-4549-941e-4bb2889eb1d6",
+        "timestamp": 1790696910914
+      }
+    ],
+    "25.5 Update `src/app/admin/reports/page.tsx` to add a repeat-offender section: users with 2+ actioned reports on their orders (joined query: `orders.user_id → reports WHERE status='actioned'`)": [
+      {
+        "executionId": "e82c32e4-164b-4c46-9b51-76f3d4d4d598",
+        "chatSessionId": "sess_0206d61f-c656-4549-941e-4bb2889eb1d6",
+        "timestamp": 1790611073054
+      },
+      {
+        "executionId": "24dc54b5-5535-4657-abdf-2a6467bd1b12",
+        "chatSessionId": "sess_0206d61f-c656-4549-941e-4bb2889eb1d6",
+        "timestamp": 1790696911300
+      }
+    ],
+    "26. Final checkpoint — Ensure all tests pass and feature is complete": [
+      {
+        "executionId": "e82c32e4-164b-4c46-9b51-76f3d4d4d598",
+        "chatSessionId": "sess_0206d61f-c656-4549-941e-4bb2889eb1d6",
+        "timestamp": 1790611073381
+      },
+      {
+        "executionId": "24dc54b5-5535-4657-abdf-2a6467bd1b12",
+        "chatSessionId": "sess_0206d61f-c656-4549-941e-4bb2889eb1d6",
+        "timestamp": 1790696911800
+      }
+    ],
+    "2. Supabase client factories": [
+      {
+        "executionId": "24dc54b5-5535-4657-abdf-2a6467bd1b12",
+        "chatSessionId": "sess_0206d61f-c656-4549-941e-4bb2889eb1d6",
+        "timestamp": 1790696653346
+      }
+    ],
+    "3. Middleware, route guard config, and auth callback": [
+      {
+        "executionId": "24dc54b5-5535-4657-abdf-2a6467bd1b12",
+        "chatSessionId": "sess_0206d61f-c656-4549-941e-4bb2889eb1d6",
+        "timestamp": 1790696681190
+      }
+    ],
+    "4. Login page and magic link": [
+      {
+        "executionId": "24dc54b5-5535-4657-abdf-2a6467bd1b12",
+        "chatSessionId": "sess_0206d61f-c656-4549-941e-4bb2889eb1d6",
+        "timestamp": 1790696761615
+      }
+    ],
+    "6. Role system and auth helpers": [
+      {
+        "executionId": "24dc54b5-5535-4657-abdf-2a6467bd1b12",
+        "chatSessionId": "sess_0206d61f-c656-4549-941e-4bb2889eb1d6",
+        "timestamp": 1790696779021
+      }
+    ],
+    "7. Admin MFA (TOTP)": [
+      {
+        "executionId": "24dc54b5-5535-4657-abdf-2a6467bd1b12",
+        "chatSessionId": "sess_0206d61f-c656-4549-941e-4bb2889eb1d6",
+        "timestamp": 1790696796633
+      }
+    ],
+    "8. Shared platform utilities": [
+      {
+        "executionId": "24dc54b5-5535-4657-abdf-2a6467bd1b12",
+        "chatSessionId": "sess_0206d61f-c656-4549-941e-4bb2889eb1d6",
+        "timestamp": 1790696844949
+      }
+    ],
+    "9. Admin shell": [
+      {
+        "executionId": "24dc54b5-5535-4657-abdf-2a6467bd1b12",
+        "chatSessionId": "sess_0206d61f-c656-4549-941e-4bb2889eb1d6",
+        "timestamp": 1790696870640
+      }
+    ]
+  }
+}

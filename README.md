@@ -30,11 +30,39 @@ Every tier now has **two fulfillment paths**, not just one:
 
 ```bash
 npm install
-cp .env.example .env.local   # fill in Supabase + Razorpay + Resend keys
+cp .env.example .env.local   # fill in Supabase + Razorpay + Resend + admin keys
 ```
 
-Run `supabase/schema.sql` in your Supabase project's SQL editor (creates
-both the `orders` and `manual_requests` tables), then:
+**Database**: apply migrations in order using the Supabase SQL editor (or
+your preferred migration tool). Each file in `supabase/migrations/` is
+numbered and self-contained — run them in sequence:
+
+```
+supabase/migrations/001_initial_schema.sql   ← orders + manual_requests tables
+supabase/migrations/002_rate_limit_buckets.sql
+supabase/migrations/003_admin_actions.sql
+```
+
+`supabase/schema.sql` is an auto-generated snapshot of the cumulative state
+— useful as a quick reference, but do not apply it on top of individual
+migrations. Edit only the migration files, not the snapshot.
+
+**Environment variables** — copy `.env.example` to `.env.local` and fill in:
+- `SUPABASE_URL` + `SUPABASE_SERVICE_ROLE_KEY` — server-only Supabase client
+- `NEXT_PUBLIC_SUPABASE_URL` + `NEXT_PUBLIC_SUPABASE_ANON_KEY` — browser/middleware client (safe to expose)
+- `NEXT_PUBLIC_SITE_URL` — full origin used when constructing magic-link redirect URLs (no trailing slash)
+- `RAZORPAY_KEY_ID` + `RAZORPAY_KEY_SECRET` + `RAZORPAY_WEBHOOK_SECRET`
+- `RESEND_API_KEY` + `RESEND_TO_EMAIL` + `RESEND_FROM_EMAIL` (optional — manual requests still save without it)
+- `ADMIN_EMAILS` — comma-separated emails to promote to admin role via `scripts/grant-admin.mjs`
+- `ADMIN_ALERT_EMAIL` — receives urgent content-report notifications
+
+To grant a signed-in user admin access, set `ADMIN_EMAILS` and run:
+
+```bash
+npm run grant-admin
+```
+
+Then start the dev server:
 
 ```bash
 npm run dev
