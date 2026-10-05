@@ -1,5 +1,7 @@
 import { createClient } from '@supabase/supabase-js';
-import { loadEnvConfig } from '@next/env';
+import nextEnv from '@next/env';
+
+const { loadEnvConfig } = nextEnv;
 
 // Match Next.js: load .env.local before reading configuration.
 loadEnvConfig(process.cwd());
