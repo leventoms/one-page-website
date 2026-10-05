@@ -5,6 +5,7 @@ import { getSupabaseBrowserClient } from '@/platform/supabase';
 
 export default function MfaSecurityPage() {
   const [factors, setFactors] = useState<any[]>([]);
+  const [pendingFactors, setPendingFactors] = useState<any[]>([]);
   const [enrolling, setEnrolling] = useState(false);
   const [qrCode, setQrCode] = useState<string | null>(null);
   const [manualKey, setManualKey] = useState<string | null>(null);
@@ -15,11 +16,14 @@ export default function MfaSecurityPage() {
 
   const supabase = getSupabaseBrowserClient();
 
-  useEffect(() => {
-    supabase.auth.mfa.listFactors().then(({ data }) => {
-      setFactors(data?.totp ?? []);
-    });
-  }, []);
+  async function loadFactors() {
+    const { data, error: factorsError } = await supabase.auth.mfa.listFactors();
+    if (factorsError) { setError(factorsError.message); return; }
+    setFactors(data?.totp ?? []);
+    setPendingFactors((data?.all ?? []).filter((factor) => factor.factor_type === 'totp' && factor.status === 'unverified'));
+  }
+
+  useEffect(() => { void loadFactors(); }, []);
 
   async function startEnroll() {
     setError(null);
@@ -46,8 +50,7 @@ export default function MfaSecurityPage() {
     setEnrolling(false);
     setQrCode(null);
     setManualKey(null);
-    const { data } = await supabase.auth.mfa.listFactors();
-    setFactors(data?.totp ?? []);
+    await loadFactors();
   }
 
   async function copyManualKey() {
@@ -65,7 +68,7 @@ export default function MfaSecurityPage() {
     const { error: unenrollError } = await supabase.auth.mfa.unenroll({ factorId: id });
     if (unenrollError) { setError(unenrollError.message); return; }
     setMessage('MFA removed.');
-    setFactors((prev) => prev.filter((f) => f.id !== id));
+    await loadFactors();
   }
 
   return (
@@ -82,6 +85,18 @@ export default function MfaSecurityPage() {
             <button key={f.id} onClick={() => unenroll(f.id)}
               style={{ background: '#ef4444', color: '#fff', padding: '0.5rem 1rem', borderRadius: 8, border: 'none', cursor: 'pointer' }}>
               Remove authenticator
+            </button>
+          ))}
+        </div>
+      ) : pendingFactors.length > 0 ? (
+        <div>
+          <p style={{ marginBottom: '1rem' }}>
+            An earlier authenticator setup was not completed. Remove it before starting again.
+          </p>
+          {pendingFactors.map((factor) => (
+            <button key={factor.id} onClick={() => unenroll(factor.id)}
+              style={{ background: '#ef4444', color: '#fff', padding: '0.5rem 1rem', borderRadius: 8, border: 'none', cursor: 'pointer' }}>
+              Remove incomplete setup
             </button>
           ))}
         </div>
