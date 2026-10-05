@@ -145,8 +145,16 @@ export default function Nav() {
           )}
         </nav>
 
-        {/* CTA (sm and up) */}
-        <div className="hidden sm:block">
+        {/* Account and primary CTA (sm and up) */}
+        <div className="hidden items-center gap-3 sm:flex">
+          <Link
+            href="/login"
+            className={`text-sm font-semibold transition-colors ${
+              isAutumn ? 'text-[#3a2c27] hover:text-[#e23b2e]' : 'text-ink-muted hover:text-ink'
+            }`}
+          >
+            Log in
+          </Link>
           {isAutumn ? (
             <Link
               href="/builder"
@@ -217,6 +225,13 @@ export default function Nav() {
                 {link.label}
               </a>
             ))}
+            <Link
+              href="/login"
+              onClick={() => setOpen(false)}
+              className={`py-3 text-base font-semibold ${isAutumn ? 'text-[#3a2c27]' : 'text-ink'}`}
+            >
+              Log in
+            </Link>
             <Link
               href="/builder"
               onClick={() => setOpen(false)}

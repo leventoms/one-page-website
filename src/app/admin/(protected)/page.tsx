@@ -21,28 +21,12 @@ export default async function AdminDashboard() {
 
   return (
     <div>
-      <h1 style={{ marginBottom: '2rem', fontSize: '1.5rem', fontWeight: 700 }}>Dashboard</h1>
-      <div style={{
-        display: 'grid',
-        gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))',
-        gap: '1rem',
-      }}>
+      <header className="sp-admin-pagehead"><div><span className="sp-admin-eyebrow">Overview</span><h1>Good to see you.</h1><p className="sp-admin-subtitle">A simple view of the pages and requests people have trusted you with.</p></div></header>
+      <div className="sp-admin-stats">
         {cards.map((card) => (
-          <a
-            key={card.label}
-            href={card.href}
-            style={{
-              display: 'block',
-              background: '#1a1a1e',
-              padding: '1.5rem',
-              borderRadius: 12,
-              border: '1px solid #1f2937',
-              textDecoration: 'none',
-              color: 'inherit',
-            }}
-          >
-            <div style={{ fontSize: '2rem', fontWeight: 700, color: '#ff7a45' }}>{card.value}</div>
-            <div style={{ fontSize: '0.875rem', color: '#9ca3af', marginTop: '0.25rem' }}>{card.label}</div>
+          <a key={card.label} href={card.href} className="sp-admin-card sp-admin-stat">
+            <div className="sp-admin-stat-value">{card.value}</div>
+            <div className="sp-admin-stat-label">{card.label} →</div>
           </a>
         ))}
       </div>

@@ -1,5 +1,3 @@
-import './landing.css';
-
 import { fontVariables } from '@/components/marketing/typography';
 import { landingContent } from '@/components/marketing/content';
 import { FallingLeaves } from '@/components/marketing/effects/FallingLeaves';

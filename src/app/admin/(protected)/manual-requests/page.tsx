@@ -11,20 +11,16 @@ export default async function AdminManualRequestsPage() {
 
   return (
     <div>
-      <h1 style={{ marginBottom: '1.5rem', fontSize: '1.5rem', fontWeight: 700 }}>Manual requests</h1>
+      <header className="sp-admin-pagehead"><div><span className="sp-admin-eyebrow">Concierge</span><h1>Manual requests</h1><p className="sp-admin-subtitle">The latest requests from people who want your help creating something special.</p></div></header>
       {data?.length ? (
-        <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '0.875rem' }}>
-          <thead><tr>{['Tier', 'Recipient', 'Contact', 'From', 'Occasion', 'Status', 'Created'].map((heading) => <th key={heading} style={cellStyle}>{heading}</th>)}</tr></thead>
+        <div className="sp-admin-card sp-admin-table-card"><div className="sp-admin-table-wrap"><table className="sp-admin-table">
+          <thead><tr>{['Tier', 'Recipient', 'Contact', 'From', 'Occasion', 'Status', 'Created'].map((heading) => <th key={heading}>{heading}</th>)}</tr></thead>
           <tbody>{data.map((item) => <tr key={item.id}>
-            <td style={cellStyle}>{item.tier}</td><td style={cellStyle}>{item.recipient_name}</td>
-            <td style={cellStyle}>{item.contact_email}</td><td style={cellStyle}>{item.sender_name ?? '—'}</td>
-            <td style={cellStyle}>{item.occasion ?? '—'}</td><td style={cellStyle}>{item.status}</td>
-            <td style={cellStyle}>{new Date(item.created_at).toLocaleString()}</td>
+            <td>{item.tier}</td><td>{item.recipient_name}</td><td>{item.contact_email}</td><td>{item.sender_name ?? '—'}</td>
+            <td>{item.occasion ?? '—'}</td><td><span className="sp-admin-status">{item.status}</span></td><td>{new Date(item.created_at).toLocaleString()}</td>
           </tr>)}</tbody>
-        </table>
-      ) : <p style={{ color: '#9ca3af' }}>No manual requests yet.</p>}
+        </table></div></div>
+      ) : <div className="sp-admin-card sp-admin-empty">No manual requests yet.</div>}
     </div>
   );
 }
-
-const cellStyle = { textAlign: 'left' as const, padding: '0.75rem', borderBottom: '1px solid #1f2937' };

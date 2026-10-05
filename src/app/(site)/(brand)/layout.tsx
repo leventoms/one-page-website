@@ -1,4 +1,3 @@
-import '../landing.css';
 import { FallingLeaves } from '@/components/marketing/effects/FallingLeaves';
 
 /**
@@ -13,7 +12,7 @@ import { FallingLeaves } from '@/components/marketing/effects/FallingLeaves';
  */
 export default function BrandLayout({ children }: { children: React.ReactNode }) {
   return (
-    <div className="sp-landing">
+    <div>
       <FallingLeaves />
       {children}
     </div>

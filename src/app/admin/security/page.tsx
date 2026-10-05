@@ -72,45 +72,43 @@ export default function MfaSecurityPage() {
   }
 
   return (
-    <div style={{ maxWidth: 480, padding: '2rem' }}>
-      <h1 style={{ marginBottom: '1.5rem' }}>MFA / Two-Factor Authentication</h1>
+    <div>
+      <header className="sp-admin-pagehead"><div><span className="sp-admin-eyebrow">Account protection</span><h1>Security</h1><p className="sp-admin-subtitle">Use an authenticator app to keep the admin workspace private.</p></div></header>
+      <section className="sp-admin-card sp-admin-security">
 
-      {message && <p style={{ color: 'green', marginBottom: '1rem' }}>{message}</p>}
-      {error && <p style={{ color: 'red', marginBottom: '1rem' }}>{error}</p>}
+      {message && <p className="sp-admin-notice success">{message}</p>}
+      {error && <p className="sp-admin-notice error">{error}</p>}
 
       {factors.length > 0 ? (
         <div>
-          <p style={{ marginBottom: '1rem' }}>✓ TOTP authenticator enrolled.</p>
+          <p>✓ Your authenticator app is connected.</p>
           {factors.map((f) => (
-            <button key={f.id} onClick={() => unenroll(f.id)}
-              style={{ background: '#ef4444', color: '#fff', padding: '0.5rem 1rem', borderRadius: 8, border: 'none', cursor: 'pointer' }}>
+            <button key={f.id} onClick={() => unenroll(f.id)} className="sp-admin-button danger" style={{ marginTop: '1rem' }}>
               Remove authenticator
             </button>
           ))}
         </div>
       ) : pendingFactors.length > 0 ? (
         <div>
-          <p style={{ marginBottom: '1rem' }}>
+          <p>
             An earlier authenticator setup was not completed. Remove it before starting again.
           </p>
           {pendingFactors.map((factor) => (
-            <button key={factor.id} onClick={() => unenroll(factor.id)}
-              style={{ background: '#ef4444', color: '#fff', padding: '0.5rem 1rem', borderRadius: 8, border: 'none', cursor: 'pointer' }}>
+            <button key={factor.id} onClick={() => unenroll(factor.id)} className="sp-admin-button danger" style={{ marginTop: '1rem' }}>
               Remove incomplete setup
             </button>
           ))}
         </div>
       ) : !enrolling ? (
         <div>
-          <p style={{ marginBottom: '1rem' }}>No authenticator enrolled. Enroll one to access admin routes.</p>
-          <button onClick={startEnroll}
-            style={{ background: '#22c55e', color: '#fff', padding: '0.5rem 1rem', borderRadius: 8, border: 'none', cursor: 'pointer' }}>
+          <p>No authenticator is connected yet. Add one to access the rest of the admin workspace.</p>
+          <button onClick={startEnroll} className="sp-admin-button" style={{ marginTop: '1rem' }}>
             Enroll authenticator
           </button>
         </div>
       ) : (
         <div>
-          <p style={{ marginBottom: '1rem' }}>Scan this QR code with your authenticator app, then enter the code below.</p>
+          <p>Scan this code with your authenticator app, then enter the six-digit code it gives you.</p>
           {qrCode && (
             // eslint-disable-next-line @next/next/no-img-element
             <img
@@ -118,23 +116,23 @@ export default function MfaSecurityPage() {
               alt="TOTP QR code"
               width={280}
               height={280}
-              style={{ marginBottom: '1rem', display: 'block', background: '#fff', imageRendering: 'pixelated' }}
+              style={{ imageRendering: 'pixelated' }}
             />
           )}
           {manualKey && (
-            <div style={{ marginBottom: '1rem' }}>
-              <p style={{ marginBottom: '0.5rem' }}>
+            <div>
+              <p>
                 Can&apos;t scan it? In your authenticator app choose <strong>Enter a setup key</strong>, then use this key.
               </p>
-              <div style={{ display: 'flex', gap: '0.5rem' }}>
-                <code style={{ flex: 1, overflowWrap: 'anywhere', padding: '0.75rem', background: '#f3f4f6', borderRadius: 8 }}>
+              <div className="sp-admin-key">
+                <code>
                   {manualKey}
                 </code>
-                <button type="button" onClick={copyManualKey} style={{ padding: '0.5rem 0.75rem', borderRadius: 8, border: '1px solid #ccc', cursor: 'pointer' }}>
+                <button type="button" onClick={copyManualKey} className="sp-admin-button secondary">
                   Copy
                 </button>
               </div>
-              <p style={{ marginTop: '0.5rem', fontSize: '0.875rem', color: '#555' }}>Select time-based / TOTP when the app asks for the key type.</p>
+              <p>Select time-based / TOTP when the app asks for the key type.</p>
             </div>
           )}
           <input
@@ -144,14 +142,14 @@ export default function MfaSecurityPage() {
             value={verifyCode}
             onChange={(e) => setVerifyCode(e.target.value.replace(/\D/g, ''))}
             placeholder="6-digit code"
-            style={{ padding: '0.5rem', borderRadius: 8, border: '1px solid #ccc', marginBottom: '0.75rem', width: '100%' }}
+            className="sp-admin-code"
           />
-          <button onClick={verifyEnroll}
-            style={{ background: '#3b82f6', color: '#fff', padding: '0.5rem 1rem', borderRadius: 8, border: 'none', cursor: 'pointer' }}>
+          <button onClick={verifyEnroll} className="sp-admin-button">
             Verify and save
           </button>
         </div>
       )}
+      </section>
     </div>
   );
 }

@@ -46,10 +46,11 @@ export default function MfaChallengePage() {
   }
 
   return (
-    <main style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', background: '#0a0a0c' }}>
-      <div style={{ background: '#1a1a1e', padding: '2rem', borderRadius: 16, maxWidth: 360, width: '100%' }}>
-        <h1 style={{ color: '#fff', marginBottom: '0.5rem', fontSize: '1.25rem' }}>Two-factor verification</h1>
-        <p style={{ color: '#aaa', marginBottom: '1.5rem', fontSize: '0.875rem' }}>
+    <main className="sp-admin">
+      <div className="sp-admin-main" style={{ maxWidth: 560, paddingTop: '12vh' }}>
+      <div className="sp-admin-card sp-admin-security">
+        <span className="sp-admin-eyebrow">One more step</span><h1>Two-factor verification</h1>
+        <p style={{ marginTop: '12px' }}>
           Enter the 6-digit code from your authenticator app.
         </p>
 
@@ -62,26 +63,20 @@ export default function MfaChallengePage() {
             onChange={(e) => setCode(e.target.value.replace(/\D/g, ''))}
             placeholder="000000"
             autoFocus
-            style={{
-              width: '100%', padding: '0.75rem', borderRadius: 8, border: '1px solid #333',
-              background: '#0a0a0c', color: '#fff', fontSize: '1.5rem', textAlign: 'center',
-              letterSpacing: '0.5em', marginBottom: '1rem',
-            }}
+            className="sp-admin-code"
+            style={{ textAlign: 'center' }}
           />
-          {error && <p style={{ color: '#ef4444', marginBottom: '1rem', fontSize: '0.875rem' }}>{error}</p>}
+          {error && <p className="sp-admin-notice error">{error}</p>}
           <button
             type="submit"
             disabled={code.length !== 6 || loading || !factorId}
-            style={{
-              width: '100%', padding: '0.75rem', borderRadius: 8, background: '#ff7a45',
-              color: '#fff', border: 'none', cursor: 'pointer', fontWeight: 600,
-              opacity: (code.length !== 6 || loading || !factorId) ? 0.5 : 1,
-            }}
+            className="sp-admin-button"
+            style={{ width: '100%', opacity: (code.length !== 6 || loading || !factorId) ? 0.5 : 1 }}
           >
             {loading ? 'Verifying…' : 'Verify'}
           </button>
         </form>
-      </div>
+      </div></div>
     </main>
   );
 }
