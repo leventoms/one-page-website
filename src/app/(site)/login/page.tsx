@@ -1,6 +1,6 @@
 import { redirect } from 'next/navigation';
 import type { Metadata } from 'next';
-import { getSupabaseSessionClient } from '@/platform/supabase';
+import { getSupabaseSessionClient } from '@/platform/supabase/server';
 import LoginForm from '@/components/auth/LoginForm';
 
 interface PageProps {
