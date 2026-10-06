@@ -8,6 +8,7 @@ import ManualRequestForm from '@/components/ManualRequestForm';
 import VideoInput from '@/components/builders/VideoInput';
 import { EXPANDED_ACCENT_COLORS } from '@/lib/validation';
 import { useOrderCheckout } from '@/components/builders/useOrderCheckout';
+import CheckoutAccountNotice from '@/components/builders/CheckoutAccountNotice';
 import type { Tier3Config } from '@/types';
 
 function defaultRevealAt(): string {
@@ -33,7 +34,7 @@ export default function Tier3Builder() {
   const [revealAtLocal, setRevealAtLocal] = useState(defaultRevealAt());
   const [pinCode, setPinCode] = useState('');
   const [formError, setFormError] = useState<string | null>(null);
-  const { stage, errorMessage, finalSlug, couponCode, setCouponCode, payAndPublish } = useOrderCheckout();
+  const { stage, errorMessage, finalSlug, couponCode, setCouponCode, isSignedIn, payAndPublish } = useOrderCheckout();
 
   if (mode === 'manual') {
     return (
@@ -209,6 +210,8 @@ export default function Tier3Builder() {
                 <label>Coupon code <span className="sp-form-note" style={{ textTransform: 'none' }}>— optional</span></label>
                 <input className="sp-input" value={couponCode} onChange={(e) => setCouponCode(e.target.value)} placeholder="Enter coupon" />
               </div>
+
+              <CheckoutAccountNotice isSignedIn={isSignedIn} />
 
               {(formError || errorMessage) && (
                 <p className="sp-field-error">{formError ?? errorMessage}</p>

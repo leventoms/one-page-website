@@ -258,6 +258,8 @@
 .sp-form-done .mark{width:52px;height:52px;border-radius:50%;background:var(--red);color:#fff;display:grid;place-items:center;font-size:1.5rem;margin:0 auto 14px;box-shadow:0 6px 0 var(--red-deep)}
 .sp-form-done h3{font-family:var(--font-fraunces),Georgia,serif;font-size:1.4rem;font-weight:700;color:var(--ink)}
 .sp-form-done p{color:var(--ink2);margin-top:.4rem}
+.sp-account-status{display:inline-flex;align-items:center;border-radius:999px;background:#fbe7d3;color:var(--wine);font-size:.76rem;font-weight:700;letter-spacing:.04em;padding:.4rem .7rem;text-transform:uppercase}
+.sp-account-notice{border:1px solid #ead4be;border-radius:12px;background:#fff5e9;color:var(--ink2);font-size:.87rem;line-height:1.55;padding:12px 14px}.sp-account-notice.saved{border-color:#b8ddc2;background:#eef9f0;color:#27643a;font-weight:600}
 /* examples gallery */
 .sp-gallery{display:grid;grid-template-columns:1fr;gap:22px}
 @media(min-width:600px){.sp-gallery{grid-template-columns:repeat(2,1fr)}}

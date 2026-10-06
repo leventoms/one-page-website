@@ -7,6 +7,7 @@ import Tier1Template from '@/components/templates/Tier1Template';
 import ManualRequestForm from '@/components/ManualRequestForm';
 import { ALLOWED_ACCENT_COLORS } from '@/lib/validation';
 import { useOrderCheckout } from '@/components/builders/useOrderCheckout';
+import CheckoutAccountNotice from '@/components/builders/CheckoutAccountNotice';
 import type { Tier1Config } from '@/types';
 
 const EMPTY_CONFIG: Tier1Config = {
@@ -22,7 +23,7 @@ export default function Tier1Builder() {
   const [config, setConfig] = useState<Tier1Config>(EMPTY_CONFIG);
   const [pinCode, setPinCode] = useState('');
   const [formError, setFormError] = useState<string | null>(null);
-  const { stage, errorMessage, finalSlug, couponCode, setCouponCode, payAndPublish } = useOrderCheckout();
+  const { stage, errorMessage, finalSlug, couponCode, setCouponCode, isSignedIn, payAndPublish } = useOrderCheckout();
 
   if (mode === 'manual') {
     return (
@@ -166,6 +167,8 @@ export default function Tier1Builder() {
                 <label>Coupon code <span className="sp-form-note" style={{ textTransform: 'none' }}>— optional</span></label>
                 <input className="sp-input" value={couponCode} onChange={(e) => setCouponCode(e.target.value)} placeholder="Enter coupon" />
               </div>
+
+              <CheckoutAccountNotice isSignedIn={isSignedIn} />
 
               {(formError || errorMessage) && (
                 <p className="sp-field-error">{formError ?? errorMessage}</p>

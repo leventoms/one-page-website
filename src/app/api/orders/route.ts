@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { createOrder } from '@/lib/orders';
 import { createOrderInputSchema } from '@/lib/validation';
+import { getSupabaseSessionClient } from '@/platform/supabase/server';
 
 export async function POST(request: NextRequest) {
   const json = await request.json().catch(() => null);
@@ -17,7 +18,10 @@ export async function POST(request: NextRequest) {
   }
 
   try {
-    const order = await createOrder(parsed.data);
+    // Accounts are optional for checkout, but when a user is signed in we
+    // attach the order server-side so it appears in their private dashboard.
+    const { data: { user } } = await getSupabaseSessionClient().auth.getUser();
+    const order = await createOrder(parsed.data, user?.id ?? null);
     return NextResponse.json(
       { slug: order.slug, status: order.status },
       { status: 201 }

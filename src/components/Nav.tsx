@@ -3,6 +3,8 @@
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useEffect, useState } from 'react';
+import { getSupabaseBrowserClient } from '@/platform/supabase';
+import type { User } from '@supabase/supabase-js';
 
 /**
  * Marketing-site top navigation. Scoped to the (site) route group only —
@@ -52,6 +54,25 @@ export default function Nav() {
   const isAutumn = isLanding || AUTUMN_ROUTES.has(pathname) || pathname.startsWith('/builder');
   const [open, setOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const [isSignedIn, setIsSignedIn] = useState(false);
+  const [isAdmin, setIsAdmin] = useState(false);
+
+  useEffect(() => {
+    const supabase = getSupabaseBrowserClient();
+    const updateAccount = (user: User | null) => {
+      const metadata = user?.app_metadata as { role?: string } | undefined;
+      setIsSignedIn(Boolean(user));
+      setIsAdmin(metadata?.role === 'admin');
+    };
+    void supabase.auth.getUser().then(({ data }) => updateAccount(data.user));
+    const { data: listener } = supabase.auth.onAuthStateChange((_event, session) => updateAccount(session?.user ?? null));
+    return () => listener.subscription.unsubscribe();
+  }, []);
+
+  async function signOut() {
+    await getSupabaseBrowserClient().auth.signOut();
+    window.location.assign('/');
+  }
 
   // Close the mobile sheet whenever the route changes.
   useEffect(() => {
@@ -147,14 +168,11 @@ export default function Nav() {
 
         {/* Account and primary CTA (sm and up) */}
         <div className="hidden items-center gap-3 sm:flex">
-          <Link
-            href="/login"
-            className={`text-sm font-semibold transition-colors ${
-              isAutumn ? 'text-[#3a2c27] hover:text-[#e23b2e]' : 'text-ink-muted hover:text-ink'
-            }`}
-          >
-            Log in
-          </Link>
+          {isSignedIn ? <>
+            <Link href="/account" className={`text-sm font-semibold transition-colors ${isAutumn ? 'text-[#3a2c27] hover:text-[#e23b2e]' : 'text-ink-muted hover:text-ink'}`}>My pages</Link>
+            {isAdmin && <Link href="/admin" className={`text-sm font-semibold transition-colors ${isAutumn ? 'text-[#3a2c27] hover:text-[#e23b2e]' : 'text-ink-muted hover:text-ink'}`}>Admin</Link>}
+            <button type="button" onClick={signOut} className={`text-sm font-semibold transition-colors ${isAutumn ? 'text-[#3a2c27] hover:text-[#e23b2e]' : 'text-ink-muted hover:text-ink'}`}>Sign out</button>
+          </> : <Link href="/login?next=/account" className={`text-sm font-semibold transition-colors ${isAutumn ? 'text-[#3a2c27] hover:text-[#e23b2e]' : 'text-ink-muted hover:text-ink'}`}>Log in</Link>}
           {isAutumn ? (
             <Link
               href="/builder"
@@ -225,13 +243,11 @@ export default function Nav() {
                 {link.label}
               </a>
             ))}
-            <Link
-              href="/login"
-              onClick={() => setOpen(false)}
-              className={`py-3 text-base font-semibold ${isAutumn ? 'text-[#3a2c27]' : 'text-ink'}`}
-            >
-              Log in
-            </Link>
+            {isSignedIn ? <>
+              <Link href="/account" onClick={() => setOpen(false)} className={`py-3 text-base font-semibold ${isAutumn ? 'text-[#3a2c27]' : 'text-ink'}`}>My pages</Link>
+              {isAdmin && <Link href="/admin" onClick={() => setOpen(false)} className={`py-3 text-base font-semibold ${isAutumn ? 'text-[#3a2c27]' : 'text-ink'}`}>Admin</Link>}
+              <button type="button" onClick={signOut} className={`py-3 text-left text-base font-semibold ${isAutumn ? 'text-[#3a2c27]' : 'text-ink'}`}>Sign out</button>
+            </> : <Link href="/login?next=/account" onClick={() => setOpen(false)} className={`py-3 text-base font-semibold ${isAutumn ? 'text-[#3a2c27]' : 'text-ink'}`}>Log in</Link>}
             <Link
               href="/builder"
               onClick={() => setOpen(false)}

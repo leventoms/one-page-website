@@ -42,7 +42,10 @@ export async function GET(request: NextRequest) {
     const { error } = await supabase.auth.exchangeCodeForSession(code);
     if (error) {
       console.error('Auth callback error:', error.message);
-      return NextResponse.redirect(new URL('/login?error=auth', request.url));
+      const loginUrl = new URL('/login', request.url);
+      loginUrl.searchParams.set('error', 'link');
+      loginUrl.searchParams.set('next', next);
+      return NextResponse.redirect(loginUrl);
     }
   }
 

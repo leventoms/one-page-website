@@ -9,6 +9,7 @@ export interface RouteGuard {
  * protected area; never edit middleware.ts directly for route changes.
  */
 export const PROTECTED_ROUTES: RouteGuard[] = [
+  { prefix: '/account', role: 'user' },
   { prefix: '/mature', role: 'user' },
   { prefix: '/admin', role: 'admin' },
 ];

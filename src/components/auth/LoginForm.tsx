@@ -5,14 +5,26 @@ import { getSupabaseBrowserClient } from '@/platform/supabase';
 
 interface Props {
   next: string;
+  initialError?: string;
 }
 
 const COOLDOWN_SECONDS = 60;
 
-export default function LoginForm({ next }: Props) {
+const CALLBACK_ERRORS: Record<string, string> = {
+  link: 'That sign-in link has expired or was already used. Request a new one below.',
+};
+
+function friendlyAuthError(message: string): string {
+  const normalized = message.toLowerCase();
+  if (normalized.includes('rate limit') || normalized.includes('too many requests')) return 'Too many sign-in emails were requested. Please wait a little while before trying again.';
+  if (normalized.includes('not authorized')) return 'This email address is not allowed to receive a sign-in email yet.';
+  return 'We could not send your sign-in link. Please try again.';
+}
+
+export default function LoginForm({ next, initialError }: Props) {
   const [email, setEmail] = useState('');
   const [submitted, setSubmitted] = useState(false);
-  const [error, setError] = useState<string | null>(null);
+  const [error, setError] = useState<string | null>(initialError ? CALLBACK_ERRORS[initialError] ?? 'We could not complete that sign-in. Please request a new link.' : null);
   const [loading, setLoading] = useState(false);
   const [cooldown, setCooldown] = useState(0);
 
@@ -40,7 +52,7 @@ export default function LoginForm({ next }: Props) {
     setLoading(false);
 
     if (otpError) {
-      setError(otpError.message);
+      setError(friendlyAuthError(otpError.message));
       return;
     }
 

@@ -41,6 +41,7 @@ numbered and self-contained — run them in sequence:
 supabase/migrations/001_initial_schema.sql   ← orders + manual_requests tables
 supabase/migrations/002_rate_limit_buckets.sql
 supabase/migrations/003_admin_actions.sql
+supabase/migrations/004_order_owners.sql          ← customer account dashboard
 ```
 
 `supabase/schema.sql` is an auto-generated snapshot of the cumulative state

@@ -12,6 +12,7 @@ interface OrderRow {
   pin_code: string;
   razorpay_order_id: string | null;
   razorpay_payment_id: string | null;
+  owner_id: string | null;
   created_at: string;
   paid_at: string | null;
 }
@@ -40,22 +41,34 @@ function toOrder(row: OrderRow): Order {
     pinCode: row.pin_code,
     razorpayOrderId: row.razorpay_order_id,
     razorpayPaymentId: row.razorpay_payment_id,
+    ownerId: row.owner_id,
     createdAt: row.created_at,
     paidAt: row.paid_at,
   };
 }
 
-export async function createOrder(input: CreateOrderInput): Promise<Order> {
+export async function createOrder(input: CreateOrderInput, ownerId: string | null): Promise<Order> {
   const slug = createSlug(input.config.data.recipientName);
   const priceInPaise = getTemplateDefinition(input.config.tier).priceInPaise;
   const { data, error } = await getSupabaseServerClient()
     .from('orders')
-    .insert({ slug, status: 'draft', config: input.config, price_in_paise: priceInPaise, pin_code: input.pinCode })
+    .insert({ slug, status: 'draft', config: input.config, price_in_paise: priceInPaise, pin_code: input.pinCode, owner_id: ownerId })
     .select()
     .single<OrderRow>();
 
   if (error || !data) throw new Error(`Failed to create order: ${error?.message ?? 'unknown error'}`);
   return toOrder(data);
+}
+
+/** Returns only the orders explicitly linked to this signed-in customer. */
+export async function getOrdersForOwner(ownerId: string): Promise<Order[]> {
+  const { data, error } = await getSupabaseServerClient()
+    .from('orders')
+    .select()
+    .eq('owner_id', ownerId)
+    .order('created_at', { ascending: false });
+  if (error) throw new Error(`Failed to fetch account orders: ${error.message}`);
+  return (data ?? []).map((row) => toOrder(row as OrderRow));
 }
 
 export async function getOrder(slug: string): Promise<Order> {

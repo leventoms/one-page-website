@@ -11,12 +11,14 @@ create table if not exists orders (
   pin_code text not null,
   razorpay_order_id text,
   razorpay_payment_id text,
+  owner_id uuid references auth.users(id) on delete set null,
   created_at timestamptz not null default now(),
   paid_at timestamptz
 );
 
 create index if not exists orders_slug_idx on orders (slug);
 create index if not exists orders_status_idx on orders (status);
+create index if not exists orders_owner_created_idx on orders (owner_id, created_at desc);
 
 -- Row Level Security: no direct client access. All reads/writes go through
 -- the server (service role key), so the browser can never query this table

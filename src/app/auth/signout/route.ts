@@ -2,12 +2,11 @@ import { createServerClient } from '@supabase/ssr';
 import { NextRequest, NextResponse } from 'next/server';
 
 /**
- * Clears the current Supabase session, then sends the user to the admin login
- * flow. This is useful after a user's app_metadata role has changed because
- * the new role is included in the next access token they receive.
+ * Legacy browser fallback for sign-out. The UI uses the Supabase client
+ * directly; this route remains for users who open a saved sign-out link.
  */
 export async function GET(request: NextRequest) {
-  const response = NextResponse.redirect(new URL('/login?next=/admin', request.url));
+  const response = NextResponse.redirect(new URL('/', request.url));
 
   const supabase = createServerClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,

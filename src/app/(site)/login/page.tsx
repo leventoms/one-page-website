@@ -4,13 +4,13 @@ import { getSupabaseSessionClient } from '@/platform/supabase/server';
 import LoginForm from '@/components/auth/LoginForm';
 
 interface PageProps {
-  searchParams: { next?: string };
+  searchParams: { next?: string; error?: string };
 }
 
 function validateNext(next: string | undefined): string {
-  if (!next) return '/';
-  if (!next.startsWith('/')) return '/';
-  if (next.startsWith('//')) return '/';
+  if (!next) return '/account';
+  if (!next.startsWith('/')) return '/account';
+  if (next.startsWith('//')) return '/account';
   return next;
 }
 
@@ -32,13 +32,13 @@ export default async function LoginPage({ searchParams }: PageProps) {
     <section className="sp-builder">
       <div className="sp-wrap" style={{ maxWidth: '480px', margin: '0 auto', paddingTop: '4rem' }}>
         <div className="sp-builder-intro">
-          <span className="sp-eyebrow">sign in</span>
+          <span className="sp-eyebrow">your account</span>
           <h1>Welcome back</h1>
           <p className="lede">
-            Enter your email and we&apos;ll send you a magic link — no password needed.
+            Sign in or create an account with one secure magic link — no password needed.
           </p>
         </div>
-        <LoginForm next={next} />
+        <LoginForm next={next} initialError={searchParams.error} />
       </div>
     </section>
   );

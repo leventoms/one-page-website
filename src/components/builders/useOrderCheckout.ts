@@ -1,5 +1,6 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import type { TemplateConfig } from '@/types';
+import { getSupabaseBrowserClient } from '@/platform/supabase';
 
 export type CheckoutStage = 'editing' | 'creating' | 'paying' | 'done';
 
@@ -9,6 +10,7 @@ interface UseOrderCheckoutResult {
   finalSlug: string | null;
   couponCode: string;
   setCouponCode: (code: string) => void;
+  isSignedIn: boolean | null;
   payAndPublish: (config: TemplateConfig, pinCode: string) => Promise<void>;
   reset: () => void;
 }
@@ -25,6 +27,14 @@ export function useOrderCheckout(): UseOrderCheckoutResult {
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [finalSlug, setFinalSlug] = useState<string | null>(null);
   const [couponCode, setCouponCode] = useState('');
+  const [isSignedIn, setIsSignedIn] = useState<boolean | null>(null);
+
+  useEffect(() => {
+    const supabase = getSupabaseBrowserClient();
+    void supabase.auth.getUser().then(({ data }) => setIsSignedIn(Boolean(data.user)));
+    const { data: listener } = supabase.auth.onAuthStateChange((_event, session) => setIsSignedIn(Boolean(session?.user)));
+    return () => listener.subscription.unsubscribe();
+  }, []);
 
   function reset() {
     setStage('editing');
@@ -106,5 +116,5 @@ export function useOrderCheckout(): UseOrderCheckoutResult {
     }
   }
 
-  return { stage, errorMessage, finalSlug, couponCode, setCouponCode, payAndPublish, reset };
+  return { stage, errorMessage, finalSlug, couponCode, setCouponCode, isSignedIn, payAndPublish, reset };
 }
